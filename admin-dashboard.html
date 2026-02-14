@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>NOVA BANK - Administration</title>
     <style>
-        /* Garder tout ton CSS identique */
+        /* Gardez tout votre CSS ici */
         * {
             margin: 0;
             padding: 0;
@@ -793,29 +793,47 @@
         let filteredUsers = [];
         let currentUserId = null;
         let currentFilter = 'all';
+        let currentAdminEmail = '';
 
-        // MODIFICATION 1: Nouvel email admin
-        const ADMIN_EMAIL = 'serviceclient08987@gmail.com';
-
+        // ✅ FONCTION CORRIGÉE : Vérifie le RÔLE au lieu de l'email
         async function checkAuth() {
-            const { data: { user }, error } = await _supabase.auth.getUser();
-            
-            if (error || !user) {
-                window.location.href = 'admin.html';
-                return;
-            }
-
-            // MODIFICATION 2: Vérifier avec le nouvel email
-            if (user.email !== ADMIN_EMAIL) {
-                showAlert('Ce compte n\'a pas les droits d\'administration', 'error');
-                setTimeout(() => {
+            try {
+                const { data: { user }, error } = await _supabase.auth.getUser();
+                
+                if (error || !user) {
                     window.location.href = 'admin.html';
-                }, 2000);
-                return;
-            }
+                    return;
+                }
 
-            document.getElementById('adminEmail').textContent = user.email;
-            loadUsers();
+                // Vérifier le rôle dans profiles
+                const { data: profile, error: profileError } = await _supabase
+                    .from('profiles')
+                    .select('role, email')
+                    .eq('id', user.id)
+                    .single();
+
+                if (profileError || !profile) {
+                    showAlert('Profil non trouvé', 'error');
+                    setTimeout(() => window.location.href = 'admin.html', 2000);
+                    return;
+                }
+
+                // ✅ Vérification par le RÔLE (pas par l'email)
+                if (profile.role !== 'admin') {
+                    showAlert('Ce compte n\'a pas les droits d\'administration', 'error');
+                    setTimeout(() => window.location.href = 'admin.html', 2000);
+                    return;
+                }
+
+                // Admin authentifié
+                currentAdminEmail = profile.email;
+                document.getElementById('adminEmail').textContent = profile.email;
+                loadUsers();
+                
+            } catch (error) {
+                console.error('Erreur auth:', error);
+                window.location.href = 'admin.html';
+            }
         }
 
         async function loadUsers() {
@@ -869,8 +887,7 @@
             `;
 
             filteredUsers.forEach(user => {
-                // MODIFICATION 3: Vérifier avec le nouvel email
-                const isAdmin = user.email === ADMIN_EMAIL;
+                const isAdmin = user.role === 'admin';
                 const date = new Date(user.created_at).toLocaleDateString('fr-FR');
                 
                 html += `
@@ -900,8 +917,7 @@
 
         function updateStats() {
             const total = allUsers.length;
-            // MODIFICATION 4: Compter avec le nouvel email
-            const admins = allUsers.filter(u => u.email === ADMIN_EMAIL).length;
+            const admins = allUsers.filter(u => u.role === 'admin').length;
             const totalBalance = allUsers.reduce((sum, u) => sum + (u.solde || 0), 0);
             const avgBalance = total > 0 ? totalBalance / total : 0;
 
@@ -934,10 +950,9 @@
             if (filter === 'all') {
                 filteredUsers = [...allUsers];
             } else if (filter === 'admins') {
-                // MODIFICATION 5: Filtrer avec le nouvel email
-                filteredUsers = allUsers.filter(u => u.email === ADMIN_EMAIL);
+                filteredUsers = allUsers.filter(u => u.role === 'admin');
             } else if (filter === 'users') {
-                filteredUsers = allUsers.filter(u => u.email !== ADMIN_EMAIL);
+                filteredUsers = allUsers.filter(u => u.role !== 'admin');
             }
             displayUsers();
         }
@@ -1160,6 +1175,7 @@
             window.location.href = 'admin.html';
         }
 
+        // Démarrer
         checkAuth();
     </script>
 </body>
