@@ -3,539 +3,491 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KaliPay - Inscription & Connexion</title>
-    
-    <!-- Supabase -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    
+    <title>NOVA BANK - Inscription</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-        }
-
-        :root {
-            --primary-blue: #2563eb;
-            --primary-red: #dc2626;
-            --primary-orange: #ea580c;
-            --primary-green: #16a34a;
-            --dark-bg: #0f172a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--dark-bg) 0%, #1e293b 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
+            padding: 20px;
         }
 
         .container {
+            max-width: 500px;
             width: 100%;
-            max-width: 480px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .logo {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .logo h1 {
-            font-size: 3.5rem;
+            font-size: 2.5em;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-red), var(--primary-orange), var(--primary-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .logo span {
-            color: rgba(255,255,255,0.7);
-            font-size: 0.9rem;
+            color: #ff6b6b;
+            font-weight: 900;
         }
 
-        .form-card {
+        .tagline {
+            color: rgba(255,255,255,0.9);
+            margin-top: 10px;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-section {
+            padding: 40px 30px;
             background: white;
-            border-radius: 1.5rem;
-            padding: 2rem;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
         }
 
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-            background: #f1f5f9;
-            padding: 0.25rem;
-            border-radius: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 0.75rem;
-            border: none;
-            background: transparent;
-            border-radius: 0.75rem;
+        .form-title {
+            font-size: 1.8em;
+            color: #1e3c72;
+            margin-bottom: 10px;
             font-weight: 600;
-            color: #64748b;
-            cursor: pointer;
-            transition: all 0.2s;
         }
 
-        .tab.active {
-            background: white;
-            color: var(--primary-blue);
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        }
-
-        .form {
-            display: none;
-        }
-
-        .form.active {
-            display: block;
-        }
-
-        .form h2 {
-            color: #1e293b;
-            margin-bottom: 1.5rem;
-            font-size: 1.5rem;
+        .form-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            border-left: 4px solid #ff6b6b;
+            padding-left: 15px;
         }
 
         .form-group {
-            margin-bottom: 1.25rem;
+            margin-bottom: 25px;
+            position: relative;
         }
 
-        label {
+        .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
-            color: #475569;
+            margin-bottom: 8px;
+            color: #1e3c72;
             font-weight: 500;
-            font-size: 0.9rem;
+            font-size: 0.95em;
         }
 
-        input {
+        .form-group input {
             width: 100%;
-            padding: 0.875rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 0.75rem;
-            font-size: 1rem;
-            transition: all 0.2s;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
         }
 
-        input:focus {
+        .form-group input:focus {
             outline: none;
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+            border-color: #1e3c72;
+            background: white;
+            box-shadow: 0 5px 20px rgba(30,60,114,0.1);
         }
 
-        .btn-primary {
+        .form-group input.error {
+            border-color: #ff6b6b;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .password-strength {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s ease;
+        }
+
+        .password-strength-text {
+            font-size: 0.8em;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .btn-submit {
             width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, var(--primary-blue), var(--primary-red));
+            padding: 16px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
             border: none;
-            border-radius: 0.75rem;
-            font-size: 1rem;
+            border-radius: 12px;
+            font-size: 1.1em;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 1rem;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 10px 20px rgba(30,60,114,0.2);
         }
 
-        .btn-primary:hover {
+        .btn-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(37,99,235,0.3);
+            box-shadow: 0 15px 30px rgba(30,60,114,0.3);
         }
 
-        .btn-primary:disabled {
+        .btn-submit:disabled {
             opacity: 0.7;
             cursor: not-allowed;
             transform: none;
         }
 
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #1e3c72;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .login-link a:hover {
+            color: #ff6b6b;
+        }
+
         .alert {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            padding: 1rem 1.5rem;
-            border-radius: 0.75rem;
-            color: white;
-            font-weight: 500;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
             display: none;
-            z-index: 1000;
             animation: slideIn 0.3s ease;
-        }
-
-        .alert.success {
-            background: var(--primary-green);
-        }
-
-        .alert.error {
-            background: var(--primary-red);
-        }
-
-        .alert.info {
-            background: var(--primary-blue);
         }
 
         @keyframes slideIn {
             from {
-                transform: translateX(100%);
                 opacity: 0;
+                transform: translateY(-10px);
             }
             to {
-                transform: translateX(0);
                 opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        .btn-primary.loading {
-            position: relative;
-            color: transparent;
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
         }
 
-        .btn-primary.loading::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 3px solid white;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 0.6s linear infinite;
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
 
-        @keyframes spin {
-            to { transform: translate(-50%, -50%) rotate(360deg); }
+        .info-box {
+            background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
+            border-left: 4px solid #ff6b6b;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-size: 0.9em;
+            color: #666;
         }
 
-        .forgot-password {
-            text-align: right;
-            margin: 0.5rem 0 1rem;
+        .info-box i {
+            color: #ff6b6b;
+            margin-right: 10px;
         }
 
-        .forgot-password span {
-            color: var(--primary-blue);
-            font-size: 0.9rem;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        .footer-links {
-            text-align: center;
-            margin-top: 1.5rem;
-        }
-
-        .footer-links span {
-            color: var(--primary-blue);
-            font-weight: 500;
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        .features {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .feature {
-            text-align: center;
+        .bonus-badge {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
             color: white;
-            cursor: pointer;
-            transition: transform 0.2s;
+            padding: 8px 15px;
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 0.9em;
+            font-weight: 600;
+            margin-top: 10px;
+            animation: pulse 2s infinite;
         }
 
-        .feature:hover {
-            transform: translateY(-5px);
-        }
-
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .feature-text {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .feature-small {
-            font-size: 0.75rem;
-            opacity: 0.7;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Logo -->
-        <div class="logo">
-            <h1>KaliPay</h1>
-            <span>Transferts instantanés • Sécurisé • Fiable</span>
+        <div class="header">
+            <div class="logo">NOVA<span>BANK</span></div>
+            <div class="tagline">L'innovation à votre service</div>
         </div>
 
-        <!-- Formulaire -->
-        <div class="form-card">
-            <div class="tabs">
-                <button class="tab active" id="tabLogin">Connexion</button>
-                <button class="tab" id="tabRegister">Inscription</button>
-            </div>
+        <div class="form-section">
+            <h2 class="form-title">Créer un compte</h2>
+            <div class="form-subtitle">Rejoignez NOVA BANK et bénéficiez de 500€ offerts</div>
 
-            <!-- Formulaire de Connexion -->
-            <div id="loginForm" class="form active">
-                <h2>Content de te revoir !</h2>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="loginEmail" placeholder="ton@email.com">
-                </div>
-                <div class="form-group">
-                    <label>Mot de passe</label>
-                    <input type="password" id="loginPassword" placeholder="••••••••">
-                </div>
-                <div class="forgot-password">
-                    <span id="forgotPassword">Mot de passe oublié ?</span>
-                </div>
-                <button class="btn-primary" id="loginBtn">Se connecter</button>
-                <div class="footer-links">
-                    Pas encore de compte ? <span id="goToRegister">S'inscrire</span>
-                </div>
-            </div>
+            <div class="alert" id="alertMessage"></div>
 
-            <!-- Formulaire d'Inscription -->
-            <div id="registerForm" class="form">
-                <h2>Créer un compte</h2>
+            <form id="registrationForm">
                 <div class="form-group">
-                    <label>Nom complet</label>
-                    <input type="text" id="regName" placeholder="John Doe">
+                    <label for="nom">Nom complet</label>
+                    <input type="text" id="nom" placeholder="Jean Dupont" required>
                 </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="regEmail" placeholder="ton@email.com">
-                </div>
-                <div class="form-group">
-                    <label>Téléphone</label>
-                    <input type="tel" id="regPhone" placeholder="6XXXXXXXX">
-                </div>
-                <div class="form-group">
-                    <label>Mot de passe</label>
-                    <input type="password" id="regPassword" placeholder="••••••••">
-                </div>
-                <div class="form-group">
-                    <label>Confirmer le mot de passe</label>
-                    <input type="password" id="regConfirm" placeholder="••••••••">
-                </div>
-                <button class="btn-primary" id="registerBtn">S'inscrire</button>
-                <div class="footer-links">
-                    Déjà inscrit ? <span id="goToLogin">Se connecter</span>
-                </div>
-            </div>
-        </div>
 
-        <!-- Features -->
-        <div class="features">
-            <div class="feature" id="featureInstant">
-                <div class="feature-icon">⚡</div>
-                <div class="feature-text">Instantané</div>
-                <div class="feature-small">Transferts en temps réel</div>
-            </div>
-            <div class="feature" id="featureSecure">
-                <div class="feature-icon">🔒</div>
-                <div class="feature-text">Sécurisé</div>
-                <div class="feature-small">Données protégées</div>
-            </div>
-            <div class="feature" id="featureSupport">
-                <div class="feature-icon">💚</div>
-                <div class="feature-text">Support</div>
-                <div class="feature-small">WhatsApp 7j/7</div>
+                <div class="form-group">
+                    <label for="email">Adresse email</label>
+                    <input type="email" id="email" placeholder="jean.dupont@email.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="identite">Numéro de carte d'identité</label>
+                    <input type="text" id="identite" placeholder="AB123456" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                    </div>
+                    <div class="password-strength-text" id="passwordStrengthText"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmer le mot de passe</label>
+                    <input type="password" id="confirmPassword" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    CRÉER MON COMPTE
+                </button>
+
+                <div class="bonus-badge">
+                    🎁 500€ offerts à l'inscription !
+                </div>
+
+                <div class="info-box">
+                    <i>ℹ️</i> Pour tout retrait, des documents justificatifs vous seront demandés conformément à la réglementation bancaire.
+                </div>
+            </form>
+
+            <div class="login-link">
+                Déjà un compte ? <a href="dashboard.html">Se connecter</a>
             </div>
         </div>
     </div>
 
-    <div id="alertMessage" class="alert"></div>
-
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Configuration Supabase
-        const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
-        
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Initialisation de Supabase
+        const supabaseUrl = 'https://oypihdbuovijjutuyqaj.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // Fonction pour afficher les alertes
-        function showAlert(message, type) {
-            const alert = document.getElementById('alertMessage');
-            alert.textContent = message;
-            alert.className = `alert ${type}`;
-            alert.style.display = 'block';
-            setTimeout(() => alert.style.display = 'none', 3000);
-        }
+        // Éléments du DOM
+        const form = document.getElementById('registrationForm');
+        const alertMessage = document.getElementById('alertMessage');
+        const submitBtn = document.getElementById('submitBtn');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const strengthBar = document.getElementById('passwordStrengthBar');
+        const strengthText = document.getElementById('passwordStrengthText');
 
-        // Fonction pour changer de formulaire
-        function showForm(form) {
-            const tabs = document.querySelectorAll('.tab');
-            const forms = document.querySelectorAll('.form');
+        // Vérification de la force du mot de passe
+        passwordInput.addEventListener('input', checkPasswordStrength);
+        confirmPasswordInput.addEventListener('input', checkPasswordsMatch);
+
+        function checkPasswordStrength() {
+            const password = passwordInput.value;
+            let strength = 0;
             
-            tabs.forEach(t => t.classList.remove('active'));
-            forms.forEach(f => f.classList.remove('active'));
+            if (password.length >= 8) strength += 25;
+            if (password.match(/[a-z]+/)) strength += 25;
+            if (password.match(/[A-Z]+/)) strength += 25;
+            if (password.match(/[0-9]+/)) strength += 25;
+            if (password.match(/[$@#&!]+/)) strength += 25;
+
+            strengthBar.style.width = Math.min(strength, 100) + '%';
             
-            if (form === 'login') {
-                tabs[0].classList.add('active');
-                document.getElementById('loginForm').classList.add('active');
+            if (strength <= 25) {
+                strengthBar.style.background = '#ff6b6b';
+                strengthText.textContent = 'Faible';
+                strengthText.style.color = '#ff6b6b';
+            } else if (strength <= 50) {
+                strengthBar.style.background = '#ffa502';
+                strengthText.textContent = 'Moyen';
+                strengthText.style.color = '#ffa502';
+            } else if (strength <= 75) {
+                strengthBar.style.background = '#1e90ff';
+                strengthText.textContent = 'Bon';
+                strengthText.style.color = '#1e90ff';
             } else {
-                tabs[1].classList.add('active');
-                document.getElementById('registerForm').classList.add('active');
+                strengthBar.style.background = '#28a745';
+                strengthText.textContent = 'Excellent';
+                strengthText.style.color = '#28a745';
             }
         }
 
-        // === ATTACHER LES ÉVÉNEMENTS AUX BOUTONS ===
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Page chargée, attachement des événements...');
-
-            // Tabs
-            document.getElementById('tabLogin').addEventListener('click', function() {
-                showForm('login');
-            });
-
-            document.getElementById('tabRegister').addEventListener('click', function() {
-                showForm('register');
-            });
-
-            // Liens de navigation
-            document.getElementById('goToRegister').addEventListener('click', function() {
-                showForm('register');
-            });
-
-            document.getElementById('goToLogin').addEventListener('click', function() {
-                showForm('login');
-            });
-
-            // Mot de passe oublié
-            document.getElementById('forgotPassword').addEventListener('click', function() {
-                showAlert('📞 Contactez-nous sur WhatsApp pour réinitialiser votre mot de passe', 'info');
-            });
-
-            // Bouton de connexion
-            document.getElementById('loginBtn').addEventListener('click', login);
-
-            // Bouton d'inscription
-            document.getElementById('registerBtn').addEventListener('click', register);
-
-            // Features
-            document.getElementById('featureInstant').addEventListener('click', function() {
-                showAlert('⚡ Transferts instantanés 24/7', 'info');
-            });
-
-            document.getElementById('featureSecure').addEventListener('click', function() {
-                showAlert('🔒 Vos données sont protégées et cryptées', 'info');
-            });
-
-            document.getElementById('featureSupport').addEventListener('click', function() {
-                showAlert('💚 Support WhatsApp: +237600000000', 'info');
-            });
-
-            // Vérifier si déjà connecté
-            if (localStorage.getItem('userId')) {
-                window.location.href = 'dashboard.html';
+        function checkPasswordsMatch() {
+            const password = passwordInput.value;
+            const confirm = confirmPasswordInput.value;
+            
+            if (confirm && password !== confirm) {
+                confirmPasswordInput.classList.add('error');
+                return false;
+            } else {
+                confirmPasswordInput.classList.remove('error');
+                return true;
             }
-        });
+        }
 
-        // Fonction de connexion
-        async function login() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            const btn = document.getElementById('loginBtn');
+        function showAlert(message, type) {
+            alertMessage.textContent = message;
+            alertMessage.className = `alert alert-${type}`;
+            alertMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                alertMessage.style.display = 'none';
+            }, 5000);
+        }
 
-            if (!email || !password) {
+        // Gestion de l'inscription
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nom = document.getElementById('nom').value;
+            const email = document.getElementById('email').value;
+            const identite = document.getElementById('identite').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Validation
+            if (!nom || !email || !identite || !password || !confirmPassword) {
                 showAlert('Veuillez remplir tous les champs', 'error');
                 return;
             }
 
-            btn.classList.add('loading');
-            btn.disabled = true;
-
-            try {
-                const { data, error } = await supabase
-                    .from('users')
-                    .select('*')
-                    .eq('email', email)
-                    .eq('password', password)
-                    .maybeSingle();
-
-                if (data) {
-                    localStorage.setItem('userId', data.id);
-                    localStorage.setItem('userName', data.name);
-                    showAlert('✅ Connexion réussie !', 'success');
-                    setTimeout(() => window.location.href = 'dashboard.html', 1500);
-                } else {
-                    showAlert('❌ Email ou mot de passe incorrect', 'error');
-                }
-            } catch (error) {
-                showAlert('❌ Erreur de connexion', 'error');
-            } finally {
-                btn.classList.remove('loading');
-                btn.disabled = false;
-            }
-        }
-
-        // Fonction d'inscription
-        async function register() {
-            const name = document.getElementById('regName').value.trim();
-            const email = document.getElementById('regEmail').value.trim();
-            const phone = document.getElementById('regPhone').value.trim();
-            const password = document.getElementById('regPassword').value;
-            const confirm = document.getElementById('regConfirm').value;
-            const btn = document.getElementById('registerBtn');
-
-            if (!name || !email || !phone || !password || !confirm) {
-                showAlert('Tous les champs sont requis', 'error');
-                return;
-            }
-
-            if (password !== confirm) {
+            if (password !== confirmPassword) {
                 showAlert('Les mots de passe ne correspondent pas', 'error');
                 return;
             }
 
-            btn.classList.add('loading');
-            btn.disabled = true;
+            if (password.length < 6) {
+                showAlert('Le mot de passe doit contenir au moins 6 caractères', 'error');
+                return;
+            }
 
             try {
-                const { data, error } = await supabase
-                    .from('users')
-                    .insert([{
-                        name,
-                        email,
-                        phone,
-                        password,
-                        balance: 0,
-                        total_withdrawn: 0,
-                        total_recharged: 0,
-                        points: 100
-                    }])
-                    .select();
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'CRÉATION EN COURS...';
 
-                if (data && data[0]) {
-                    localStorage.setItem('userId', data[0].id);
-                    localStorage.setItem('userName', data[0].name);
-                    showAlert('✅ Inscription réussie !', 'success');
-                    setTimeout(() => window.location.href = 'dashboard.html', 1500);
-                } else {
-                    showAlert('❌ Cet email est déjà utilisé', 'error');
+                // Inscription avec Supabase
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                });
+
+                if (authError) throw authError;
+
+                if (authData.user) {
+                    // Créer le profil utilisateur avec solde initial de 500€
+                    const { error: profileError } = await supabase
+                        .from('profiles')
+                        .insert([
+                            {
+                                id: authData.user.id,
+                                nom: nom,
+                                email: email,
+                                numero_identite: identite,
+                                solde: 500.00,
+                                date_inscription: new Date().toISOString()
+                            }
+                        ]);
+
+                    if (profileError) throw profileError;
+
+                    showAlert('Compte créé avec succès ! 500€ ont été crédités sur votre compte.', 'success');
+                    
+                    // Redirection après 2 secondes
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
                 }
+
             } catch (error) {
-                showAlert('❌ Erreur lors de l\'inscription', 'error');
+                console.error('Erreur:', error);
+                showAlert(error.message || 'Une erreur est survenue lors de l\'inscription', 'error');
             } finally {
-                btn.classList.remove('loading');
-                btn.disabled = false;
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'CRÉER MON COMPTE';
             }
-        }
+        });
     </script>
 </body>
 </html>
