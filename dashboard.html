@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVA BANK - Tableau de bord</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.8em;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: #ff6b6b;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-item i {
+            font-size: 1.2em;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+        }
+
+        .logout-btn {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 8px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #ff6b6b;
+            border-color: #ff6b6b;
+            transform: translateY(-2px);
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Bienvenue */
+        .welcome-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(102,126,234,0.3);
+            animation: slideIn 0.5s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-text h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .welcome-text p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .date-display {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 25px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .date-display .day {
+            font-size: 2em;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .date-display .month {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        /* Cartes de solde */
+        .balance-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .balance-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(30,60,114,0.03) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        .balance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(30,60,114,0.15);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            color: #666;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        .card-amount {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        .card-amount small {
+            font-size: 0.4em;
+            font-weight: 400;
+            color: #999;
+            margin-left: 5px;
+        }
+
+        .card-footer {
+            color: #28a745;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Actions rapides */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            animation: fadeIn 0.5s ease 0.2s both;
+        }
+
+        .action-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(30,60,114,0.15);
+        }
+
+        .action-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 2em;
+            transition: all 0.3s ease;
+        }
+
+        .action-card:hover .action-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .action-card h3 {
+            color: #1e3c72;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .action-card p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* Section retrait */
+        .withdraw-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            animation: fadeIn 0.5s ease 0.4s both;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            color: #1e3c72;
+            font-size: 1.4em;
+        }
+
+        .section-title i {
+            color: #ff6b6b;
+        }
+
+        .withdraw-form {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            align-items: end;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1e3c72;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #1e3c72;
+            box-shadow: 0 5px 20px rgba(30,60,114,0.1);
+        }
+
+        .btn-withdraw {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-withdraw:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(30,60,114,0.3);
+        }
+
+        /* Documents requis */
+        .documents-modal {
+            background: #fff8f8;
+            border-left: 4px solid #ff6b6b;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .documents-modal.show {
+            display: block;
+        }
+
+        .documents-modal h3 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .documents-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .document-item {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(255,107,107,0.1);
+        }
+
+        .document-icon {
+            width: 40px;
+            height: 40px;
+            background: #ff6b6b;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .document-info h4 {
+            color: #1e3c72;
+            margin-bottom: 5px;
+            font-size: 0.95em;
+        }
+
+        .document-info p {
+            color: #666;
+            font-size: 0.8em;
+        }
+
+        .upload-btn {
+            background: #1e3c72;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .upload-btn:hover {
+            background: #2a5298;
+        }
+
+        /* Transactions */
+        .transactions-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            animation: fadeIn 0.5s ease 0.6s both;
+        }
+
+        .transactions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .transactions-header h2 {
+            color: #1e3c72;
+            font-size: 1.4em;
+        }
+
+        .filter-select {
+            padding: 10px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 0.95em;
+            cursor: pointer;
+        }
+
+        .transactions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .transaction-item:hover {
+            background: #f0f4ff;
+            transform: translateX(5px);
+        }
+
+        .transaction-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .transaction-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .transaction-details h4 {
+            color: #1e3c72;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .transaction-details p {
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        .transaction-right {
+            text-align: right;
+        }
+
+        .transaction-amount {
+            font-weight: 700;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+
+        .amount-positive {
+            color: #28a745;
+        }
+
+        .amount-negative {
+            color: #ff6b6b;
+        }
+
+        .transaction-status {
+            font-size: 0.8em;
+            padding: 4px 12px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1e3c72;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-menu {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .withdraw-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-section {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .transactions-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">NOVA<span>BANK</span></div>
+        <div class="nav-menu">
+            <div class="nav-item" onclick="scrollToSection('dashboard')">
+                <i>🏠</i>
+                <span>Accueil</span>
+            </div>
+            <div class="nav-item" onclick="scrollToSection('transactions')">
+                <i>📊</i>
+                <span>Transactions</span>
+            </div>
+            <div class="nav-item" onclick="scrollToSection('withdraw')">
+                <i>💳</i>
+                <span>Retrait</span>
+            </div>
+        </div>
+        <div class="user-menu">
+            <div class="user-avatar" id="userAvatar" onclick="showUserMenu()">JD</div>
+            <button class="logout-btn" onclick="logout()">DÉCONNEXION</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="alert" id="alertMessage"></div>
+
+        <!-- Section bienvenue -->
+        <div class="welcome-section" id="dashboard">
+            <div class="welcome-text">
+                <h1 id="welcomeMessage">Bonjour, <span id="userName">...</span></h1>
+                <p>Bienvenue sur votre espace personnel NOVA BANK</p>
+            </div>
+            <div class="date-display" id="currentDate">
+                <div class="day">15</div>
+                <div class="month">Février 2026</div>
+            </div>
+        </div>
+
+        <!-- Cartes de solde -->
+        <div class="balance-section">
+            <div class="balance-card">
+                <div class="card-header">
+                    <span class="card-title">Compte courant</span>
+                    <div class="card-icon">💳</div>
+                </div>
+                <div class="card-amount" id="currentBalance">0.00 <small>EUR</small></div>
+                <div class="card-footer">
+                    <span>✓</span> Disponible immédiatement
+                </div>
+            </div>
+
+            <div class="balance-card">
+                <div class="card-header">
+                    <span class="card-title">Compte épargne</span>
+                    <div class="card-icon">💰</div>
+                </div>
+                <div class="card-amount" id="savingsBalance">0.00 <small>EUR</small></div>
+                <div class="card-footer">
+                    <span>📈</span> Taux 2.5%
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions rapides -->
+        <div class="quick-actions">
+            <div class="action-card" onclick="showWithdrawForm()">
+                <div class="action-icon">💳</div>
+                <h3>Effectuer un retrait</h3>
+                <p>Retirez de l'argent de votre compte</p>
+            </div>
+            <div class="action-card" onclick="transferMoney()">
+                <div class="action-icon">↗️</div>
+                <h3>Transférer</h3>
+                <p>Envoyez de l'argent</p>
+            </div>
+            <div class="action-card" onclick="payBills()">
+                <div class="action-icon">📄</div>
+                <h3>Payer une facture</h3>
+                <p>Réglez vos factures</p>
+            </div>
+            <div class="action-card" onclick="showDocuments()">
+                <div class="action-icon">📋</div>
+                <h3>Mes documents</h3>
+                <p>Gérez vos justificatifs</p>
+            </div>
+        </div>
+
+        <!-- Section retrait -->
+        <div class="withdraw-section" id="withdraw">
+            <div class="section-title">
+                <i>💳</i>
+                <h2>Effectuer un retrait</h2>
+            </div>
+
+            <div class="withdraw-form">
+                <div class="form-group">
+                    <label>Montant du retrait (EUR)</label>
+                    <input type="number" id="withdrawAmount" placeholder="0.00" min="10" step="10" value="100">
+                </div>
+                <div class="form-group">
+                    <label>Compte à débiter</label>
+                    <select id="withdrawAccount">
+                        <option value="current">Compte courant</option>
+                        <option value="savings">Compte épargne</option>
+                    </select>
+                </div>
+                <button class="btn-withdraw" onclick="requestWithdraw()">DEMANDER UN RETRAIT</button>
+            </div>
+
+            <!-- Documents requis pour le retrait -->
+            <div class="documents-modal" id="documentsRequired">
+                <h3>
+                    <i>⚠️</i>
+                    Documents requis pour valider le retrait
+                </h3>
+                <div class="documents-list">
+                    <div class="document-item">
+                        <div class="document-icon">🆔</div>
+                        <div class="document-info">
+                            <h4>Pièce d'identité</h4>
+                            <p>Carte d'identité ou passeport en cours de validité</p>
+                            <button class="upload-btn" onclick="uploadDocument('id')">Télécharger</button>
+                        </div>
+                    </div>
+                    <div class="document-item">
+                        <div class="document-icon">🏠</div>
+                        <div class="document-info">
+                            <h4>Justificatif de domicile</h4>
+                            <p>Facture de moins de 3 mois</p>
+                            <button class="upload-btn" onclick="uploadDocument('domicile')">Télécharger</button>
+                        </div>
+                    </div>
+                    <div class="document-item">
+                        <div class="document-icon">🏦</div>
+                        <div class="document-info">
+                            <h4>RIB</h4>
+                            <p>Relevé d'identité bancaire</p>
+                            <button class="upload-btn" onclick="uploadDocument('rib')">Télécharger</button>
+                        </div>
+                    </div>
+                    <div class="document-item">
+                        <div class="document-icon">📝</div>
+                        <div class="document-info">
+                            <h4>Formulaire de retrait</h4>
+                            <p>Document signé</p>
+                            <button class="upload-btn" onclick="uploadDocument('form')">Télécharger</button>
+                        </div>
+                    </div>
+                </div>
+                <p style="color: #ff6b6b; font-size: 0.9em; margin-top: 15px;">
+                    <i>⏱️</i> Délai de traitement : 24-48h après réception des documents
+                </p>
+            </div>
+        </div>
+
+        <!-- Historique des transactions -->
+        <div class="transactions-section" id="transactions">
+            <div class="transactions-header">
+                <h2>Historique des transactions</h2>
+                <select class="filter-select" id="transactionFilter" onchange="filterTransactions()">
+                    <option value="all">Toutes les transactions</option>
+                    <option value="incoming">Reçus</option>
+                    <option value="outgoing">Envoyés</option>
+                    <option value="pending">En attente</option>
+                </select>
+            </div>
+
+            <div class="transactions-list" id="transactionsList">
+                <!-- Les transactions seront chargées dynamiquement -->
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Chargement des transactions...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialisation Supabase
+        const supabaseUrl = 'https://oypihdbuovijjutuyqaj.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        let currentUser = null;
+        let userProfile = null;
+        let transactions = [];
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', () => {
+            checkUser();
+            updateDate();
+        });
+
+        // Mettre à jour la date
+        function updateDate() {
+            const date = new Date();
+            const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+            const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+            
+            document.querySelector('.day').textContent = date.getDate();
+            document.querySelector('.month').textContent = months[date.getMonth()] + ' ' + date.getFullYear();
+        }
+
+        // Vérifier l'utilisateur connecté
+        async function checkUser() {
+            try {
+                const { data: { user }, error } = await supabase.auth.getUser();
+                
+                if (error || !user) {
+                    window.location.href = 'connexion.html';
+                    return;
+                }
+
+                currentUser = user;
+                
+                // Initiales pour l'avatar
+                if (user.email) {
+                    const initials = user.email.substring(0, 2).toUpperCase();
+                    document.getElementById('userAvatar').textContent = initials;
+                }
+                
+                await loadUserProfile();
+                await loadTransactions();
+                
+            } catch (error) {
+                console.error('Erreur:', error);
+                window.location.href = 'connexion.html';
+            }
+        }
+
+        // Charger le profil utilisateur
+        async function loadUserProfile() {
+            try {
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (error) throw error;
+
+                userProfile = data;
+                
+                // Mettre à jour l'interface
+                document.getElementById('userName').textContent = data.nom.split(' ')[0];
+                document.getElementById('currentBalance').textContent = data.solde.toFixed(2);
+                document.getElementById('savingsBalance').textContent = (data.solde * 0.3).toFixed(2); // Exemple
+                
+            } catch (error) {
+                console.error('Erreur chargement profil:', error);
+                showAlert('Erreur lors du chargement du profil', 'error');
+            }
+        }
+
+        // Charger les transactions
+        async function loadTransactions() {
+            try {
+                // Simuler des transactions pour l'exemple
+                transactions = [
+                    {
+                        id: 1,
+                        type: 'Dépôt',
+                        montant: 5000.00,
+                        date: new Date(Date.now() - 2*24*60*60*1000),
+                        status: 'complété',
+                        icon: '📥',
+                        description: 'Virement reçu'
+                    },
+                    {
+                        id: 2,
+                        type: 'Retrait',
+                        montant: -200.00,
+                        date: new Date(Date.now() - 5*24*60*60*1000),
+                        status: 'en_attente',
+                        icon: '💳',
+                        description: 'Retrait DAB'
+                    },
+                    {
+                        id: 3,
+                        type: 'Paiement',
+                        montant: -85.50,
+                        date: new Date(Date.now() - 7*24*60*60*1000),
+                        status: 'complété',
+                        icon: '🛒',
+                        description: 'Carrefour Market'
+                    },
+                    {
+                        id: 4,
+                        type: 'Virement',
+                        montant: 150.00,
+                        date: new Date(Date.now() - 10*24*60*60*1000),
+                        status: 'complété',
+                        icon: '↗️',
+                        description: 'De Jean Martin'
+                    }
+                ];
+
+                displayTransactions(transactions);
+
+            } catch (error) {
+                console.error('Erreur chargement transactions:', error);
+            }
+        }
+
+        // Afficher les transactions
+        function displayTransactions(transactionsToShow) {
+            const container = document.getElementById('transactionsList');
+            
+            if (!transactionsToShow || transactionsToShow.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #999; padding: 30px;">Aucune transaction</p>';
+                return;
+            }
+
+            let html = '';
+            transactionsToShow.forEach(transaction => {
+                const isPositive = transaction.montant > 0;
+                const dateStr = transaction.date.toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+
+                html += `
+                    <div class="transaction-item">
+                        <div class="transaction-left">
+                            <div class="transaction-icon">${transaction.icon}</div>
+                            <div class="transaction-details">
+                                <h4>${transaction.description || transaction.type}</h4>
+                                <p>${dateStr}</p>
+                            </div>
+                        </div>
+                        <div class="transaction-right">
+                            <div class="transaction-amount ${isPositive ? 'amount-positive' : 'amount-negative'}">
+                                ${isPositive ? '+' : ''}${transaction.montant.toFixed(2)} €
+                            </div>
+                            <span class="transaction-status ${transaction.status === 'complété' ? 'status-success' : 'status-pending'}">
+                                ${transaction.status === 'complété' ? 'Complété' : 'En attente'}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Filtrer les transactions
+        function filterTransactions() {
+            const filter = document.getElementById('transactionFilter').value;
+            
+            let filtered = [...transactions];
+            
+            if (filter === 'incoming') {
+                filtered = transactions.filter(t => t.montant > 0);
+            } else if (filter === 'outgoing') {
+                filtered = transactions.filter(t => t.montant < 0);
+            } else if (filter === 'pending') {
+                filtered = transactions.filter(t => t.status === 'en_attente');
+            }
+            
+            displayTransactions(filtered);
+        }
+
+        // Scroll vers une section
+        function scrollToSection(section) {
+            document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Afficher le menu utilisateur
+        function showUserMenu() {
+            showAlert('Profil utilisateur - bientôt disponible', 'success');
+        }
+
+        // Afficher le formulaire de retrait
+        function showWithdrawForm() {
+            scrollToSection('withdraw');
+        }
+
+        // Transférer de l'argent
+        function transferMoney() {
+            showAlert('Service de transfert bientôt disponible', 'success');
+        }
+
+        // Payer une facture
+        function payBills() {
+            showAlert('Service de paiement de factures bientôt disponible', 'success');
+        }
+
+        // Afficher les documents
+        function showDocuments() {
+            showAlert('Gestion des documents bientôt disponible', 'success');
+        }
+
+        // Upload de document
+        function uploadDocument(type) {
+            showAlert(`Téléchargement du document ${type} - bientôt disponible`, 'success');
+        }
+
+        // Demande de retrait
+        async function requestWithdraw() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const account = document.getElementById('withdrawAccount').value;
+            
+            if (!amount || amount < 10) {
+                showAlert('Veuillez entrer un montant valide (minimum 10€)', 'error');
+                return;
+            }
+
+            if (amount > userProfile.solde) {
+                showAlert('Solde insuffisant pour effectuer ce retrait', 'error');
+                return;
+            }
+
+            // Afficher les documents requis
+            const documentsDiv = document.getElementById('documentsRequired');
+            documentsDiv.classList.add('show');
+            
+            showAlert('Votre demande de retrait a été enregistrée. Veuillez fournir les documents requis.', 'success');
+            
+            // Simuler l'ajout d'une transaction
+            const newTransaction = {
+                id: transactions.length + 1,
+                type: 'Retrait',
+                montant: -amount,
+                date: new Date(),
+                status: 'en_attente',
+                icon: '💳',
+                description: `Retrait de ${amount}€`
+            };
+            
+            transactions.unshift(newTransaction);
+            displayTransactions(transactions);
+            
+            // Mettre à jour le solde (simulé)
+            userProfile.solde -= amount;
+            document.getElementById('currentBalance').textContent = userProfile.solde.toFixed(2);
+        }
+
+        // Afficher une alerte
+        function showAlert(message, type) {
+            const alert = document.getElementById('alertMessage');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 5000);
+        }
+
+        // Déconnexion
+        async function logout() {
+            try {
+                const { error } = await supabase.auth.signOut();
+                if (error) throw error;
+                window.location.href = 'connexion.html';
+            } catch (error) {
+                console.error('Erreur déconnexion:', error);
+                showAlert('Erreur lors de la déconnexion', 'error');
+            }
+        }
+    </script>
+</body>
+</html>
