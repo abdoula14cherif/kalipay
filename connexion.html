@@ -350,6 +350,12 @@
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
 
+        // Empêcher la soumission par défaut du formulaire
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            return false;
+        });
+
         // Vérifier si l'utilisateur est déjà connecté
         async function checkExistingSession() {
             try {
@@ -383,9 +389,10 @@
             showAlert('Veuillez contacter votre conseiller bancaire au 01 23 45 67 89', 'success');
         }
 
-        // Gestion de la connexion
-        form.addEventListener('submit', async (e) => {
+        // Gestion de la connexion - Version corrigée
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
+            e.stopPropagation();
 
             const email = emailInput.value.trim();
             const password = passwordInput.value;
@@ -393,7 +400,7 @@
             // Validations
             if (!email || !password) {
                 showAlert('Veuillez remplir tous les champs', 'error');
-                return;
+                return false;
             }
 
             try {
@@ -432,6 +439,8 @@
                     setTimeout(() => {
                         window.location.href = 'dashboard.html';
                     }, 1000);
+                    
+                    return true;
                 }
 
             } catch (error) {
@@ -446,9 +455,10 @@
                     emailInput.classList.remove('error');
                     passwordInput.classList.remove('error');
                 }, 500);
-            } finally {
+                
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'SE CONNECTER';
+                return false;
             }
         });
 
