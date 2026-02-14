@@ -198,13 +198,13 @@
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
 
-        // MODIFICATION 1: Nouvel email admin
+        // Email admin (insensible à la casse)
         const ADMIN_EMAIL = 'serviceclient08987@gmail.com';
 
         // Vérifier si déjà connecté
         async function checkExistingSession() {
             const { data: { user } } = await _supabase.auth.getUser();
-            if (user && user.email === ADMIN_EMAIL) {
+            if (user && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
                 sessionStorage.setItem('adminAuth', 'true');
                 window.location.href = 'admin-dashboard.html';
             }
@@ -240,13 +240,25 @@
 
                 if (error) throw error;
 
-                // MODIFICATION 2: Vérifier avec le nouvel email
-                if (data.user.email === ADMIN_EMAIL) {
-                    sessionStorage.setItem('adminAuth', 'true');
-                    showAlert('Connexion admin réussie !', 'success');
-                    setTimeout(() => {
-                        window.location.href = 'admin-dashboard.html';
-                    }, 1000);
+                // ✅ Vérification insensible à la casse
+                if (data.user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+                    
+                    // ✅ Vérifier aussi le rôle dans profiles
+                    const { data: profile, error: profileError } = await _supabase
+                        .from('profiles')
+                        .select('role')
+                        .eq('id', data.user.id)
+                        .single();
+
+                    if (!profileError && profile && profile.role === 'admin') {
+                        sessionStorage.setItem('adminAuth', 'true');
+                        showAlert('Connexion admin réussie !', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'admin-dashboard.html';
+                        }, 1000);
+                    } else {
+                        throw new Error('Profil non trouvé ou pas admin');
+                    }
                 } else {
                     throw new Error('Accès non autorisé - Compte non admin');
                 }
@@ -259,7 +271,7 @@
                 } else if (error.message.includes('non autorisé')) {
                     showAlert('Ce compte n\'a pas les droits admin', 'error');
                 } else {
-                    showAlert('Erreur de connexion', 'error');
+                    showAlert('Erreur de connexion: ' + error.message, 'error');
                 }
 
                 submitBtn.disabled = false;
