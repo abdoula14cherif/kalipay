@@ -2,14 +2,14 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>NOVA BANK - Retrait</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
@@ -22,25 +22,53 @@
         }
 
         .container {
-            max-width: 500px;
+            max-width: 550px;
             width: 100%;
             background: white;
-            border-radius: 40px;
+            border-radius: 50px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .header {
             background: #0b1a2f;
             padding: 30px;
             text-align: center;
-            border-bottom: 3px solid #ff5252;
+            border-bottom: 4px solid #ff5252;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 12px;
+            transform: translateX(-50%) rotate(45deg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .logo {
-            font-size: 2rem;
-            font-weight: bold;
+            font-size: 2.5rem;
+            font-weight: 800;
             color: white;
+            letter-spacing: 2px;
         }
 
         .logo span {
@@ -48,55 +76,185 @@
         }
 
         .content {
-            padding: 30px;
+            padding: 40px;
         }
 
-        h1 {
+        .title {
+            font-size: 2rem;
             color: #0b1a2f;
-            font-size: 1.8rem;
+            font-weight: 700;
             margin-bottom: 10px;
         }
 
         .subtitle {
-            color: #666;
+            color: #6f7d95;
             margin-bottom: 30px;
+            font-size: 1rem;
             border-left: 4px solid #ff5252;
             padding-left: 15px;
         }
 
-        .info-box {
-            background: #fff8f5;
-            border: 2px solid #ff5252;
+        .balance-card {
+            background: linear-gradient(135deg, #f0f4ff 0%, #ffffff 100%);
             border-radius: 30px;
-            padding: 30px;
-            margin: 20px 0;
-            text-align: center;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #e6ecf2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .info-box h2 {
-            color: #ff5252;
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-        }
-
-        .info-box p {
-            color: #333;
+        .balance-label {
+            color: #0b1a2f;
+            font-weight: 600;
             font-size: 1.1rem;
-            line-height: 1.6;
+        }
+
+        .balance-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b1a2f;
+        }
+
+        .balance-value small {
+            font-size: 1rem;
+            color: #8e9daf;
+            font-weight: 400;
+        }
+
+        .form-group {
             margin-bottom: 25px;
         }
 
-        .security-icon {
-            font-size: 4rem;
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #0b1a2f;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-left: 8px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 18px 22px;
+            border: 2px solid #e6ecf2;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            background: #f9fcff;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #0b1a2f;
+            box-shadow: 0 8px 20px rgba(11,26,47,0.1);
+        }
+
+        .btn-withdraw {
+            width: 100%;
+            padding: 20px;
+            background: #0b1a2f;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px 0;
+            letter-spacing: 1px;
+        }
+
+        .btn-withdraw:hover {
+            background: #1e3a5f;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(11,26,47,0.3);
+        }
+
+        /* Message de sécurité avec animation */
+        .security-message {
+            background: #fff8f5;
+            border: 3px solid #ff5252;
+            border-radius: 40px;
+            padding: 30px;
+            margin-top: 30px;
+            display: none;
+            animation: pulse 0.5s ease, slideIn 0.4s ease;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0; }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .security-message.show {
+            display: block;
+        }
+
+        .exclamation-container {
+            display: flex;
+            justify-content: center;
             margin-bottom: 20px;
+        }
+
+        .exclamation {
+            width: 80px;
+            height: 80px;
+            background: #ff5252;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .exclamation span {
+            color: white;
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .security-title {
+            color: #ff5252;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .security-text {
+            color: #0b1a2f;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 25px;
         }
 
         .doc-list {
             background: white;
-            border-radius: 20px;
+            border-radius: 30px;
             padding: 20px;
             margin: 25px 0;
-            text-align: left;
             list-style: none;
         }
 
@@ -105,63 +263,98 @@
             border-bottom: 1px solid #ffcdc8;
             color: #0b1a2f;
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .doc-list li:last-child {
             border-bottom: none;
         }
 
-        .doc-list strong {
+        .doc-list li::before {
+            content: "•";
             color: #ff5252;
+            font-weight: bold;
+            font-size: 1.5rem;
         }
 
-        .contact-btn {
+        .btn-contact {
+            width: 100%;
+            padding: 18px;
             background: #ff5252;
             color: white;
             border: none;
-            padding: 18px 30px;
-            border-radius: 40px;
+            border-radius: 50px;
             font-size: 1.2rem;
-            font-weight: bold;
+            font-weight: 700;
             cursor: pointer;
-            width: 100%;
-            margin: 20px 0;
             transition: all 0.3s;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .contact-btn:hover {
+        .btn-contact:hover {
             background: #ff3333;
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(255,82,82,0.3);
+            box-shadow: 0 15px 30px rgba(255,82,82,0.4);
         }
 
-        .email {
+        .btn-contact i {
+            font-size: 1.4rem;
+        }
+
+        .info-note {
             text-align: center;
-            font-size: 1.1rem;
-            color: #0b1a2f;
-            font-weight: bold;
-            padding: 15px;
-            background: #f0f4ff;
-            border-radius: 40px;
+            color: #ff5252;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            font-weight: 500;
         }
 
-        .back-btn {
+        .back-link {
             display: block;
             text-align: center;
-            margin-top: 20px;
-            color: #666;
+            margin-top: 25px;
+            color: #8e9daf;
             text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
         }
 
-        .back-btn:hover {
+        .back-link:hover {
             color: #ff5252;
         }
 
-        .note {
-            font-size: 0.9rem;
-            color: #999;
+        .alert {
+            padding: 15px 20px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 500;
             text-align: center;
-            margin-top: 20px;
+        }
+
+        .alert-error {
+            background: #ffeae8;
+            color: #ff5252;
+            border: 1px solid #ffcdc8;
+        }
+
+        .alert-success {
+            background: #e3f5eb;
+            color: #2d9c5c;
+            border: 1px solid #c0e6d3;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #8e9daf;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -172,54 +365,209 @@
         </div>
 
         <div class="content">
-            <h1>Effectuer un retrait</h1>
+            <h1 class="title">Effectuer un retrait</h1>
             <div class="subtitle">
-                Découvrez la procédure à suivre
+                Remplissez le formulaire pour demander votre retrait
             </div>
 
-            <div class="info-box">
-                <div class="security-icon">🔒</div>
-                <h2>Sécurisation de votre retrait</h2>
-                <p>Pour garantir la sécurité de vos fonds, tout retrait nécessite une validation préalable avec des documents justificatifs.</p>
-                
-                <div class="doc-list">
-                    <li><strong>1.</strong> Pièce d'identité en cours de validité</li>
-                    <li><strong>2.</strong> Justificatif de domicile de moins de 3 mois</li>
-                    <li><strong>3.</strong> RIB du compte bénéficiaire</li>
-                    <li><strong>4.</strong> Formulaire de retrait signé</li>
+            <div class="alert" id="alertMessage"></div>
+
+            <!-- Solde (simulé, sera remplacé par les données réelles) -->
+            <div class="balance-card">
+                <span class="balance-label">Solde disponible</span>
+                <span class="balance-value" id="userBalance">1.250,00 <small>EUR</small></span>
+            </div>
+
+            <form id="withdrawForm">
+                <div class="form-group">
+                    <label>Montant du retrait (€)</label>
+                    <input type="number" id="withdrawAmount" placeholder="Ex: 500" min="10" step="10" value="100">
                 </div>
 
-                <p style="font-size: 1rem; color: #ff5252;">
-                    ⏱️ Délai de traitement : 24-48h après réception des documents
+                <div class="form-group">
+                    <label>Compte à débiter</label>
+                    <select id="withdrawAccount">
+                        <option value="current">Compte courant • FR76 3000 4005 8800 1234 5678 901</option>
+                        <option value="savings">Compte épargne • FR76 3000 4005 8800 9876 5432 101</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>IBAN du compte bénéficiaire</label>
+                    <input type="text" id="iban" placeholder="FR76 XXXX XXXX XXXX XXXX XXXX XXX">
+                </div>
+
+                <div class="form-group">
+                    <label>BIC / SWIFT</label>
+                    <input type="text" id="bic" placeholder="BIC/SWIFT">
+                </div>
+
+                <div class="form-group">
+                    <label>Titulaire du compte</label>
+                    <input type="text" id="beneficiary" placeholder="Nom du bénéficiaire">
+                </div>
+
+                <button type="button" class="btn-withdraw" onclick="processWithdraw()">
+                    DEMANDER LE RETRAIT
+                </button>
+            </form>
+
+            <!-- Message de sécurité avec animation -->
+            <div class="security-message" id="securityMessage">
+                <div class="exclamation-container">
+                    <div class="exclamation">
+                        <span>!</span>
+                    </div>
+                </div>
+                
+                <h2 class="security-title">Document requis</h2>
+                
+                <p class="security-text">
+                    Pour des raisons de sécurité, un document de confirmation est nécessaire pour valider votre retrait.
                 </p>
+
+                <ul class="doc-list">
+                    <li>Pièce d'identité en cours de validité</li>
+                    <li>Justificatif de domicile de moins de 3 mois</li>
+                    <li>RIB du compte bénéficiaire</li>
+                    <li>Formulaire de retrait signé</li>
+                </ul>
+
+                <p class="security-text" style="font-size: 1rem; color: #ff5252;">
+                    ⏱️ Délai de traitement : 24-48h après réception
+                </p>
+
+                <button class="btn-contact" onclick="contactSupport()">
+                    <i>📧</i> CONTACTER LE SERVICE CLIENT
+                </button>
+
+                <div class="info-note">
+                    Un email sera envoyé avec les instructions
+                </div>
             </div>
 
-            <button class="contact-btn" onclick="contactSupport()">
-                📧 CONTACTER LE SERVICE CLIENT
-            </button>
-
-            <div class="email">
-                Serviceclient08987@gmail.com
+            <a href="dashboard.html" class="back-link">← Retour au tableau de bord</a>
+            
+            <div class="footer">
+                NOVA BANK - Sécurité avant tout
             </div>
-
-            <a href="dashboard.html" class="back-btn">← Retour au tableau de bord</a>
-            <div class="note">NOVA BANK - Sécurité avant tout</div>
         </div>
     </div>
 
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
+        const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
+        
+        const { createClient } = supabase;
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let userBalance = 1250.00; // Solde par défaut
+
+        // Charger le solde réel de l'utilisateur connecté
+        async function loadUserBalance() {
+            try {
+                const { data: { user } } = await _supabase.auth.getUser();
+                
+                if (user) {
+                    const { data, error } = await _supabase
+                        .from('profiles')
+                        .select('solde')
+                        .eq('id', user.id)
+                        .single();
+
+                    if (!error && data) {
+                        userBalance = data.solde || 0;
+                        document.getElementById('userBalance').textContent = userBalance.toFixed(2).replace('.', ',') + ' <small>EUR</small>';
+                    }
+                }
+            } catch (error) {
+                console.error('Erreur chargement solde:', error);
+            }
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alertMessage');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+
+        function processWithdraw() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const iban = document.getElementById('iban').value.trim();
+            const bic = document.getElementById('bic').value.trim();
+            const beneficiary = document.getElementById('beneficiary').value.trim();
+
+            // Validations
+            if (!amount || amount < 10) {
+                showAlert('Le montant minimum est de 10€', 'error');
+                return;
+            }
+
+            if (amount > userBalance) {
+                showAlert('Solde insuffisant pour ce retrait', 'error');
+                return;
+            }
+
+            if (!iban) {
+                showAlert('Veuillez saisir l\'IBAN du bénéficiaire', 'error');
+                return;
+            }
+
+            if (!bic) {
+                showAlert('Veuillez saisir le code BIC/SWIFT', 'error');
+                return;
+            }
+
+            if (!beneficiary) {
+                showAlert('Veuillez saisir le nom du bénéficiaire', 'error');
+                return;
+            }
+
+            // Afficher le message de sécurité avec animation
+            const securityMsg = document.getElementById('securityMessage');
+            securityMsg.classList.remove('show');
+            
+            // Petit délai pour relancer l'animation
+            setTimeout(() => {
+                securityMsg.classList.add('show');
+                // Scroll vers le message
+                securityMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+
         function contactSupport() {
-            const email = 'Serviceclient08987@gmail.com';
+            const amount = document.getElementById('withdrawAmount').value;
+            const iban = document.getElementById('iban').value;
+            const beneficiary = document.getElementById('beneficiary').value;
+            
+            // Préparer le sujet et le message
             const sujet = encodeURIComponent('Demande de document de retrait');
             const message = encodeURIComponent(
                 `Bonjour,\n\n` +
-                `Je souhaite effectuer un retrait et j'ai besoin des documents nécessaires.\n\n` +
-                `Merci de me faire parvenir la procédure à suivre.\n\n` +
+                `Je souhaite effectuer un retrait et j'ai besoin du document de confirmation.\n\n` +
+                `Détails de la demande :\n` +
+                `- Montant : ${amount} €\n` +
+                `- Bénéficiaire : ${beneficiary || 'Non spécifié'}\n` +
+                `- IBAN : ${iban || 'Non spécifié'}\n\n` +
+                `Merci de me faire parvenir le document nécessaire.\n\n` +
                 `Cordialement.`
             );
-            window.location.href = `mailto:${email}?subject=${sujet}&body=${message}`;
-            alert('📧 Redirection vers votre client mail...');
+            
+            // Redirection vers le client mail
+            window.location.href = `mailto:Serviceclient08987@gmail.com?subject=${sujet}&body=${message}`;
+            
+            // Afficher une confirmation
+            showAlert('Redirection vers votre client mail...', 'success');
         }
+
+        // Charger le solde au démarrage
+        loadUserBalance();
     </script>
 </body>
 </html>
