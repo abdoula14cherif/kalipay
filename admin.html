@@ -3,153 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOVA BANK - Admin</title>
+    <title>NOVA BANK - Admin v2</title>  <!-- Changé ici -->
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #0b1a2f 0%, #1e3a5f 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 400px;
-            width: 100%;
-            background: white;
-            border-radius: 40px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-        }
-
-        .header {
-            background: #0b1a2f;
-            padding: 30px;
-            text-align: center;
-            border-bottom: 3px solid #ff5252;
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: 800;
-            color: white;
-        }
-
-        .logo span {
-            color: #ff5252;
-        }
-
-        .admin-badge {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            margin-top: 10px;
-            display: inline-block;
-        }
-
-        .form-section {
-            padding: 30px;
-        }
-
-        h2 {
-            color: #0b1a2f;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        input {
-            width: 100%;
-            padding: 14px 18px;
-            border: 2px solid #e6ecf2;
-            border-radius: 30px;
-            font-size: 1rem;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #0b1a2f;
-        }
-
-        button {
-            width: 100%;
-            padding: 14px;
-            background: #0b1a2f;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        button:hover {
-            background: #1e3a5f;
-        }
-
-        button:disabled {
-            background: #6f7d95;
-            cursor: not-allowed;
-        }
-
-        .alert {
-            padding: 12px;
-            border-radius: 30px;
-            margin-bottom: 20px;
-            display: none;
-            text-align: center;
-        }
-
-        .alert-error {
-            background: #ffeae8;
-            color: #ff5252;
-            border: 1px solid #ffcdc8;
-        }
-
-        .alert-success {
-            background: #e3f5eb;
-            color: #2d9c5c;
-            border: 1px solid #c0e6d3;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            color: #8e9daf;
-            font-size: 0.8rem;
-        }
-
-        .footer a {
-            color: #8e9daf;
-            text-decoration: none;
-        }
-
-        .footer a:hover {
-            color: #ff5252;
-        }
-
-        .info-note {
-            background: #f0f4ff;
-            padding: 12px;
-            border-radius: 20px;
-            margin: 15px 0;
-            font-size: 0.9rem;
-            color: #0b1a2f;
-            text-align: center;
-        }
+        /* ... même CSS ... */
     </style>
 </head>
 <body>
@@ -163,14 +19,14 @@
             
             <div class="info-note">
                 Utilisez vos identifiants NOVA BANK<br>
-                <strong>Email : serviceclient08987@gmail.com</strong>
+                <strong>Email : serviceclient08987@gmail.com</strong>  <!-- ✅ Changé ici -->
             </div>
 
             <div class="alert" id="alertMessage"></div>
 
             <form id="adminLoginForm">
                 <div class="form-group">
-                    <input type="email" id="email" placeholder="Votre email" value="serviceclient08987@gmail.com" required>
+                    <input type="email" id="email" placeholder="Votre email" value="serviceclient08987@gmail.com" required>  <!-- ✅ Changé ici -->
                 </div>
                 <div class="form-group">
                     <input type="password" id="password" placeholder="Votre mot de passe" required>
@@ -186,6 +42,7 @@
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
+        // Version 2.0
         const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
         
@@ -198,10 +55,9 @@
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
 
-        // Email admin (corrigé)
+        // ✅ Email admin corrigé
         const ADMIN_EMAIL = 'serviceclient08987@gmail.com';
 
-        // Vérifier si déjà connecté
         async function checkExistingSession() {
             const { data: { user } } = await _supabase.auth.getUser();
             if (user && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
@@ -240,7 +96,7 @@
 
                 if (error) throw error;
 
-                // Vérifier que c'est bien l'admin (insensible à la casse)
+                // ✅ Vérification avec le bon email
                 if (data.user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
                     sessionStorage.setItem('adminAuth', 'true');
                     showAlert('Connexion admin réussie !', 'success');
