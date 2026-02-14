@@ -391,6 +391,12 @@
         const strengthText = document.getElementById('passwordStrengthText');
         const identiteInput = document.getElementById('identite');
 
+        // Empêcher la soumission par défaut du formulaire
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            return false;
+        });
+
         // Vérifier si l'utilisateur est déjà connecté
         async function checkExistingSession() {
             try {
@@ -503,9 +509,10 @@
             return cleaned.length >= 6 && cleaned.length <= 12;
         }
 
-        // Gestion de l'inscription
-        form.addEventListener('submit', async (e) => {
+        // Gestion de l'inscription - Version corrigée
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
+            e.stopPropagation();
 
             const nom = document.getElementById('nom').value.trim();
             const email = document.getElementById('email').value.trim();
@@ -516,27 +523,29 @@
             // Validations
             if (!nom || !email || !identite || !password || !confirmPassword) {
                 showAlert('Veuillez remplir tous les champs', 'error');
-                return;
+                return false;
             }
 
             if (!validateIdentite(identite)) {
                 showAlert('Le numéro d\'identité doit contenir entre 6 et 12 caractères', 'error');
-                return;
+                return false;
             }
 
             if (password !== confirmPassword) {
                 showAlert('Les mots de passe ne correspondent pas', 'error');
-                return;
+                return false;
             }
 
             if (password.length < 6) {
                 showAlert('Le mot de passe doit contenir au moins 6 caractères', 'error');
-                return;
+                return false;
             }
 
             try {
                 submitBtn.disabled = true;
                 submitBtn.textContent = 'CRÉATION EN COURS...';
+
+                console.log('Tentative d\'inscription pour:', email);
 
                 // Inscription avec Supabase
                 const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -563,25 +572,24 @@
                 }
 
                 if (authData && authData.user) {
-                    console.log('Utilisateur créé:', authData.user);
+                    console.log('Utilisateur créé avec succès:', authData.user);
                     
-                    // Attendre un peu que le trigger crée le profil
-                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    showAlert('Compte créé avec succès ! Redirection vers la connexion...', 'success');
                     
-                    showAlert('Compte créé avec succès ! Vérifiez votre email pour confirmer votre compte.', 'success');
-                    
-                    // Redirection après 3 secondes
+                    // Redirection après 2 secondes
                     setTimeout(() => {
                         window.location.href = 'connexion.html';
-                    }, 3000);
+                    }, 2000);
+                    
+                    return true;
                 }
 
             } catch (error) {
                 console.error('Erreur complète:', error);
                 showAlert(error.message || 'Une erreur est survenue lors de l\'inscription', 'error');
-            } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'CRÉER MON COMPTE';
+                return false;
             }
         });
     </script>
