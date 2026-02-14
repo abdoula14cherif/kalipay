@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>NOVA BANK - Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #f5f7fc;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: #0b1a2f;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+        }
+
+        .logo span {
+            color: #ff5252;
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .admin-badge {
+            background: #ff5252;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            padding: 8px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Stats cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 30px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+            border: 1px solid #eef2f6;
+        }
+
+        .stat-label {
+            color: #6f7d95;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0b1a2f;
+        }
+
+        .stat-value small {
+            font-size: 0.9rem;
+            color: #8e9daf;
+            font-weight: 400;
+        }
+
+        /* Search bar */
+        .search-section {
+            background: white;
+            border-radius: 40px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            border: 1px solid #eef2f6;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 2px solid #e6ecf2;
+            border-radius: 40px;
+            font-size: 1rem;
+            min-width: 250px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #0b1a2f;
+        }
+
+        .btn-filter {
+            background: #f0f4ff;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 40px;
+            font-weight: 600;
+            color: #0b1a2f;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-filter:hover {
+            background: #e0e8ff;
+        }
+
+        /* Tableau des utilisateurs */
+        .users-table-container {
+            background: white;
+            border-radius: 40px;
+            padding: 25px;
+            border: 1px solid #eef2f6;
+            overflow-x: auto;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .table-header h2 {
+            color: #0b1a2f;
+            font-size: 1.5rem;
+        }
+
+        .table-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-refresh {
+            background: #0b1a2f;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-refresh:hover {
+            background: #1e3a5f;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        th {
+            text-align: left;
+            padding: 18px 12px;
+            color: #6f7d95;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 2px solid #eef2f6;
+        }
+
+        td {
+            padding: 16px 12px;
+            border-bottom: 1px solid #eef2f6;
+            color: #0b1a2f;
+            font-weight: 500;
+        }
+
+        tr:hover td {
+            background: #f9fcff;
+        }
+
+        .user-email {
+            color: #0b1a2f;
+            font-weight: 600;
+        }
+
+        .user-id {
+            color: #8e9daf;
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
+
+        .balance-cell {
+            font-weight: 700;
+            color: #0b1a2f;
+        }
+
+        .balance-positive {
+            color: #2d9c5c;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            border: none;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-add {
+            background: #e3f5eb;
+            color: #2d9c5c;
+        }
+
+        .btn-add:hover {
+            background: #c0e6d3;
+        }
+
+        .btn-remove {
+            background: #ffeae8;
+            color: #ff5252;
+        }
+
+        .btn-remove:hover {
+            background: #ffcdc8;
+        }
+
+        .btn-delete {
+            background: #ff5252;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #ff3333;
+        }
+
+        .btn-view {
+            background: #f0f4ff;
+            color: #0b1a2f;
+        }
+
+        .btn-view:hover {
+            background: #e0e8ff;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 40px;
+            padding: 30px;
+            max-width: 450px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #0b1a2f;
+            font-size: 1.4rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #8e9daf;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .modal-info {
+            background: #f9fcff;
+            border-radius: 30px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-info p {
+            margin: 8px 0;
+            color: #0b1a2f;
+        }
+
+        .modal-info strong {
+            color: #6f7d95;
+            width: 100px;
+            display: inline-block;
+        }
+
+        .modal-form-group {
+            margin-bottom: 20px;
+        }
+
+        .modal-form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #0b1a2f;
+            font-weight: 600;
+        }
+
+        .modal-form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e6ecf2;
+            border-radius: 30px;
+            font-size: 1rem;
+        }
+
+        .modal-form-group input:focus {
+            outline: none;
+            border-color: #0b1a2f;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-modal {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-modal-primary {
+            background: #0b1a2f;
+            color: white;
+        }
+
+        .btn-modal-primary:hover {
+            background: #1e3a5f;
+        }
+
+        .btn-modal-secondary {
+            background: #f0f4ff;
+            color: #0b1a2f;
+        }
+
+        .btn-modal-secondary:hover {
+            background: #e0e8ff;
+        }
+
+        .btn-modal-danger {
+            background: #ff5252;
+            color: white;
+        }
+
+        .btn-modal-danger:hover {
+            background: #ff3333;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 16px 24px;
+            border-radius: 40px;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 500;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .alert-success {
+            background: #e3f5eb;
+            color: #2d9c5c;
+            border: 1px solid #c0e6d3;
+        }
+
+        .alert-error {
+            background: #ffeae8;
+            color: #ff5252;
+            border: 1px solid #ffcdc8;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #8e9daf;
+        }
+
+        .spinner {
+            border: 4px solid #f0f4ff;
+            border-top: 4px solid #0b1a2f;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .search-section {
+                flex-direction: column;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
+            
+            .btn-filter {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">NOVA<span>BANK</span></div>
+        <div class="admin-info">
+            <span class="admin-badge">Administrateur</span>
+            <button class="logout-btn" onclick="logout()">Déconnexion</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="alert" id="alertMessage"></div>
+
+        <!-- Statistiques -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total utilisateurs</div>
+                <div class="stat-value" id="totalUsers">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Solde total</div>
+                <div class="stat-value" id="totalBalance">0 <small>EUR</small></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Solde moyen</div>
+                <div class="stat-value" id="avgBalance">0 <small>EUR</small></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Inscriptions</div>
+                <div class="stat-value" id="todayUsers">0 <small>aujourd'hui</small></div>
+            </div>
+        </div>
+
+        <!-- Recherche -->
+        <div class="search-section">
+            <input type="text" class="search-input" id="searchInput" placeholder="Rechercher par nom, email ou ID..." onkeyup="searchUsers()">
+            <button class="btn-filter" onclick="filterUsers()">Filtrer</button>
+            <button class="btn-refresh" onclick="loadUsers()">Actualiser</button>
+        </div>
+
+        <!-- Tableau des utilisateurs -->
+        <div class="users-table-container">
+            <div class="table-header">
+                <h2>Gestion des utilisateurs</h2>
+                <div class="table-controls">
+                    <button class="btn-refresh" onclick="exportCSV()">Exporter CSV</button>
+                </div>
+            </div>
+
+            <div id="usersTable">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Chargement des utilisateurs...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ajout de solde -->
+    <div class="modal" id="addBalanceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Ajouter du solde</h3>
+                <button class="close-modal" onclick="closeModal('addBalanceModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-info" id="addUserInfo"></div>
+                <div class="modal-form-group">
+                    <label>Montant à ajouter (EUR)</label>
+                    <input type="number" id="addAmount" placeholder="Ex: 500" min="0" step="10">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal btn-modal-secondary" onclick="closeModal('addBalanceModal')">Annuler</button>
+                <button class="btn-modal btn-modal-primary" onclick="confirmAddBalance()">Ajouter</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Retrait de solde -->
+    <div class="modal" id="removeBalanceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Retirer du solde</h3>
+                <button class="close-modal" onclick="closeModal('removeBalanceModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-info" id="removeUserInfo"></div>
+                <div class="modal-form-group">
+                    <label>Montant à retirer (EUR)</label>
+                    <input type="number" id="removeAmount" placeholder="Ex: 100" min="0" step="10">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal btn-modal-secondary" onclick="closeModal('removeBalanceModal')">Annuler</button>
+                <button class="btn-modal btn-modal-primary" onclick="confirmRemoveBalance()">Retirer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Détails utilisateur -->
+    <div class="modal" id="userDetailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Détails utilisateur</h3>
+                <button class="close-modal" onclick="closeModal('userDetailsModal')">&times;</button>
+            </div>
+            <div class="modal-body" id="userDetailsContent">
+                <!-- Rempli dynamiquement -->
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal btn-modal-secondary" onclick="closeModal('userDetailsModal')">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmation suppression -->
+    <div class="modal" id="deleteUserModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Supprimer l'utilisateur</h3>
+                <button class="close-modal" onclick="closeModal('deleteUserModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer cet utilisateur ?</p>
+                <p class="user-email" id="deleteUserEmail"></p>
+                <p style="color: #ff5252; margin-top: 10px;">Cette action est irréversible.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal btn-modal-secondary" onclick="closeModal('deleteUserModal')">Annuler</button>
+                <button class="btn-modal btn-modal-danger" onclick="confirmDeleteUser()">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        // Vérification admin
+        if (!sessionStorage.getItem('adminAuth')) {
+            window.location.href = 'admin.html';
+        }
+
+        const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
+        
+        const { createClient } = supabase;
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let users = [];
+        let currentUserId = null;
+
+        // Charger les utilisateurs
+        async function loadUsers() {
+            try {
+                const { data, error } = await _supabase
+                    .from('profiles')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                users = data || [];
+                displayUsers(users);
+                updateStats();
+                
+            } catch (error) {
+                console.error('Erreur chargement:', error);
+                showAlert('Erreur lors du chargement', 'error');
+            }
+        }
+
+        // Afficher les utilisateurs
+        function displayUsers(usersToShow) {
+            const container = document.getElementById('usersTable');
+            
+            if (!usersToShow || usersToShow.length === 0) {
+                container.innerHTML = '<p style="text-align: center; padding: 40px; color: #8e9daf;">Aucun utilisateur trouvé</p>';
+                return;
+            }
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Utilisateur</th>
+                            <th>Email</th>
+                            <th>ID Carte</th>
+                            <th>Solde</th>
+                            <th>Date inscription</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            usersToShow.forEach(user => {
+                const date = new Date(user.created_at).toLocaleDateString('fr-FR');
+                html += `
+                    <tr>
+                        <td>
+                            <div class="user-email">${user.nom || 'Non renseigné'}</div>
+                            <div class="user-id">ID: ${user.id.substring(0, 8)}...</div>
+                        </td>
+                        <td>${user.email}</td>
+                        <td>${user.numero_identite || 'Non renseigné'}</td>
+                        <td class="balance-cell">${user.solde.toFixed(2)} €</td>
+                        <td>${date}</td>
+                        <td class="actions-cell">
+                            <button class="btn-action btn-add" onclick="openAddModal('${user.id}', '${user.nom}', ${user.solde})">+ Ajouter</button>
+                            <button class="btn-action btn-remove" onclick="openRemoveModal('${user.id}', '${user.nom}', ${user.solde})">- Retirer</button>
+                            <button class="btn-action btn-view" onclick="viewUserDetails('${user.id}')">Détails</button>
+                            <button class="btn-action btn-delete" onclick="openDeleteModal('${user.id}', '${user.nom}')">Supprimer</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        // Mettre à jour les statistiques
+        function updateStats() {
+            document.getElementById('totalUsers').textContent = users.length;
+            
+            const totalBalance = users.reduce((sum, user) => sum + (user.solde || 0), 0);
+            document.getElementById('totalBalance').textContent = totalBalance.toFixed(2);
+            
+            const avgBalance = users.length > 0 ? totalBalance / users.length : 0;
+            document.getElementById('avgBalance').textContent = avgBalance.toFixed(2);
+            
+            const today = new Date().toDateString();
+            const todayUsers = users.filter(u => new Date(u.created_at).toDateString() === today).length;
+            document.getElementById('todayUsers').textContent = todayUsers;
+        }
+
+        // Recherche
+        function searchUsers() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (!search) {
+                displayUsers(users);
+                return;
+            }
+
+            const filtered = users.filter(user => 
+                (user.nom && user.nom.toLowerCase().includes(search)) ||
+                (user.email && user.email.toLowerCase().includes(search)) ||
+                (user.id && user.id.toLowerCase().includes(search))
+            );
+            
+            displayUsers(filtered);
+        }
+
+        // Filtrer
+        function filterUsers() {
+            const sorted = [...users].sort((a, b) => b.solde - a.solde);
+            displayUsers(sorted);
+        }
+
+        // Ouvrir modal ajout
+        function openAddModal(userId, userName, currentBalance) {
+            currentUserId = userId;
+            document.getElementById('addUserInfo').innerHTML = `
+                <p><strong>Utilisateur:</strong> ${userName}</p>
+                <p><strong>Solde actuel:</strong> ${currentBalance.toFixed(2)} €</p>
+            `;
+            document.getElementById('addAmount').value = '';
+            document.getElementById('addBalanceModal').classList.add('active');
+        }
+
+        // Confirmer ajout
+        async function confirmAddBalance() {
+            const amount = parseFloat(document.getElementById('addAmount').value);
+            
+            if (!amount || amount <= 0) {
+                showAlert('Montant invalide', 'error');
+                return;
+            }
+
+            try {
+                const user = users.find(u => u.id === currentUserId);
+                const newBalance = (user.solde || 0) + amount;
+
+                const { error } = await _supabase
+                    .from('profiles')
+                    .update({ solde: newBalance })
+                    .eq('id', currentUserId);
+
+                if (error) throw error;
+
+                showAlert(`${amount} € ajouté avec succès`, 'success');
+                closeModal('addBalanceModal');
+                loadUsers();
+                
+            } catch (error) {
+                console.error(error);
+                showAlert('Erreur lors de l\'ajout', 'error');
+            }
+        }
+
+        // Ouvrir modal retrait
+        function openRemoveModal(userId, userName, currentBalance) {
+            currentUserId = userId;
+            document.getElementById('removeUserInfo').innerHTML = `
+                <p><strong>Utilisateur:</strong> ${userName}</p>
+                <p><strong>Solde actuel:</strong> ${currentBalance.toFixed(2)} €</p>
+            `;
+            document.getElementById('removeAmount').value = '';
+            document.getElementById('removeBalanceModal').classList.add('active');
+        }
+
+        // Confirmer retrait
+        async function confirmRemoveBalance() {
+            const amount = parseFloat(document.getElementById('removeAmount').value);
+            
+            if (!amount || amount <= 0) {
+                showAlert('Montant invalide', 'error');
+                return;
+            }
+
+            try {
+                const user = users.find(u => u.id === currentUserId);
+                const newBalance = (user.solde || 0) - amount;
+
+                if (newBalance < 0) {
+                    showAlert('Solde insuffisant', 'error');
+                    return;
+                }
+
+                const { error } = await _supabase
+                    .from('profiles')
+                    .update({ solde: newBalance })
+                    .eq('id', currentUserId);
+
+                if (error) throw error;
+
+                showAlert(`${amount} € retiré avec succès`, 'success');
+                closeModal('removeBalanceModal');
+                loadUsers();
+                
+            } catch (error) {
+                console.error(error);
+                showAlert('Erreur lors du retrait', 'error');
+            }
+        }
+
+        // Voir détails utilisateur
+        async function viewUserDetails(userId) {
+            const user = users.find(u => u.id === userId);
+            
+            if (!user) return;
+
+            const content = document.getElementById('userDetailsContent');
+            content.innerHTML = `
+                <div class="modal-info">
+                    <p><strong>ID:</strong> ${user.id}</p>
+                    <p><strong>Nom:</strong> ${user.nom || 'Non renseigné'}</p>
+                    <p><strong>Email:</strong> ${user.email}</p>
+                    <p><strong>N° Identité:</strong> ${user.numero_identite || 'Non renseigné'}</p>
+                    <p><strong>Solde:</strong> ${user.solde.toFixed(2)} €</p>
+                    <p><strong>Inscription:</strong> ${new Date(user.created_at).toLocaleString('fr-FR')}</p>
+                </div>
+            `;
+
+            document.getElementById('userDetailsModal').classList.add('active');
+        }
+
+        // Ouvrir modal suppression
+        function openDeleteModal(userId, userName) {
+            currentUserId = userId;
+            document.getElementById('deleteUserEmail').textContent = userName;
+            document.getElementById('deleteUserModal').classList.add('active');
+        }
+
+        // Confirmer suppression
+        async function confirmDeleteUser() {
+            try {
+                const { error } = await _supabase.auth.admin.deleteUser(currentUserId);
+
+                if (error) throw error;
+
+                showAlert('Utilisateur supprimé', 'success');
+                closeModal('deleteUserModal');
+                loadUsers();
+                
+            } catch (error) {
+                console.error(error);
+                showAlert('Erreur lors de la suppression', 'error');
+            }
+        }
+
+        // Fermer modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            currentUserId = null;
+        }
+
+        // Afficher alerte
+        function showAlert(message, type) {
+            const alert = document.getElementById('alertMessage');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 4000);
+        }
+
+        // Exporter CSV
+        function exportCSV() {
+            const headers = ['ID', 'Nom', 'Email', 'N° Identité', 'Solde', 'Date inscription'];
+            const csvData = users.map(u => [
+                u.id,
+                u.nom || '',
+                u.email,
+                u.numero_identite || '',
+                u.solde,
+                new Date(u.created_at).toLocaleDateString('fr-FR')
+            ]);
+
+            const csv = [headers, ...csvData].map(row => row.join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `utilisateurs_${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+
+        // Déconnexion
+        function logout() {
+            sessionStorage.removeItem('adminAuth');
+            window.location.href = 'admin.html';
+        }
+
+        // Initialisation
+        loadUsers();
+    </script>
+</body>
+</html>
