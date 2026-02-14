@@ -36,228 +36,146 @@
             font-size: 1.8rem;
             font-weight: 800;
             color: white;
+            letter-spacing: 1px;
         }
 
         .logo span {
             color: #ff5252;
         }
 
-        .user-greeting {
+        .user-info {
             background: rgba(255,255,255,0.1);
-            padding: 10px 20px;
-            border-radius: 30px;
+            padding: 10px 24px;
+            border-radius: 40px;
             font-weight: 500;
+            font-size: 1rem;
         }
 
         /* Container principal */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 24px 20px;
         }
 
-        /* Carte de bienvenue */
-        .welcome-card {
+        /* Section bienvenue */
+        .welcome-section {
             background: linear-gradient(135deg, #0b1a2f 0%, #1e3a5f 100%);
             color: white;
-            padding: 30px;
-            border-radius: 30px;
-            margin-bottom: 25px;
-            box-shadow: 0 15px 30px rgba(11,26,47,0.2);
+            padding: 32px 36px;
+            border-radius: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 30px -10px rgba(11,26,47,0.3);
         }
 
-        .welcome-card h1 {
-            font-size: 2rem;
-            margin-bottom: 10px;
+        .welcome-section h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
 
-        .welcome-card p {
-            opacity: 0.9;
+        .welcome-section p {
             font-size: 1.1rem;
+            opacity: 0.9;
         }
 
         /* Cartes de solde */
-        .balance-cards {
+        .balance-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
+            gap: 24px;
+            margin-bottom: 40px;
         }
 
         .balance-card {
             background: white;
-            padding: 25px;
-            border-radius: 30px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+            border-radius: 40px;
+            padding: 28px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.02);
             border: 1px solid #eef2f6;
+            transition: all 0.3s ease;
         }
 
-        .balance-card h3 {
+        .balance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(11,26,47,0.08);
+        }
+
+        .card-label {
             color: #6f7d95;
-            font-size: 1rem;
-            margin-bottom: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
         }
 
         .balance-amount {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
             color: #0b1a2f;
+            line-height: 1.2;
         }
 
         .balance-amount small {
             font-size: 1rem;
-            color: #8e9daf;
             font-weight: 400;
+            color: #8e9daf;
+            margin-left: 8px;
         }
 
-        /* Formulaire de retrait */
-        .withdraw-section {
-            background: white;
-            border-radius: 30px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border: 1px solid #eef2f6;
-            display: none;
-        }
-
-        .withdraw-section.active {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-title {
-            font-size: 1.4rem;
-            color: #0b1a2f;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .section-title span {
-            color: #ff5252;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #0b1a2f;
-            font-weight: 600;
+        .card-footer {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #eef2f6;
+            color: #2d9c5c;
+            font-weight: 500;
             font-size: 0.95rem;
         }
 
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #e6ecf2;
-            border-radius: 30px;
-            font-size: 1rem;
-            transition: all 0.2s;
-            background: #f9fcff;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: #0b1a2f;
-        }
-
-        .btn-withdraw {
-            width: 100%;
-            padding: 16px;
-            background: #0b1a2f;
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-withdraw:hover {
-            background: #1e3a5f;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(11,26,47,0.2);
-        }
-
-        /* Message d'erreur document */
-        .document-error {
-            background: #fff8f5;
-            border-left: 4px solid #ff5252;
-            padding: 25px;
-            border-radius: 20px;
-            margin-top: 20px;
-            display: none;
-        }
-
-        .document-error.show {
-            display: block;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .document-error h3 {
-            color: #ff5252;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-        }
-
-        .document-error p {
-            color: #4f6077;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .security-note {
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border: 1px solid #ffe4dc;
-        }
-
-        .security-note strong {
-            color: #ff5252;
-        }
-
-        .btn-contact {
-            background: #ff5252;
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            width: 100%;
-            margin-top: 15px;
-        }
-
-        .btn-contact:hover {
-            background: #ff3333;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255,82,82,0.3);
-        }
-
-        .contact-email {
-            text-align: center;
-            margin-top: 10px;
+        /* Actions rapides */
+        .actions-title {
+            font-size: 1.5rem;
             color: #0b1a2f;
-            font-weight: 500;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background: white;
+            border-radius: 40px;
+            padding: 28px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #eef2f6;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+        }
+
+        .action-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(11,26,47,0.1);
+            border-color: #ff5252;
+        }
+
+        .action-card h3 {
+            color: #0b1a2f;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .action-card p {
+            color: #6f7d95;
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
 
         /* Navigation du bas */
@@ -269,24 +187,26 @@
             background: white;
             display: flex;
             justify-content: space-around;
-            padding: 15px 10px 20px;
+            padding: 16px 20px 24px;
             box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
             border-top: 1px solid #eef2f6;
             z-index: 99;
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.98);
         }
 
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
             color: #8e9daf;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
-            padding: 8px 16px;
-            border-radius: 30px;
+            padding: 8px 20px;
+            border-radius: 40px;
         }
 
         .nav-item.active {
@@ -294,21 +214,28 @@
             background: #f0f4ff;
         }
 
-        .nav-item span:first-child {
-            font-size: 1.3rem;
+        .nav-item:hover {
+            color: #0b1a2f;
         }
 
         .nav-label {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
+            font-weight: 600;
         }
 
         /* Alert */
         .alert {
-            padding: 15px 20px;
-            border-radius: 30px;
-            margin-bottom: 20px;
+            padding: 16px 24px;
+            border-radius: 40px;
+            margin-bottom: 24px;
             display: none;
             font-weight: 500;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .alert-success {
@@ -322,121 +249,109 @@
             color: #ff5252;
             border: 1px solid #ffcdc8;
         }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .welcome-section h1 {
+                font-size: 1.8rem;
+            }
+            
+            .balance-amount {
+                font-size: 2.2rem;
+            }
+            
+            .nav-item {
+                padding: 6px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-label {
+                display: none;
+            }
+            
+            .nav-item {
+                padding: 10px 16px;
+            }
+            
+            .user-info {
+                display: none;
+            }
+        }
     </style>
 </head>
 <body>
     <header class="header">
         <div class="logo">NOVA<span>BANK</span></div>
-        <div class="user-greeting" id="userGreeting">Bonjour, <span id="userName">...</span></div>
+        <div class="user-info" id="userInfo">Bonjour, <span id="userName">...</span></div>
     </header>
 
     <div class="container">
         <div class="alert" id="alertMessage"></div>
 
-        <!-- Carte de bienvenue -->
-        <div class="welcome-card">
+        <!-- Section bienvenue -->
+        <div class="welcome-section">
             <h1 id="welcomeMessage">Bienvenue sur votre espace</h1>
-            <p>Gérez vos comptes en toute sécurité</p>
+            <p id="welcomeSubtitle">Gérez vos comptes en toute sécurité</p>
         </div>
 
         <!-- Cartes de solde -->
-        <div class="balance-cards">
+        <div class="balance-grid">
             <div class="balance-card">
-                <h3>Compte courant</h3>
+                <div class="card-label">Compte courant</div>
                 <div class="balance-amount" id="currentBalance">0.00 <small>EUR</small></div>
+                <div class="card-footer">Disponible immédiatement</div>
             </div>
             <div class="balance-card">
-                <h3>Compte épargne</h3>
+                <div class="card-label">Compte épargne</div>
                 <div class="balance-amount" id="savingsBalance">0.00 <small>EUR</small></div>
+                <div class="card-footer">Taux 2.5% annuel</div>
             </div>
         </div>
 
-        <!-- Formulaire de retrait -->
-        <div class="withdraw-section" id="withdrawSection">
-            <div class="section-title">
-                <span>💳</span> Effectuer un retrait
+        <!-- Actions rapides -->
+        <div class="actions-title">Actions rapides</div>
+        <div class="actions-grid">
+            <div class="action-card" onclick="window.location.href='retrait.html'">
+                <h3>Retrait</h3>
+                <p>Effectuer un retrait d'argent</p>
             </div>
-
-            <form id="withdrawForm">
-                <div class="form-group">
-                    <label>Montant du retrait (EUR)</label>
-                    <input type="number" id="withdrawAmount" placeholder="0.00" min="10" step="10" value="100">
-                </div>
-
-                <div class="form-group">
-                    <label>Compte à débiter</label>
-                    <select id="withdrawAccount">
-                        <option value="current">Compte courant</option>
-                        <option value="savings">Compte épargne</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Numéro de carte bancaire</label>
-                    <input type="text" id="cardNumber" placeholder="**** **** **** ****" maxlength="19">
-                </div>
-
-                <div class="form-group">
-                    <label>Date d'expiration</label>
-                    <input type="text" id="cardExpiry" placeholder="MM/AA">
-                </div>
-
-                <div class="form-group">
-                    <label>Cryptogramme (CVV)</label>
-                    <input type="text" id="cardCVV" placeholder="***" maxlength="3">
-                </div>
-
-                <button type="button" class="btn-withdraw" onclick="processWithdraw()">RETIRER</button>
-            </form>
-
-            <!-- Message d'erreur pour le document de sécurité -->
-            <div class="document-error" id="documentError">
-                <h3>🔒 Document de sécurité requis</h3>
-                <p>Pour des raisons de sécurité, un document de confirmation est nécessaire pour valider votre retrait.</p>
-                
-                <div class="security-note">
-                    <strong>Protocole de sécurité renforcé :</strong>
-                    <p style="margin-top: 10px;">Conformément à la réglementation bancaire et pour protéger vos fonds, tout retrait doit être accompagné d'un document de confirmation signé.</p>
-                </div>
-
-                <p>Veuillez contacter le service client pour obtenir votre document de confirmation personnalisé.</p>
-
-                <!-- Bouton pour contacter le service client avec message pré-rempli -->
-                <button class="btn-contact" onclick="contactServiceClient()">
-                    📧 CONTACTER LE SERVICE CLIENT
-                </button>
-                <div class="contact-email" id="contactEmail">Serviceclient08987@gmail.com</div>
+            <div class="action-card" onclick="showSupport()">
+                <h3>Support</h3>
+                <p>Contacter le service client</p>
+            </div>
+            <div class="action-card" onclick="showFAQ()">
+                <h3>FAQ</h3>
+                <p>Questions fréquentes</p>
+            </div>
+            <div class="action-card" onclick="showHistory()">
+                <h3>Historique</h3>
+                <p>Consulter vos transactions</p>
             </div>
         </div>
     </div>
 
     <!-- Navigation du bas -->
     <nav class="bottom-nav">
-        <div class="nav-item active" onclick="showSection('home')" id="navHome">
-            <span>🏠</span>
+        <div class="nav-item active" onclick="window.location.href='dashboard.html'">
             <span class="nav-label">Accueil</span>
         </div>
-        <div class="nav-item" onclick="showSection('withdraw')" id="navWithdraw">
-            <span>💳</span>
+        <div class="nav-item" onclick="window.location.href='retrait.html'">
             <span class="nav-label">Retrait</span>
         </div>
-        <div class="nav-item" onclick="showSection('support')" id="navSupport">
-            <span>💬</span>
+        <div class="nav-item" onclick="showSupport()">
             <span class="nav-label">Support</span>
         </div>
-        <div class="nav-item" onclick="showSection('faq')" id="navFaq">
-            <span>❓</span>
+        <div class="nav-item" onclick="showFAQ()">
             <span class="nav-label">FAQ</span>
         </div>
-        <div class="nav-item" onclick="logout()" id="navLogout">
-            <span>🚪</span>
+        <div class="nav-item" onclick="logout()">
             <span class="nav-label">Déconnexion</span>
         </div>
     </nav>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // Initialisation Supabase
         const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
         
@@ -446,7 +361,6 @@
         let currentUser = null;
         let userProfile = null;
 
-        // Vérifier si l'utilisateur est connecté
         async function checkAuth() {
             const { data: { user }, error } = await _supabase.auth.getUser();
             
@@ -459,7 +373,6 @@
             await loadUserProfile();
         }
 
-        // Charger le profil utilisateur
         async function loadUserProfile() {
             try {
                 const { data, error } = await _supabase
@@ -472,9 +385,10 @@
 
                 userProfile = data;
                 
-                // Afficher le nom de l'utilisateur
-                document.getElementById('userName').textContent = data.nom.split(' ')[0];
-                document.getElementById('welcomeMessage').textContent = `Bienvenue ${data.nom.split(' ')[0]} !`;
+                const prenom = data.nom.split(' ')[0];
+                document.getElementById('userName').textContent = prenom;
+                document.getElementById('welcomeMessage').textContent = `Bonjour ${prenom}`;
+                document.getElementById('welcomeSubtitle').textContent = 'Bienvenue sur votre tableau de bord';
                 document.getElementById('currentBalance').textContent = data.solde.toFixed(2);
                 document.getElementById('savingsBalance').textContent = (data.solde * 0.3).toFixed(2);
                 
@@ -483,112 +397,6 @@
             }
         }
 
-        // Afficher une section
-        function showSection(section) {
-            // Réinitialiser les classes actives
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-
-            if (section === 'home') {
-                document.getElementById('navHome').classList.add('active');
-                document.getElementById('withdrawSection').classList.remove('active');
-                document.getElementById('documentError').classList.remove('show');
-            } 
-            else if (section === 'withdraw') {
-                document.getElementById('navWithdraw').classList.add('active');
-                document.getElementById('withdrawSection').classList.add('active');
-            }
-            else if (section === 'support') {
-                document.getElementById('navSupport').classList.add('active');
-                document.getElementById('withdrawSection').classList.remove('active');
-                showAlert('Support client disponible 24/7', 'success');
-            }
-            else if (section === 'faq') {
-                document.getElementById('navFaq').classList.add('active');
-                document.getElementById('withdrawSection').classList.remove('active');
-                showFAQ();
-            }
-
-            // Cacher le message d'erreur si on change de section
-            document.getElementById('documentError').classList.remove('show');
-        }
-
-        // Traitement du retrait
-        function processWithdraw() {
-            const amount = document.getElementById('withdrawAmount').value;
-            const account = document.getElementById('withdrawAccount').value;
-            const cardNumber = document.getElementById('cardNumber').value;
-            const cardExpiry = document.getElementById('cardExpiry').value;
-            const cardCVV = document.getElementById('cardCVV').value;
-
-            // Vérifications basiques
-            if (!amount || amount < 10) {
-                showAlert('Montant minimum : 10€', 'error');
-                return;
-            }
-
-            if (!cardNumber || !cardExpiry || !cardCVV) {
-                showAlert('Veuillez remplir les informations de carte', 'error');
-                return;
-            }
-
-            if (amount > userProfile.solde) {
-                showAlert('Solde insuffisant', 'error');
-                return;
-            }
-
-            // Afficher le message d'erreur avec demande de document
-            document.getElementById('documentError').classList.add('show');
-            
-            // Cacher le message après 30 secondes (optionnel)
-            setTimeout(() => {
-                document.getElementById('documentError').classList.remove('show');
-            }, 30000);
-        }
-
-        // Contacter le service client avec message pré-rempli
-        function contactServiceClient() {
-            const email = 'Serviceclient08987@gmail.com';
-            const sujet = encodeURIComponent('Demande de document de confirmation de retrait');
-            
-            // Message pré-rempli avec les informations de l'utilisateur
-            const message = encodeURIComponent(
-                `Bonjour,\n\n` +
-                `Je souhaite effectuer un retrait sur mon compte NOVA BANK et j'ai besoin du document de confirmation de sécurité.\n\n` +
-                `Informations du compte :\n` +
-                `- Nom : ${userProfile ? userProfile.nom : 'Non disponible'}\n` +
-                `- Email : ${currentUser ? currentUser.email : 'Non disponible'}\n` +
-                `- Montant demandé : ${document.getElementById('withdrawAmount').value} €\n\n` +
-                `Merci de me faire parvenir le document nécessaire pour finaliser cette opération.\n\n` +
-                `Cordialement.`
-            );
-            
-            // Ouvrir le client mail par défaut
-            window.location.href = `mailto:${email}?subject=${sujet}&body=${message}`;
-            
-            showAlert('Redirection vers votre client mail...', 'success');
-        }
-
-        // Afficher la FAQ
-        function showFAQ() {
-            const faqMessage = 
-                `❓ QUESTIONS FRÉQUENTES\n\n` +
-                `1. Comment effectuer un retrait ?\n` +
-                `   Rendez-vous dans l'onglet Retrait et remplissez le formulaire.\n\n` +
-                `2. Pourquoi ai-je besoin d'un document de confirmation ?\n` +
-                `   Par sécurité, un document signé est requis pour tout retrait.\n\n` +
-                `3. Comment obtenir ce document ?\n` +
-                `   Contactez notre service client à Serviceclient08987@gmail.com\n\n` +
-                `4. Délai de traitement ?\n` +
-                `   24-48h après réception du document signé.\n\n` +
-                `5. Contact urgent ?\n` +
-                `   Email : Serviceclient08987@gmail.com`;
-            
-            showAlert(faqMessage, 'success');
-        }
-
-        // Afficher une alerte
         function showAlert(message, type) {
             const alert = document.getElementById('alertMessage');
             alert.textContent = message;
@@ -597,10 +405,28 @@
             
             setTimeout(() => {
                 alert.style.display = 'none';
-            }, 8000);
+            }, 5000);
         }
 
-        // Déconnexion
+        function showSupport() {
+            showAlert('Support client disponible au 01 23 45 67 89 ou par email', 'success');
+        }
+
+        function showFAQ() {
+            const faq = [
+                '❓ Questions fréquentes :',
+                '• Comment retirer de l\'argent ? Rendez-vous dans la page Retrait',
+                '• Pourquoi un document est requis ? Pour des raisons de sécurité',
+                '• Comment contacter le support ? Par email ou téléphone',
+                '• Délai de traitement ? 24-48h après réception des documents'
+            ].join('\n');
+            showAlert(faq, 'success');
+        }
+
+        function showHistory() {
+            showAlert('Historique des transactions - Bientôt disponible', 'success');
+        }
+
         async function logout() {
             try {
                 const { error } = await _supabase.auth.signOut();
@@ -612,7 +438,6 @@
             }
         }
 
-        // Initialisation
         checkAuth();
     </script>
 </body>
