@@ -132,21 +132,19 @@
             border-bottom: 1px solid #eee;
         }
 
-        .badge {
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
         .badge-admin {
             background: #ff5252;
             color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-left: 8px;
         }
 
         .actions {
             display: flex;
             gap: 5px;
+            flex-wrap: wrap;
         }
 
         .btn-icon {
@@ -263,7 +261,7 @@
 
         <!-- Contrôles -->
         <div class="controls">
-            <input type="text" class="search-input" id="searchInput" placeholder="Rechercher..." onkeyup="searchUsers()">
+            <input type="text" class="search-input" id="searchInput" placeholder="Rechercher par nom ou email..." onkeyup="searchUsers()">
             <button class="btn btn-primary" onclick="loadUsers()">Actualiser</button>
         </div>
 
@@ -272,8 +270,7 @@
             <h2 style="margin-bottom: 20px;">Liste des utilisateurs</h2>
             <div id="usersTable">
                 <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Chargement...</p>
+                    <p>Chargement des utilisateurs...</p>
                 </div>
             </div>
         </div>
@@ -283,7 +280,7 @@
     <div class="modal" id="addModal">
         <div class="modal-content">
             <h3>Ajouter du solde</h3>
-            <div id="addUserInfo"></div>
+            <div id="addUserInfo" style="margin: 15px 0; padding: 10px; background: #f5f5f5; border-radius: 10px;"></div>
             <input type="number" id="addAmount" placeholder="Montant (€)">
             <div class="modal-buttons">
                 <button onclick="closeModal('addModal')">Annuler</button>
@@ -295,7 +292,7 @@
     <div class="modal" id="removeModal">
         <div class="modal-content">
             <h3>Retirer du solde</h3>
-            <div id="removeUserInfo"></div>
+            <div id="removeUserInfo" style="margin: 15px 0; padding: 10px; background: #f5f5f5; border-radius: 10px;"></div>
             <input type="number" id="removeAmount" placeholder="Montant (€)">
             <div class="modal-buttons">
                 <button onclick="closeModal('removeModal')">Annuler</button>
@@ -310,36 +307,73 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
         
         const { createClient } = supabase;
-        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+            auth: {
+                autoRefreshToken: true,
+                persistSession: true,
+                detectSessionInUrl: false
+            }
+        });
 
         let allUsers = [];
         let currentUserId = null;
+        let sessionCheckInterval = null;
 
-        async function checkAuth() {
+        // Fonction pour vérifier la session sans déconnecter
+        async function checkSession() {
             try {
-                const { data: { user }, error } = await _supabase.auth.getUser();
+                const { data: { session }, error } = await _supabase.auth.getSession();
                 
-                if (error || !user) {
+                if (error || !session) {
+                    console.log('Session expirée, redirection...');
                     window.location.href = 'admin.html';
-                    return;
+                    return false;
+                }
+                
+                document.getElementById('adminEmail').textContent = session.user.email;
+                return true;
+            } catch (error) {
+                console.log('Erreur vérification session:', error);
+                return false;
+            }
+        }
+
+        // Initialisation sans vérification stricte
+        async function init() {
+            try {
+                const { data: { session } } = await _supabase.auth.getSession();
+                
+                if (!session) {
+                    // Essayer de récupérer la session silencieusement
+                    const { data } = await _supabase.auth.refreshSession();
+                    if (!data.session) {
+                        window.location.href = 'admin.html';
+                        return;
+                    }
                 }
 
-                document.getElementById('adminEmail').textContent = user.email;
+                document.getElementById('adminEmail').textContent = session?.user?.email || 'Admin';
                 loadUsers();
                 
+                // Vérifier la session toutes les 5 minutes au lieu de 1 minute
+                sessionCheckInterval = setInterval(() => {
+                    _supabase.auth.getSession().then(({ data }) => {
+                        if (!data.session) {
+                            clearInterval(sessionCheckInterval);
+                            window.location.href = 'admin.html';
+                        }
+                    });
+                }, 300000); // 5 minutes
+                
             } catch (error) {
-                console.error('Auth error:', error);
+                console.error('Init error:', error);
                 window.location.href = 'admin.html';
             }
         }
 
         async function loadUsers() {
             try {
-                document.getElementById('usersTable').innerHTML = `
-                    <div class="loading">
-                        <p>Chargement des utilisateurs...</p>
-                    </div>
-                `;
+                document.getElementById('usersTable').innerHTML = '<div class="loading">Chargement des utilisateurs...</div>';
 
                 const { data, error } = await _supabase
                     .from('profiles')
@@ -350,7 +384,7 @@
 
                 allUsers = data || [];
                 
-                // Mettre à jour les stats
+                // Stats
                 document.getElementById('totalUsers').textContent = allUsers.length;
                 const totalBalance = allUsers.reduce((sum, u) => sum + (u.solde || 0), 0);
                 document.getElementById('totalBalance').textContent = totalBalance.toFixed(2) + ' €';
@@ -358,18 +392,29 @@
                 displayUsers(allUsers);
                 
             } catch (error) {
-                console.error('Erreur:', error);
-                document.getElementById('usersTable').innerHTML = `
-                    <p style="color: red; text-align: center; padding: 40px;">
-                        Erreur: ${error.message}
-                    </p>
-                `;
+                console.error('Erreur chargement:', error);
+                
+                // Si erreur d'authentification, essayer de rafraîchir la session
+                if (error.message?.includes('JWT')) {
+                    const { data } = await _supabase.auth.refreshSession();
+                    if (data.session) {
+                        loadUsers(); // Réessayer
+                    } else {
+                        window.location.href = 'admin.html';
+                    }
+                } else {
+                    document.getElementById('usersTable').innerHTML = `
+                        <p style="color: red; text-align: center; padding: 40px;">
+                            Erreur: ${error.message}
+                        </p>
+                    `;
+                }
             }
         }
 
         function displayUsers(users) {
             if (!users || users.length === 0) {
-                document.getElementById('usersTable').innerHTML = '<p style="text-align: center; padding: 40px;">Aucun utilisateur</p>';
+                document.getElementById('usersTable').innerHTML = '<p style="text-align: center; padding: 40px;">Aucun utilisateur trouvé</p>';
                 return;
             }
 
@@ -382,7 +427,7 @@
                 html += `<tr>
                     <td>
                         <strong>${user.nom || 'Non renseigné'}</strong>
-                        ${isAdmin ? '<span style="background: #ff5252; color: white; padding: 2px 8px; border-radius: 12px; margin-left: 8px; font-size: 0.7rem;">ADMIN</span>' : ''}
+                        ${isAdmin ? '<span class="badge-admin">ADMIN</span>' : ''}
                     </td>
                     <td>${user.email}</td>
                     <td>${user.numero_identite || '-'}</td>
@@ -492,11 +537,20 @@
         }
 
         async function logout() {
+            clearInterval(sessionCheckInterval);
             await _supabase.auth.signOut();
             window.location.href = 'admin.html';
         }
 
-        checkAuth();
+        // Nettoyer l'intervalle quand on quitte la page
+        window.addEventListener('beforeunload', () => {
+            if (sessionCheckInterval) {
+                clearInterval(sessionCheckInterval);
+            }
+        });
+
+        // Démarrer
+        init();
     </script>
 </body>
 </html>
