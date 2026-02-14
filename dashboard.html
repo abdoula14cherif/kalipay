@@ -2,136 +2,137 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>NOVA BANK - Tableau de bord</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background: #f0f2f5;
+            background: #f5f7fc;
             min-height: 100vh;
+            padding-bottom: 90px;
+            overflow-x: hidden;
         }
 
-        /* Navbar */
-        .navbar {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            padding: 15px 40px;
+        /* Header */
+        .header {
+            background: #0b1a2f;
+            padding: 16px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             color: white;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,20,40,0.1);
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 100;
+            width: 100%;
         }
 
         .logo {
-            font-size: 1.8em;
+            font-size: 1.7rem;
             font-weight: 800;
-            letter-spacing: 2px;
+            letter-spacing: 0.5px;
+            color: white;
         }
 
         .logo span {
-            color: #ff6b6b;
+            color: #ff5252;
+            font-weight: 800;
         }
 
-        .nav-menu {
+        .header-right {
             display: flex;
             align-items: center;
-            gap: 30px;
+            gap: 16px;
         }
 
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            padding: 8px 15px;
-            border-radius: 50px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-item:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .nav-item i {
-            font-size: 1.2em;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .user-avatar {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
-            border-radius: 50%;
+        .notification-btn {
+            background: rgba(255,255,255,0.08);
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 1.2em;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.1);
-            box-shadow: 0 5px 15px rgba(255,107,107,0.3);
-        }
-
-        .logout-btn {
-            background: transparent;
+            transition: all 0.2s;
             color: white;
-            border: 2px solid rgba(255,255,255,0.3);
-            padding: 8px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            font-size: 1.2rem;
         }
 
-        .logout-btn:hover {
-            background: #ff6b6b;
-            border-color: #ff6b6b;
-            transform: translateY(-2px);
+        .notification-btn:hover {
+            background: rgba(255,255,255,0.15);
         }
 
-        /* Container principal */
-        .container {
-            max-width: 1400px;
-            margin: 30px auto;
-            padding: 0 20px;
+        /* Menu burger */
+        .burger-container {
+            position: relative;
         }
 
-        /* Bienvenue */
-        .welcome-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(102,126,234,0.3);
-            animation: slideIn 0.5s ease;
+        .burger-btn {
+            background: rgba(255,255,255,0.08);
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 30px;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        @keyframes slideIn {
+        .burger-btn:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .burger-btn span {
+            width: 22px;
+            height: 2.5px;
+            background: white;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .burger-btn.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .burger-btn.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .burger-btn.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .burger-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0,20,50,0.2);
+            width: 260px;
+            padding: 8px;
+            display: none;
+            z-index: 1000;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
             from {
                 opacity: 0;
-                transform: translateY(-20px);
+                transform: translateY(-10px);
             }
             to {
                 opacity: 1;
@@ -139,68 +140,102 @@
             }
         }
 
+        .burger-dropdown.show {
+            display: block;
+        }
+
+        .burger-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            border-radius: 20px;
+            color: #1a2a3a;
+            text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+
+        .burger-item:hover {
+            background: #f0f4ff;
+        }
+
+        .burger-divider {
+            height: 1px;
+            background: #eef2f6;
+            margin: 8px 0;
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px 16px;
+            width: 100%;
+        }
+
+        /* Section bienvenue */
+        .welcome-card {
+            background: linear-gradient(135deg, #0b1a2f 0%, #1e3a5f 100%);
+            color: white;
+            padding: 24px 28px;
+            border-radius: 40px;
+            margin-bottom: 28px;
+            box-shadow: 0 15px 30px -8px rgba(11,26,47,0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            width: 100%;
+        }
+
         .welcome-text h1 {
-            font-size: 2em;
-            margin-bottom: 10px;
+            font-size: 1.7rem;
+            font-weight: 600;
+            margin-bottom: 6px;
         }
 
         .welcome-text p {
-            opacity: 0.9;
-            font-size: 1.1em;
+            opacity: 0.8;
+            font-size: 1rem;
         }
 
-        .date-display {
-            background: rgba(255,255,255,0.2);
-            padding: 15px 25px;
-            border-radius: 15px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .date-display .day {
-            font-size: 2em;
-            font-weight: 700;
-            line-height: 1;
-        }
-
-        .date-display .month {
-            font-size: 1em;
-            opacity: 0.9;
+        .date-badge {
+            background: rgba(255,255,255,0.12);
+            padding: 14px 24px;
+            border-radius: 50px;
+            font-weight: 500;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 1rem;
         }
 
         /* Cartes de solde */
-        .balance-section {
+        .balance-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
             margin-bottom: 30px;
+            width: 100%;
         }
 
         .balance-card {
             background: white;
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            animation: fadeIn 0.5s ease;
+            border-radius: 40px;
+            padding: 28px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.02);
+            transition: all 0.3s;
+            border: 1px solid rgba(0,0,0,0.02);
             position: relative;
-            overflow: hidden;
-        }
-
-        .balance-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(30,60,114,0.03) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
+            width: 100%;
         }
 
         .balance-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(30,60,114,0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 35px rgba(11,26,47,0.08);
         }
 
         .card-header {
@@ -210,332 +245,361 @@
             margin-bottom: 20px;
         }
 
-        .card-title {
-            color: #666;
-            font-size: 1em;
+        .card-label {
+            color: #6f7d95;
+            font-size: 0.95rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
         .card-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            border-radius: 15px;
+            width: 52px;
+            height: 52px;
+            background: #f0f4ff;
+            border-radius: 26px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 1.5em;
+            color: #0b1a2f;
+            font-weight: 600;
         }
 
-        .card-amount {
-            font-size: 2.5em;
+        .balance-amount {
+            font-size: 2.6rem;
             font-weight: 700;
-            color: #1e3c72;
-            margin-bottom: 10px;
+            color: #0b1a2f;
+            margin-bottom: 16px;
+            line-height: 1.2;
         }
 
-        .card-amount small {
-            font-size: 0.4em;
+        .balance-amount small {
+            font-size: 1rem;
             font-weight: 400;
-            color: #999;
+            color: #8e9daf;
             margin-left: 5px;
         }
 
         .card-footer {
-            color: #28a745;
-            font-size: 0.9em;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
+            color: #2d9c5c;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding-top: 16px;
+            border-top: 1px solid #eef2f6;
         }
 
-        /* Actions rapides */
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .action-card {
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            animation: fadeIn 0.5s ease 0.2s both;
-        }
-
-        .action-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(30,60,114,0.15);
-        }
-
-        .action-icon {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
+        .withdraw-card-btn {
+            position: absolute;
+            bottom: 28px;
+            right: 28px;
+            background: #ff5252;
             color: white;
-            font-size: 2em;
-            transition: all 0.3s ease;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 8px 20px rgba(255,82,82,0.2);
         }
 
-        .action-card:hover .action-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .action-card h3 {
-            color: #1e3c72;
-            margin-bottom: 10px;
-            font-size: 1.2em;
-        }
-
-        .action-card p {
-            color: #666;
-            font-size: 0.9em;
+        .withdraw-card-btn:hover {
+            background: #ff3333;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(255,82,82,0.3);
         }
 
         /* Section retrait */
         .withdraw-section {
             background: white;
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            animation: fadeIn 0.5s ease 0.4s both;
+            border-radius: 40px;
+            padding: 28px;
+            margin-bottom: 28px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.02);
+            width: 100%;
         }
 
-        .section-title {
+        .section-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 25px;
-            color: #1e3c72;
-            font-size: 1.4em;
+            gap: 14px;
+            margin-bottom: 24px;
         }
 
-        .section-title i {
-            color: #ff6b6b;
+        .section-icon {
+            width: 56px;
+            height: 56px;
+            background: #ff525215;
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff5252;
+            font-weight: 600;
+        }
+
+        .section-header h2 {
+            color: #0b1a2f;
+            font-size: 1.5rem;
+            font-weight: 600;
         }
 
         .withdraw-form {
             display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 20px;
+            grid-template-columns: 1fr 1fr auto;
+            gap: 16px;
             align-items: end;
         }
 
         .form-group {
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #1e3c72;
-            font-weight: 500;
+            color: #4f6077;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-left: 6px;
         }
 
         .form-group input, .form-group select {
+            padding: 16px 22px;
+            border: 2px solid #e6ecf2;
+            border-radius: 40px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #f9fcff;
+            color: #1a2a3a;
+            font-weight: 500;
             width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 15px;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            background: #f8fafc;
         }
 
         .form-group input:focus, .form-group select:focus {
             outline: none;
-            border-color: #1e3c72;
-            box-shadow: 0 5px 20px rgba(30,60,114,0.1);
+            border-color: #0b1a2f;
+            background: white;
+            box-shadow: 0 5px 15px rgba(11,26,47,0.08);
         }
 
         .btn-withdraw {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: #0b1a2f;
             color: white;
             border: none;
-            padding: 15px 40px;
-            border-radius: 15px;
-            font-size: 1.1em;
+            padding: 16px 36px;
+            border-radius: 40px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
             white-space: nowrap;
         }
 
         .btn-withdraw:hover {
+            background: #1e3a5f;
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(30,60,114,0.3);
+            box-shadow: 0 10px 25px rgba(11,26,47,0.2);
         }
 
         /* Documents requis */
-        .documents-modal {
-            background: #fff8f8;
-            border-left: 4px solid #ff6b6b;
-            padding: 25px;
-            border-radius: 15px;
-            margin-top: 20px;
+        .documents-panel {
+            background: #fff8f5;
+            border-radius: 32px;
+            padding: 24px;
+            margin-top: 24px;
             display: none;
-            animation: slideIn 0.3s ease;
+            border: 1px solid #ffe4dc;
+            width: 100%;
         }
 
-        .documents-modal.show {
+        .documents-panel.show {
             display: block;
+            animation: fadeIn 0.4s ease;
         }
 
-        .documents-modal h3 {
-            color: #ff6b6b;
-            margin-bottom: 20px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .documents-panel h3 {
+            color: #c44536;
+            margin-bottom: 22px;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
         }
 
-        .documents-list {
+        .documents-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
         }
 
-        .document-item {
+        .doc-card {
             background: white;
-            padding: 15px;
-            border-radius: 12px;
+            padding: 22px;
+            border-radius: 28px;
             display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: 0 2px 10px rgba(255,107,107,0.1);
+            flex-direction: column;
+            gap: 14px;
+            box-shadow: 0 4px 12px rgba(196,69,54,0.03);
+            border: 1px solid #ffede8;
         }
 
-        .document-icon {
-            width: 40px;
-            height: 40px;
-            background: #ff6b6b;
-            border-radius: 10px;
+        .doc-icon {
+            width: 48px;
+            height: 48px;
+            background: #fff1ed;
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 1.2em;
+            color: #c44536;
+            font-weight: 600;
         }
 
-        .document-info h4 {
-            color: #1e3c72;
-            margin-bottom: 5px;
-            font-size: 0.95em;
+        .doc-card h4 {
+            color: #0b1a2f;
+            font-size: 1.1rem;
+            font-weight: 600;
         }
 
-        .document-info p {
-            color: #666;
-            font-size: 0.8em;
+        .doc-card p {
+            color: #6f7d95;
+            font-size: 0.9rem;
+            line-height: 1.5;
         }
 
-        .upload-btn {
-            background: #1e3c72;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 0.9em;
+        .btn-upload {
+            background: transparent;
+            color: #0b1a2f;
+            border: 2px solid #e6ecf2;
+            padding: 12px;
+            border-radius: 40px;
+            font-size: 0.95rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
+            transition: all 0.2s;
+            margin-top: 8px;
         }
 
-        .upload-btn:hover {
-            background: #2a5298;
+        .btn-upload:hover {
+            background: #0b1a2f;
+            border-color: #0b1a2f;
+            color: white;
+        }
+
+        .info-note {
+            margin-top: 22px;
+            padding: 16px 22px;
+            background: #fff3f0;
+            border-radius: 30px;
+            color: #c44536;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
         }
 
         /* Transactions */
         .transactions-section {
             background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            animation: fadeIn 0.5s ease 0.6s both;
+            border-radius: 40px;
+            padding: 28px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.02);
+            width: 100%;
         }
 
         .transactions-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 25px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
         .transactions-header h2 {
-            color: #1e3c72;
-            font-size: 1.4em;
+            color: #0b1a2f;
+            font-size: 1.5rem;
+            font-weight: 600;
         }
 
         .filter-select {
-            padding: 10px 20px;
-            border: 2px solid #e0e0e0;
+            padding: 14px 28px;
+            border: 2px solid #e6ecf2;
             border-radius: 50px;
-            font-size: 0.95em;
+            font-size: 0.95rem;
+            background: #f9fcff;
+            color: #0b1a2f;
+            font-weight: 500;
             cursor: pointer;
         }
 
-        .transactions-list {
+        .transaction-list {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
-        .transaction-item {
+        .transaction-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: 15px;
-            transition: all 0.3s ease;
-            cursor: pointer;
+            padding: 18px 24px;
+            background: #f9fcff;
+            border-radius: 40px;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            width: 100%;
         }
 
-        .transaction-item:hover {
-            background: #f0f4ff;
-            transform: translateX(5px);
+        .transaction-row:hover {
+            background: white;
+            border-color: #e6ecf2;
+            transform: translateX(4px);
         }
 
         .transaction-left {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 18px;
         }
 
         .transaction-icon {
-            width: 50px;
-            height: 50px;
+            width: 52px;
+            height: 52px;
             background: white;
-            border-radius: 12px;
+            border-radius: 26px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.3em;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            color: #0b1a2f;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
         }
 
         .transaction-details h4 {
-            color: #1e3c72;
+            color: #0b1a2f;
             margin-bottom: 5px;
             font-weight: 600;
+            font-size: 1.1rem;
         }
 
         .transaction-details p {
-            color: #999;
-            font-size: 0.85em;
+            color: #8e9daf;
+            font-size: 0.9rem;
         }
 
         .transaction-right {
@@ -544,71 +608,123 @@
 
         .transaction-amount {
             font-weight: 700;
-            font-size: 1.2em;
-            margin-bottom: 5px;
+            font-size: 1.3rem;
+            margin-bottom: 6px;
         }
 
         .amount-positive {
-            color: #28a745;
+            color: #2d9c5c;
         }
 
         .amount-negative {
-            color: #ff6b6b;
+            color: #ff5252;
         }
 
         .transaction-status {
-            font-size: 0.8em;
-            padding: 4px 12px;
-            border-radius: 50px;
+            font-size: 0.8rem;
+            padding: 6px 14px;
+            border-radius: 40px;
             display: inline-block;
+            font-weight: 600;
         }
 
-        .status-success {
-            background: #d4edda;
-            color: #155724;
+        .status-completed {
+            background: #e3f5eb;
+            color: #2d9c5c;
         }
 
         .status-pending {
-            background: #fff3cd;
-            color: #856404;
+            background: #fff2dd;
+            color: #ff8c42;
+        }
+
+        /* Navigation du bas */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 14px 20px 24px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.03);
+            border-top: 1px solid #eef2f6;
+            z-index: 99;
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.98);
+            width: 100%;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: #8e9daf;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 8px 16px;
+            border-radius: 40px;
+        }
+
+        .nav-item.active {
+            color: #0b1a2f;
+            background: #f0f4ff;
+        }
+
+        .nav-item span:first-child {
+            font-size: 1.4rem;
+            font-weight: 500;
+        }
+
+        .nav-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
         }
 
         /* Alert */
         .alert {
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            padding: 18px 24px;
+            border-radius: 40px;
+            margin-bottom: 24px;
             display: none;
             animation: slideIn 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            width: 100%;
         }
 
         .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: #e3f5eb;
+            color: #2d9c5c;
+            border: 1px solid #c0e6d3;
         }
 
         .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: #ffeae8;
+            color: #ff5252;
+            border: 1px solid #ffcdc8;
         }
 
         /* Loading */
-        .loading {
+        .loading-state {
             text-align: center;
-            padding: 50px;
-            color: #666;
+            padding: 40px;
+            color: #8e9daf;
         }
 
-        .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #1e3c72;
+        .spinner {
+            border: 4px solid #f0f4ff;
+            border-top: 4px solid #0b1a2f;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin: 0 auto 16px;
         }
 
         @keyframes spin {
@@ -616,145 +732,161 @@
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
-            .navbar {
-                padding: 15px 20px;
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .nav-menu {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
             .withdraw-form {
                 grid-template-columns: 1fr;
             }
             
-            .welcome-section {
-                flex-direction: column;
-                text-align: center;
-                gap: 20px;
+            .container {
+                padding: 16px 12px;
             }
             
-            .transactions-header {
+            .welcome-card {
+                padding: 20px;
                 flex-direction: column;
-                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .balance-amount {
+                font-size: 2.2rem;
+            }
+            
+            .bottom-nav {
+                padding: 10px 12px 20px;
+            }
+            
+            .withdraw-card-btn {
+                position: static;
+                width: 100%;
+                margin-top: 16px;
+                text-align: center;
+            }
+            
+            .balance-card {
+                padding-bottom: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-label {
+                display: none;
+            }
+            
+            .nav-item span:first-child {
+                font-size: 1.6rem;
+            }
+            
+            .nav-item {
+                padding: 10px 20px;
+            }
+            
+            .logo {
+                font-size: 1.4rem;
+            }
+            
+            .welcome-text h1 {
+                font-size: 1.4rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
+    <!-- Header -->
+    <header class="header">
         <div class="logo">NOVA<span>BANK</span></div>
-        <div class="nav-menu">
-            <div class="nav-item" onclick="scrollToSection('dashboard')">
-                <i>🏠</i>
-                <span>Accueil</span>
-            </div>
-            <div class="nav-item" onclick="scrollToSection('transactions')">
-                <i>📊</i>
-                <span>Transactions</span>
-            </div>
-            <div class="nav-item" onclick="scrollToSection('withdraw')">
-                <i>💳</i>
-                <span>Retrait</span>
+        
+        <div class="header-right">
+            <button class="notification-btn" onclick="showNotifications()">
+                N
+            </button>
+            
+            <!-- Menu burger à trois traits -->
+            <div class="burger-container">
+                <button class="burger-btn" id="burgerBtn" onclick="toggleBurgerMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
+                <div class="burger-dropdown" id="burgerDropdown">
+                    <div class="burger-item" onclick="navigateTo('profile')">
+                        Mon profil
+                    </div>
+                    <div class="burger-item" onclick="navigateTo('settings')">
+                        Paramètres
+                    </div>
+                    <div class="burger-divider"></div>
+                    <div class="burger-item" onclick="navigateTo('support')">
+                        Support
+                    </div>
+                    <div class="burger-item" onclick="navigateTo('faq')">
+                        FAQ
+                    </div>
+                    <div class="burger-divider"></div>
+                    <div class="burger-item" onclick="logout()">
+                        Déconnexion
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="user-menu">
-            <div class="user-avatar" id="userAvatar" onclick="showUserMenu()">JD</div>
-            <button class="logout-btn" onclick="logout()">DÉCONNEXION</button>
-        </div>
-    </nav>
+    </header>
 
     <div class="container">
         <div class="alert" id="alertMessage"></div>
 
         <!-- Section bienvenue -->
-        <div class="welcome-section" id="dashboard">
+        <div class="welcome-card">
             <div class="welcome-text">
-                <h1 id="welcomeMessage">Bonjour, <span id="userName">...</span></h1>
-                <p>Bienvenue sur votre espace personnel NOVA BANK</p>
+                <h1>Bienvenue, <span id="userName">...</span></h1>
+                <p>Votre tableau de bord financier</p>
             </div>
-            <div class="date-display" id="currentDate">
-                <div class="day">15</div>
-                <div class="month">Février 2026</div>
-            </div>
-        </div>
-
-        <!-- Cartes de solde -->
-        <div class="balance-section">
-            <div class="balance-card">
-                <div class="card-header">
-                    <span class="card-title">Compte courant</span>
-                    <div class="card-icon">💳</div>
-                </div>
-                <div class="card-amount" id="currentBalance">0.00 <small>EUR</small></div>
-                <div class="card-footer">
-                    <span>✓</span> Disponible immédiatement
-                </div>
-            </div>
-
-            <div class="balance-card">
-                <div class="card-header">
-                    <span class="card-title">Compte épargne</span>
-                    <div class="card-icon">💰</div>
-                </div>
-                <div class="card-amount" id="savingsBalance">0.00 <small>EUR</small></div>
-                <div class="card-footer">
-                    <span>📈</span> Taux 2.5%
-                </div>
+            <div class="date-badge" id="currentDate">
+                15 février 2026
             </div>
         </div>
 
-        <!-- Actions rapides -->
-        <div class="quick-actions">
-            <div class="action-card" onclick="showWithdrawForm()">
-                <div class="action-icon">💳</div>
-                <h3>Effectuer un retrait</h3>
-                <p>Retirez de l'argent de votre compte</p>
+        <!-- Cartes de solde avec bouton retrait -->
+        <div class="balance-grid">
+            <div class="balance-card">
+                <div class="card-header">
+                    <span class="card-label">Compte courant</span>
+                    <div class="card-icon">€</div>
+                </div>
+                <div class="balance-amount" id="currentBalance">0.00 <small>EUR</small></div>
+                <div class="card-footer">
+                    <span>●</span> Disponible immédiatement
+                </div>
+                <button class="withdraw-card-btn" onclick="scrollToWithdraw()">
+                    Retrait
+                </button>
             </div>
-            <div class="action-card" onclick="transferMoney()">
-                <div class="action-icon">↗️</div>
-                <h3>Transférer</h3>
-                <p>Envoyez de l'argent</p>
-            </div>
-            <div class="action-card" onclick="payBills()">
-                <div class="action-icon">📄</div>
-                <h3>Payer une facture</h3>
-                <p>Réglez vos factures</p>
-            </div>
-            <div class="action-card" onclick="showDocuments()">
-                <div class="action-icon">📋</div>
-                <h3>Mes documents</h3>
-                <p>Gérez vos justificatifs</p>
+
+            <div class="balance-card">
+                <div class="card-header">
+                    <span class="card-label">Compte épargne</span>
+                    <div class="card-icon">€</div>
+                </div>
+                <div class="balance-amount" id="savingsBalance">0.00 <small>EUR</small></div>
+                <div class="card-footer">
+                    <span>●</span> Taux 2.5% annuel
+                </div>
+                <button class="withdraw-card-btn" onclick="scrollToWithdraw()">
+                    Retrait
+                </button>
             </div>
         </div>
 
         <!-- Section retrait -->
         <div class="withdraw-section" id="withdraw">
-            <div class="section-title">
-                <i>💳</i>
+            <div class="section-header">
+                <div class="section-icon">R</div>
                 <h2>Effectuer un retrait</h2>
             </div>
 
             <div class="withdraw-form">
                 <div class="form-group">
-                    <label>Montant du retrait (EUR)</label>
+                    <label>Montant (EUR)</label>
                     <input type="number" id="withdrawAmount" placeholder="0.00" min="10" step="10" value="100">
                 </div>
                 <div class="form-group">
@@ -764,80 +896,95 @@
                         <option value="savings">Compte épargne</option>
                     </select>
                 </div>
-                <button class="btn-withdraw" onclick="requestWithdraw()">DEMANDER UN RETRAIT</button>
+                <button class="btn-withdraw" onclick="requestWithdraw()">
+                    Retirer
+                </button>
             </div>
 
-            <!-- Documents requis pour le retrait -->
-            <div class="documents-modal" id="documentsRequired">
+            <!-- Documents requis -->
+            <div class="documents-panel" id="documentsRequired">
                 <h3>
-                    <i>⚠️</i>
-                    Documents requis pour valider le retrait
+                    <span>D</span>
+                    Documents requis pour finaliser le retrait
                 </h3>
-                <div class="documents-list">
-                    <div class="document-item">
-                        <div class="document-icon">🆔</div>
-                        <div class="document-info">
-                            <h4>Pièce d'identité</h4>
-                            <p>Carte d'identité ou passeport en cours de validité</p>
-                            <button class="upload-btn" onclick="uploadDocument('id')">Télécharger</button>
-                        </div>
+                <div class="documents-grid">
+                    <div class="doc-card">
+                        <div class="doc-icon">ID</div>
+                        <h4>Pièce d'identité</h4>
+                        <p>Carte d'identité ou passeport en cours de validité</p>
+                        <button class="btn-upload" onclick="uploadDocument('identité')">Télécharger</button>
                     </div>
-                    <div class="document-item">
-                        <div class="document-icon">🏠</div>
-                        <div class="document-info">
-                            <h4>Justificatif de domicile</h4>
-                            <p>Facture de moins de 3 mois</p>
-                            <button class="upload-btn" onclick="uploadDocument('domicile')">Télécharger</button>
-                        </div>
+                    <div class="doc-card">
+                        <div class="doc-icon">JD</div>
+                        <h4>Justificatif de domicile</h4>
+                        <p>Facture de moins de 3 mois</p>
+                        <button class="btn-upload" onclick="uploadDocument('domicile')">Télécharger</button>
                     </div>
-                    <div class="document-item">
-                        <div class="document-icon">🏦</div>
-                        <div class="document-info">
-                            <h4>RIB</h4>
-                            <p>Relevé d'identité bancaire</p>
-                            <button class="upload-btn" onclick="uploadDocument('rib')">Télécharger</button>
-                        </div>
+                    <div class="doc-card">
+                        <div class="doc-icon">RIB</div>
+                        <h4>RIB</h4>
+                        <p>Relevé d'identité bancaire</p>
+                        <button class="btn-upload" onclick="uploadDocument('rib')">Télécharger</button>
                     </div>
-                    <div class="document-item">
-                        <div class="document-icon">📝</div>
-                        <div class="document-info">
-                            <h4>Formulaire de retrait</h4>
-                            <p>Document signé</p>
-                            <button class="upload-btn" onclick="uploadDocument('form')">Télécharger</button>
-                        </div>
+                    <div class="doc-card">
+                        <div class="doc-icon">F</div>
+                        <h4>Formulaire de retrait</h4>
+                        <p>Document signé électroniquement</p>
+                        <button class="btn-upload" onclick="uploadDocument('formulaire')">Télécharger</button>
                     </div>
                 </div>
-                <p style="color: #ff6b6b; font-size: 0.9em; margin-top: 15px;">
-                    <i>⏱️</i> Délai de traitement : 24-48h après réception des documents
-                </p>
+                <div class="info-note">
+                    <span>⏱️</span>
+                    Délai de traitement : 24-48h après réception des documents
+                </div>
             </div>
         </div>
 
-        <!-- Historique des transactions -->
+        <!-- Transactions -->
         <div class="transactions-section" id="transactions">
             <div class="transactions-header">
                 <h2>Historique des transactions</h2>
                 <select class="filter-select" id="transactionFilter" onchange="filterTransactions()">
-                    <option value="all">Toutes les transactions</option>
-                    <option value="incoming">Reçus</option>
-                    <option value="outgoing">Envoyés</option>
+                    <option value="all">Toutes</option>
+                    <option value="incoming">Crédits</option>
+                    <option value="outgoing">Débits</option>
                     <option value="pending">En attente</option>
                 </select>
             </div>
 
-            <div class="transactions-list" id="transactionsList">
-                <!-- Les transactions seront chargées dynamiquement -->
-                <div class="loading">
-                    <div class="loading-spinner"></div>
+            <div class="transaction-list" id="transactionsList">
+                <!-- Transactions dynamiques -->
+                <div class="loading-state">
+                    <div class="spinner"></div>
                     <p>Chargement des transactions...</p>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Navigation du bas -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="navigateToSection('dashboard')" id="navDashboard">
+            <span>A</span>
+            <span class="nav-label">Accueil</span>
+        </div>
+        <div class="nav-item" onclick="navigateToSection('withdraw')" id="navWithdraw">
+            <span>R</span>
+            <span class="nav-label">Retrait</span>
+        </div>
+        <div class="nav-item" onclick="navigateToSection('transactions')" id="navTransactions">
+            <span>H</span>
+            <span class="nav-label">Historique</span>
+        </div>
+        <div class="nav-item" onclick="openSupport()" id="navSupport">
+            <span>S</span>
+            <span class="nav-label">Support</span>
+        </div>
+    </nav>
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Initialisation Supabase
+        // Configuration Supabase
         const supabaseUrl = 'https://oypihdbuovijjutuyqaj.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
@@ -846,23 +993,17 @@
         let userProfile = null;
         let transactions = [];
 
-        // Initialisation
         document.addEventListener('DOMContentLoaded', () => {
             checkUser();
             updateDate();
         });
 
-        // Mettre à jour la date
         function updateDate() {
             const date = new Date();
-            const days = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-            const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-            
-            document.querySelector('.day').textContent = date.getDate();
-            document.querySelector('.month').textContent = months[date.getMonth()] + ' ' + date.getFullYear();
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            document.getElementById('currentDate').textContent = date.toLocaleDateString('fr-FR', options);
         }
 
-        // Vérifier l'utilisateur connecté
         async function checkUser() {
             try {
                 const { data: { user }, error } = await supabase.auth.getUser();
@@ -873,13 +1014,6 @@
                 }
 
                 currentUser = user;
-                
-                // Initiales pour l'avatar
-                if (user.email) {
-                    const initials = user.email.substring(0, 2).toUpperCase();
-                    document.getElementById('userAvatar').textContent = initials;
-                }
-                
                 await loadUserProfile();
                 await loadTransactions();
                 
@@ -889,7 +1023,6 @@
             }
         }
 
-        // Charger le profil utilisateur
         async function loadUserProfile() {
             try {
                 const { data, error } = await supabase
@@ -902,10 +1035,9 @@
 
                 userProfile = data;
                 
-                // Mettre à jour l'interface
                 document.getElementById('userName').textContent = data.nom.split(' ')[0];
                 document.getElementById('currentBalance').textContent = data.solde.toFixed(2);
-                document.getElementById('savingsBalance').textContent = (data.solde * 0.3).toFixed(2); // Exemple
+                document.getElementById('savingsBalance').textContent = (data.solde * 0.3).toFixed(2);
                 
             } catch (error) {
                 console.error('Erreur chargement profil:', error);
@@ -913,90 +1045,70 @@
             }
         }
 
-        // Charger les transactions
         async function loadTransactions() {
-            try {
-                // Simuler des transactions pour l'exemple
-                transactions = [
-                    {
-                        id: 1,
-                        type: 'Dépôt',
-                        montant: 5000.00,
-                        date: new Date(Date.now() - 2*24*60*60*1000),
-                        status: 'complété',
-                        icon: '📥',
-                        description: 'Virement reçu'
-                    },
-                    {
-                        id: 2,
-                        type: 'Retrait',
-                        montant: -200.00,
-                        date: new Date(Date.now() - 5*24*60*60*1000),
-                        status: 'en_attente',
-                        icon: '💳',
-                        description: 'Retrait DAB'
-                    },
-                    {
-                        id: 3,
-                        type: 'Paiement',
-                        montant: -85.50,
-                        date: new Date(Date.now() - 7*24*60*60*1000),
-                        status: 'complété',
-                        icon: '🛒',
-                        description: 'Carrefour Market'
-                    },
-                    {
-                        id: 4,
-                        type: 'Virement',
-                        montant: 150.00,
-                        date: new Date(Date.now() - 10*24*60*60*1000),
-                        status: 'complété',
-                        icon: '↗️',
-                        description: 'De Jean Martin'
-                    }
-                ];
+            transactions = [
+                {
+                    id: 1,
+                    type: 'Virement reçu',
+                    montant: 2500.00,
+                    date: '2026-02-14',
+                    status: 'completed'
+                },
+                {
+                    id: 2,
+                    type: 'Retrait DAB',
+                    montant: -150.00,
+                    date: '2026-02-13',
+                    status: 'completed'
+                },
+                {
+                    id: 3,
+                    type: 'Paiement carte',
+                    montant: -63.50,
+                    date: '2026-02-12',
+                    status: 'completed'
+                },
+                {
+                    id: 4,
+                    type: 'Demande de retrait',
+                    montant: -500.00,
+                    date: '2026-02-11',
+                    status: 'pending'
+                }
+            ];
 
-                displayTransactions(transactions);
-
-            } catch (error) {
-                console.error('Erreur chargement transactions:', error);
-            }
+            displayTransactions(transactions);
         }
 
-        // Afficher les transactions
         function displayTransactions(transactionsToShow) {
             const container = document.getElementById('transactionsList');
             
             if (!transactionsToShow || transactionsToShow.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #999; padding: 30px;">Aucune transaction</p>';
+                container.innerHTML = '<p style="text-align: center; color: #8e9daf; padding: 40px;">Aucune transaction</p>';
                 return;
             }
 
             let html = '';
-            transactionsToShow.forEach(transaction => {
-                const isPositive = transaction.montant > 0;
-                const dateStr = transaction.date.toLocaleDateString('fr-FR', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                });
-
+            transactionsToShow.forEach(t => {
+                const isPositive = t.montant > 0;
+                const statusClass = t.status === 'completed' ? 'status-completed' : 'status-pending';
+                const statusText = t.status === 'completed' ? 'Complété' : 'En attente';
+                const icon = isPositive ? '+' : '-';
+                
                 html += `
-                    <div class="transaction-item">
+                    <div class="transaction-row">
                         <div class="transaction-left">
-                            <div class="transaction-icon">${transaction.icon}</div>
+                            <div class="transaction-icon">${icon}</div>
                             <div class="transaction-details">
-                                <h4>${transaction.description || transaction.type}</h4>
-                                <p>${dateStr}</p>
+                                <h4>${t.type}</h4>
+                                <p>${new Date(t.date).toLocaleDateString('fr-FR')}</p>
                             </div>
                         </div>
                         <div class="transaction-right">
                             <div class="transaction-amount ${isPositive ? 'amount-positive' : 'amount-negative'}">
-                                ${isPositive ? '+' : ''}${transaction.montant.toFixed(2)} €
+                                ${isPositive ? '+' : ''}${t.montant.toFixed(2)} €
                             </div>
-                            <span class="transaction-status ${transaction.status === 'complété' ? 'status-success' : 'status-pending'}">
-                                ${transaction.status === 'complété' ? 'Complété' : 'En attente'}
-                            </span>
+                            <span class="transaction-status ${statusClass}">${statusText}</span>
                         </div>
                     </div>
                 `;
@@ -1005,10 +1117,8 @@
             container.innerHTML = html;
         }
 
-        // Filtrer les transactions
         function filterTransactions() {
             const filter = document.getElementById('transactionFilter').value;
-            
             let filtered = [...transactions];
             
             if (filter === 'incoming') {
@@ -1016,88 +1126,86 @@
             } else if (filter === 'outgoing') {
                 filtered = transactions.filter(t => t.montant < 0);
             } else if (filter === 'pending') {
-                filtered = transactions.filter(t => t.status === 'en_attente');
+                filtered = transactions.filter(t => t.status === 'pending');
             }
             
             displayTransactions(filtered);
         }
 
-        // Scroll vers une section
-        function scrollToSection(section) {
-            document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
+        function navigateToSection(section) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            if (section === 'dashboard') {
+                document.getElementById('navDashboard').classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (section === 'withdraw') {
+                document.getElementById('navWithdraw').classList.add('active');
+                document.getElementById('withdraw').scrollIntoView({ behavior: 'smooth' });
+            } else if (section === 'transactions') {
+                document.getElementById('navTransactions').classList.add('active');
+                document.getElementById('transactions').scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
-        // Afficher le menu utilisateur
-        function showUserMenu() {
-            showAlert('Profil utilisateur - bientôt disponible', 'success');
+        function scrollToWithdraw() {
+            document.getElementById('withdraw').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('navWithdraw').classList.add('active');
+            document.getElementById('navDashboard').classList.remove('active');
+            document.getElementById('navTransactions').classList.remove('active');
         }
 
-        // Afficher le formulaire de retrait
-        function showWithdrawForm() {
-            scrollToSection('withdraw');
+        function toggleBurgerMenu() {
+            const dropdown = document.getElementById('burgerDropdown');
+            const btn = document.getElementById('burgerBtn');
+            dropdown.classList.toggle('show');
+            btn.classList.toggle('active');
         }
 
-        // Transférer de l'argent
-        function transferMoney() {
-            showAlert('Service de transfert bientôt disponible', 'success');
+        function navigateTo(destination) {
+            toggleBurgerMenu();
+            
+            if (destination === 'support') {
+                showAlert('Support client disponible 24/7', 'success');
+            } else if (destination === 'faq') {
+                showAlert('FAQ - bientôt disponible', 'success');
+            } else if (destination === 'profile') {
+                showAlert('Profil utilisateur', 'success');
+            } else if (destination === 'settings') {
+                showAlert('Paramètres', 'success');
+            }
         }
 
-        // Payer une facture
-        function payBills() {
-            showAlert('Service de paiement de factures bientôt disponible', 'success');
+        function openSupport() {
+            showAlert('Support client - bientôt disponible', 'success');
         }
 
-        // Afficher les documents
-        function showDocuments() {
-            showAlert('Gestion des documents bientôt disponible', 'success');
+        function showNotifications() {
+            showAlert('Notifications', 'success');
         }
 
-        // Upload de document
-        function uploadDocument(type) {
-            showAlert(`Téléchargement du document ${type} - bientôt disponible`, 'success');
-        }
-
-        // Demande de retrait
         async function requestWithdraw() {
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
-            const account = document.getElementById('withdrawAccount').value;
             
             if (!amount || amount < 10) {
-                showAlert('Veuillez entrer un montant valide (minimum 10€)', 'error');
+                showAlert('Montant minimum : 10€', 'error');
                 return;
             }
 
             if (amount > userProfile.solde) {
-                showAlert('Solde insuffisant pour effectuer ce retrait', 'error');
+                showAlert('Solde insuffisant', 'error');
                 return;
             }
 
-            // Afficher les documents requis
-            const documentsDiv = document.getElementById('documentsRequired');
-            documentsDiv.classList.add('show');
-            
-            showAlert('Votre demande de retrait a été enregistrée. Veuillez fournir les documents requis.', 'success');
-            
-            // Simuler l'ajout d'une transaction
-            const newTransaction = {
-                id: transactions.length + 1,
-                type: 'Retrait',
-                montant: -amount,
-                date: new Date(),
-                status: 'en_attente',
-                icon: '💳',
-                description: `Retrait de ${amount}€`
-            };
-            
-            transactions.unshift(newTransaction);
-            displayTransactions(transactions);
-            
-            // Mettre à jour le solde (simulé)
-            userProfile.solde -= amount;
-            document.getElementById('currentBalance').textContent = userProfile.solde.toFixed(2);
+            document.getElementById('documentsRequired').classList.add('show');
+            showAlert('Demande de retrait enregistrée', 'success');
         }
 
-        // Afficher une alerte
+        function uploadDocument(type) {
+            showAlert(`Téléchargement du document ${type}`, 'success');
+        }
+
         function showAlert(message, type) {
             const alert = document.getElementById('alertMessage');
             alert.textContent = message;
@@ -1106,10 +1214,9 @@
             
             setTimeout(() => {
                 alert.style.display = 'none';
-            }, 5000);
+            }, 4000);
         }
 
-        // Déconnexion
         async function logout() {
             try {
                 const { error } = await supabase.auth.signOut();
@@ -1120,6 +1227,17 @@
                 showAlert('Erreur lors de la déconnexion', 'error');
             }
         }
+
+        document.addEventListener('click', function(event) {
+            const burger = document.querySelector('.burger-container');
+            const dropdown = document.getElementById('burgerDropdown');
+            const btn = document.getElementById('burgerBtn');
+            
+            if (!burger.contains(event.target) && dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+                btn.classList.remove('active');
+            }
+        });
     </script>
 </body>
 </html>
