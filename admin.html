@@ -198,7 +198,7 @@
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
 
-        // Email admin (insensible à la casse)
+        // Email admin (corrigé)
         const ADMIN_EMAIL = 'serviceclient08987@gmail.com';
 
         // Vérifier si déjà connecté
@@ -240,25 +240,13 @@
 
                 if (error) throw error;
 
-                // ✅ Vérification insensible à la casse
+                // Vérifier que c'est bien l'admin (insensible à la casse)
                 if (data.user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-                    
-                    // ✅ Vérifier aussi le rôle dans profiles
-                    const { data: profile, error: profileError } = await _supabase
-                        .from('profiles')
-                        .select('role')
-                        .eq('id', data.user.id)
-                        .single();
-
-                    if (!profileError && profile && profile.role === 'admin') {
-                        sessionStorage.setItem('adminAuth', 'true');
-                        showAlert('Connexion admin réussie !', 'success');
-                        setTimeout(() => {
-                            window.location.href = 'admin-dashboard.html';
-                        }, 1000);
-                    } else {
-                        throw new Error('Profil non trouvé ou pas admin');
-                    }
+                    sessionStorage.setItem('adminAuth', 'true');
+                    showAlert('Connexion admin réussie !', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'admin-dashboard.html';
+                    }, 1000);
                 } else {
                     throw new Error('Accès non autorisé - Compte non admin');
                 }
@@ -271,7 +259,7 @@
                 } else if (error.message.includes('non autorisé')) {
                     showAlert('Ce compte n\'a pas les droits admin', 'error');
                 } else {
-                    showAlert('Erreur de connexion: ' + error.message, 'error');
+                    showAlert('Erreur de connexion', 'error');
                 }
 
                 submitBtn.disabled = false;
