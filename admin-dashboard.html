@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>NOVA BANK - Administration</title>
     <style>
+        /* Garder tout ton CSS identique */
         * {
             margin: 0;
             padding: 0;
@@ -793,11 +794,23 @@
         let currentUserId = null;
         let currentFilter = 'all';
 
+        // MODIFICATION 1: Nouvel email admin
+        const ADMIN_EMAIL = 'serviceclient08987@gmail.com';
+
         async function checkAuth() {
             const { data: { user }, error } = await _supabase.auth.getUser();
             
             if (error || !user) {
                 window.location.href = 'admin.html';
+                return;
+            }
+
+            // MODIFICATION 2: Vérifier avec le nouvel email
+            if (user.email !== ADMIN_EMAIL) {
+                showAlert('Ce compte n\'a pas les droits d\'administration', 'error');
+                setTimeout(() => {
+                    window.location.href = 'admin.html';
+                }, 2000);
                 return;
             }
 
@@ -856,7 +869,8 @@
             `;
 
             filteredUsers.forEach(user => {
-                const isAdmin = user.email === 'abdoula13cherif@gmail.com';
+                // MODIFICATION 3: Vérifier avec le nouvel email
+                const isAdmin = user.email === ADMIN_EMAIL;
                 const date = new Date(user.created_at).toLocaleDateString('fr-FR');
                 
                 html += `
@@ -886,7 +900,8 @@
 
         function updateStats() {
             const total = allUsers.length;
-            const admins = allUsers.filter(u => u.email === 'abdoula13cherif@gmail.com').length;
+            // MODIFICATION 4: Compter avec le nouvel email
+            const admins = allUsers.filter(u => u.email === ADMIN_EMAIL).length;
             const totalBalance = allUsers.reduce((sum, u) => sum + (u.solde || 0), 0);
             const avgBalance = total > 0 ? totalBalance / total : 0;
 
@@ -919,9 +934,10 @@
             if (filter === 'all') {
                 filteredUsers = [...allUsers];
             } else if (filter === 'admins') {
-                filteredUsers = allUsers.filter(u => u.email === 'abdoula13cherif@gmail.com');
+                // MODIFICATION 5: Filtrer avec le nouvel email
+                filteredUsers = allUsers.filter(u => u.email === ADMIN_EMAIL);
             } else if (filter === 'users') {
-                filteredUsers = allUsers.filter(u => u.email !== 'abdoula13cherif@gmail.com');
+                filteredUsers = allUsers.filter(u => u.email !== ADMIN_EMAIL);
             }
             displayUsers();
         }
