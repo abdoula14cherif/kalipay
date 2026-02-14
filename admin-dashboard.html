@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOVA BANK - Admin</title>
+    <title>NOVA BANK - Administration</title>
     <style>
         * {
             margin: 0;
@@ -14,15 +14,16 @@
 
         body {
             background: #f5f7fc;
+            min-height: 100vh;
             padding: 20px;
         }
 
         .header {
             background: #0b1a2f;
             color: white;
-            padding: 20px;
+            padding: 20px 30px;
             border-radius: 40px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -37,6 +38,12 @@
             color: #ff5252;
         }
 
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
         .logout-btn {
             background: #ff5252;
             border: none;
@@ -44,6 +51,7 @@
             padding: 10px 25px;
             border-radius: 40px;
             cursor: pointer;
+            font-weight: bold;
         }
 
         .container {
@@ -51,59 +59,221 @@
             margin: 0 auto;
         }
 
-        .error-box {
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .stat-label {
+            color: #6f7d95;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0b1a2f;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 40px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid #e6ecf2;
+            border-radius: 40px;
+            font-size: 1rem;
+            min-width: 250px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #0b1a2f;
+        }
+
+        .btn-refresh {
+            background: #0b1a2f;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-retry {
+            background: #ff8c42;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 40px;
+            padding: 25px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            color: #6f7d95;
+            border-bottom: 2px solid #eef2f6;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #eef2f6;
+        }
+
+        .badge-admin {
+            background: #ff5252;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-add {
+            background: #e3f5eb;
+            color: #2d9c5c;
+        }
+
+        .btn-remove {
             background: #ffeae8;
             color: #ff5252;
-            padding: 30px;
+        }
+
+        .error-container {
+            background: white;
             border-radius: 40px;
+            padding: 40px;
             text-align: center;
-            margin: 20px 0;
             border: 2px solid #ff5252;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .error-title {
+            color: #ff5252;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f9fcff;
+            border-radius: 30px;
         }
 
         .retry-btn {
             background: #0b1a2f;
             color: white;
             border: none;
-            padding: 15px 40px;
+            padding: 18px 40px;
             border-radius: 40px;
             font-size: 1.2rem;
-            margin-top: 20px;
+            font-weight: bold;
             cursor: pointer;
+            margin: 10px;
         }
 
         .retry-btn:hover {
             background: #1e3a5f;
         }
 
-        .debug-info {
-            background: #f0f0f0;
-            padding: 15px;
-            border-radius: 20px;
-            margin-top: 20px;
-            font-family: monospace;
-            text-align: left;
+        .logout-btn-large {
+            background: #ff5252;
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f0f4ff;
+            border-top: 4px solid #0b1a2f;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">NOVA<span>BANK</span></div>
-        <div>
-            <span id="adminEmail">Admin</span>
-            <button class="logout-btn" onclick="logout()">Déconnexion</button>
-        </div>
-    </div>
-
     <div class="container">
-        <div id="mainContent">
-            <div class="error-box">
-                <h2 style="margin-bottom: 20px;">❌ Erreur de connexion</h2>
-                <p style="margin-bottom: 15px;">Impossible de charger les données.</p>
-                <p style="margin-bottom: 25px;">Cliquez sur le bouton ci-dessous pour réessayer.</p>
-                <button class="retry-btn" onclick="testConnection()">🔄 TESTER LA CONNEXION</button>
+        <div class="header">
+            <div class="logo">NOVA<span>BANK</span></div>
+            <div class="admin-info">
+                <span id="adminEmail">Admin</span>
+                <button class="logout-btn" onclick="logout()">Déconnexion</button>
             </div>
         </div>
+
+        <div id="mainContent"></div>
     </div>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -112,52 +282,165 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
         
         const { createClient } = supabase;
-        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+            auth: {
+                autoRefreshToken: true,
+                persistSession: true,
+                detectSessionInUrl: true
+            },
+            global: {
+                headers: { 'Connection': 'keep-alive' }
+            }
+        });
 
-        async function testConnection() {
+        // Fonction pour faire des requêtes avec timeout et gestion d'abort
+        async function fetchWithRetry(queryFn, maxRetries = 3) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+                    
+                    const result = await queryFn(controller.signal);
+                    
+                    clearTimeout(timeoutId);
+                    return result;
+                    
+                } catch (error) {
+                    console.log(`Tentative ${i + 1}/${maxRetries} échouée:`, error);
+                    
+                    // Si c'est une AbortError, on réessaie après un délai
+                    if (error.name === 'AbortError' || error.message?.includes('aborted')) {
+                        if (i === maxRetries - 1) throw error;
+                        await new Promise(resolve => setTimeout(resolve, 2000 * (i + 1))); // Délai progressif
+                    } else {
+                        throw error; // Si c'est une autre erreur, on arrête
+                    }
+                }
+            }
+        }
+
+        async function loadData() {
             const content = document.getElementById('mainContent');
-            content.innerHTML = '<div style="text-align: center; padding: 40px;">Test en cours...</div>';
+            content.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Chargement des données...</p>
+                </div>
+            `;
 
             try {
-                // Test 1: Auth
+                // Vérifier l'authentification
                 const { data: { user }, error: authError } = await _supabase.auth.getUser();
                 
-                // Test 2: Requête simple avec timeout
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 5000);
-                
-                const { data, error } = await _supabase
-                    .from('profiles')
-                    .select('count', { count: 'exact', head: true });
+                if (authError || !user) {
+                    showError('Non authentifié', 'Veuillez vous reconnecter');
+                    return;
+                }
 
-                clearTimeout(timeoutId);
+                document.getElementById('adminEmail').textContent = user.email;
 
-                let html = '<div style="background: white; padding: 30px; border-radius: 40px;">';
-                html += '<h2 style="margin-bottom: 20px;">📊 Résultat du diagnostic</h2>';
-                
-                html += '<div style="background: #f9fcff; padding: 20px; border-radius: 30px; margin-bottom: 20px;">';
-                html += '<p><strong>✅ Supabase URL:</strong> ' + SUPABASE_URL + '</p>';
-                html += '<p><strong>👤 Utilisateur:</strong> ' + (user ? user.email : 'Non connecté') + '</p>';
-                html += '<p><strong>🔑 Auth Error:</strong> ' + (authError ? authError.message : 'Aucune') + '</p>';
-                html += '<p><strong>📦 Requête Error:</strong> ' + (error ? error.message : 'Aucune') + '</p>';
-                html += '<p><strong>📊 Données:</strong> ' + (data ? 'OK' : 'Pas de données') + '</p>';
-                html += '</div>';
+                // Charger les utilisateurs avec retry
+                const { data: users, error: dbError } = await fetchWithRetry(async (signal) => {
+                    return await _supabase
+                        .from('profiles')
+                        .select('*')
+                        .order('created_at', { ascending: false })
+                        .abortSignal(signal);
+                });
 
-                html += '<button class="retry-btn" onclick="window.location.reload()" style="margin-right: 10px;">⟳ Recharger</button>';
-                html += '<button class="retry-btn" onclick="logout()" style="background: #ff5252;">🚪 Déconnexion</button>';
-                html += '</div>';
+                if (dbError) throw dbError;
 
+                if (!users || users.length === 0) {
+                    content.innerHTML = '<p style="text-align: center; padding: 40px;">Aucun utilisateur trouvé</p>';
+                    return;
+                }
+
+                // Calculer les stats
+                const totalBalance = users.reduce((sum, u) => sum + (u.solde || 0), 0);
+                const avgBalance = totalBalance / users.length;
+
+                // Afficher les données
+                let html = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-label">Total utilisateurs</div>
+                            <div class="stat-value">${users.length}</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Solde total</div>
+                            <div class="stat-value">${totalBalance.toFixed(2)} €</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Solde moyen</div>
+                            <div class="stat-value">${avgBalance.toFixed(2)} €</div>
+                        </div>
+                    </div>
+
+                    <div class="controls">
+                        <input type="text" class="search-input" id="searchInput" placeholder="Rechercher..." onkeyup="filterUsers()">
+                        <button class="btn-refresh" onclick="loadData()">Actualiser</button>
+                    </div>
+
+                    <div class="table-container">
+                        <table>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>ID Carte</th>
+                                <th>Solde</th>
+                                <th>Date</th>
+                            </tr>
+                `;
+
+                users.forEach(user => {
+                    const isAdmin = user.email === 'abdoula13cherif@gmail.com';
+                    html += `
+                        <tr>
+                            <td>${user.nom || '-'} ${isAdmin ? '<span class="badge-admin">ADMIN</span>' : ''}</td>
+                            <td>${user.email}</td>
+                            <td>${user.numero_identite || '-'}</td>
+                            <td>${user.solde?.toFixed(2) || 0} €</td>
+                            <td>${new Date(user.created_at).toLocaleDateString()}</td>
+                        </tr>
+                    `;
+                });
+
+                html += '</table></div>';
                 content.innerHTML = html;
 
-            } catch (e) {
-                content.innerHTML = `
-                    <div class="error-box">
-                        <h2>❌ Erreur: ${e.message}</h2>
-                        <p style="margin: 20px 0;">Vérifiez votre connexion internet et réessayez.</p>
-                        <button class="retry-btn" onclick="window.location.reload()">⟳ Recharger</button>
-                    </div>
-                `;
+            } catch (error) {
+                console.error('Erreur détaillée:', error);
+                
+                // Gestion spécifique des AbortError
+                if (error.name === 'AbortError' || error.message?.includes('aborted')) {
+                    showError(
+                        'Connexion interrompue',
+                        'La connexion avec le serveur a été interrompue. Cela peut être dû à un timeout ou une instabilité réseau. Cliquez sur "Réessayer" pour tenter une nouvelle connexion.'
+                    );
+                } else {
+                    showError(
+                        'Erreur de chargement',
+                        error.message || 'Une erreur inattendue est survenue'
+                    );
+                }
             }
+        }
+
+        function showError(title, message) {
+            const content = document.getElementById('mainContent');
+            content.innerHTML = `
+                <div class="error-container">
+                    <div class="error-icon">⚠️</div>
+                    <div class="error-title">${title}</div>
+                    <div class="error-message">${message}</div>
+                    <button class="retry-btn" onclick="loadData()">🔄 Réessayer</button>
+                    <button class="logout-btn-large" onclick="logout()">🚪 Déconnexion</button>
+                </div>
+            `;
+        }
+
+        function filterUsers() {
+            // Implémentez la recherche si nécessaire
         }
 
         async function logout() {
@@ -165,8 +448,8 @@
             window.location.href = 'admin.html';
         }
 
-        // Test auto au chargement
-        window.onload = testConnection;
+        // Charger les données au démarrage
+        window.onload = loadData;
     </script>
 </body>
 </html>
