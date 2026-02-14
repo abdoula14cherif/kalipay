@@ -169,12 +169,12 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0,0,0,0.5);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(3px);
         }
 
         .overlay.show {
@@ -187,20 +187,22 @@
             to { opacity: 1; }
         }
 
+        /* Carte de message réduite */
         .message-card {
             background: white;
-            border-radius: 40px;
-            padding: 40px;
-            max-width: 450px;
+            border-radius: 30px;
+            padding: 25px;
+            max-width: 380px;
             width: 90%;
             text-align: center;
             animation: slideUp 0.4s ease;
             border: 3px solid #ff5252;
+            box-shadow: 0 20px 40px rgba(255,82,82,0.2);
         }
 
         @keyframes slideUp {
             from {
-                transform: translateY(30px);
+                transform: translateY(20px);
                 opacity: 0;
             }
             to {
@@ -210,59 +212,60 @@
         }
 
         .exclamation {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             background: #ff5252;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
+            margin: 0 auto 15px;
             animation: pulse 1.5s infinite;
         }
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
 
         .exclamation span {
             color: white;
-            font-size: 3.5rem;
+            font-size: 2.5rem;
             font-weight: 800;
         }
 
         .message-card h2 {
             color: #ff5252;
-            font-size: 1.8rem;
-            margin-bottom: 15px;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
         }
 
         .message-card p {
             color: #0b1a2f;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 25px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 15px;
         }
 
         .doc-list {
             background: #f9fcff;
-            border-radius: 30px;
-            padding: 20px;
-            margin: 20px 0;
+            border-radius: 20px;
+            padding: 15px;
+            margin: 15px 0;
             text-align: left;
             list-style: none;
+            font-size: 0.9rem;
         }
 
         .doc-list li {
-            padding: 12px 0;
+            padding: 8px 0;
             border-bottom: 1px solid #eef2f6;
             color: #0b1a2f;
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .doc-list li:last-child {
@@ -273,44 +276,52 @@
             content: "•";
             color: #ff5252;
             font-weight: bold;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
         }
 
         .btn-contact {
             width: 100%;
-            padding: 18px;
+            padding: 14px;
             background: #ff5252;
             color: white;
             border: none;
             border-radius: 40px;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            margin: 15px 0;
+            margin: 10px 0;
         }
 
         .btn-contact:hover {
             background: #ff3333;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(255,82,82,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(255,82,82,0.3);
         }
 
         .btn-close {
             background: transparent;
             border: 2px solid #e6ecf2;
             color: #0b1a2f;
-            padding: 12px 30px;
+            padding: 10px 25px;
             border-radius: 40px;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            width: 100%;
         }
 
         .btn-close:hover {
             background: #f0f4ff;
             border-color: #0b1a2f;
+        }
+
+        .delay-text {
+            color: #ff5252;
+            font-weight: 600;
+            margin: 10px 0;
+            font-size: 0.9rem;
         }
 
         .alert {
@@ -357,7 +368,7 @@
             </div>
 
             <div class="form-group">
-                <label>Montant du retrait</label>
+                <label>Montant du retrait (€)</label>
                 <input type="number" id="withdrawAmount" placeholder="Ex: 500" value="100">
             </div>
 
@@ -396,7 +407,7 @@
         </div>
     </div>
 
-    <!-- Overlay avec message -->
+    <!-- Overlay avec message réduit -->
     <div class="overlay" id="securityOverlay">
         <div class="message-card">
             <div class="exclamation">
@@ -405,7 +416,7 @@
             
             <h2>Document requis</h2>
             
-            <p>Pour des raisons de sécurité, un document de confirmation est nécessaire pour valider votre retrait.</p>
+            <p>Un document de confirmation est nécessaire pour valider votre retrait</p>
 
             <ul class="doc-list">
                 <li>Pièce d'identité</li>
@@ -414,12 +425,12 @@
                 <li>Formulaire signé</li>
             </ul>
 
-            <p style="color: #ff5252; font-weight: 600; margin: 15px 0;">
-                ⏱️ Délai: 24-48h après réception
-            </p>
+            <div class="delay-text">
+                ⏱️ Délai: 24-48h
+            </div>
 
             <button class="btn-contact" onclick="contactSupport()">
-                CONTACTER LE SERVICE CLIENT
+                CONTACTER LE SUPPORT
             </button>
 
             <button class="btn-close" onclick="closeOverlay()">
