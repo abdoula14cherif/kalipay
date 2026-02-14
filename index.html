@@ -151,6 +151,12 @@
             box-shadow: 0 10px 15px -3px rgba(37,99,235,0.3);
         }
 
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .alert {
             position: fixed;
             top: 1rem;
@@ -215,17 +221,11 @@
             margin: 0.5rem 0 1rem;
         }
 
-        .forgot-password a {
+        .forgot-password span {
             color: var(--primary-blue);
-            text-decoration: none;
             font-size: 0.9rem;
             cursor: pointer;
-        }
-
-        .validation-message {
-            font-size: 0.8rem;
-            margin-top: 0.25rem;
-            color: var(--primary-red);
+            text-decoration: underline;
         }
 
         .footer-links {
@@ -233,11 +233,11 @@
             margin-top: 1.5rem;
         }
 
-        .footer-links a {
+        .footer-links span {
             color: var(--primary-blue);
-            text-decoration: none;
             font-weight: 500;
             cursor: pointer;
+            text-decoration: underline;
         }
 
         .features {
@@ -250,6 +250,12 @@
         .feature {
             text-align: center;
             color: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
         }
 
         .feature-icon {
@@ -279,11 +285,11 @@
         <!-- Formulaire -->
         <div class="form-card">
             <div class="tabs">
-                <button class="tab active" onclick="showForm('login')">Connexion</button>
-                <button class="tab" onclick="showForm('register')">Inscription</button>
+                <button class="tab active" id="tabLogin">Connexion</button>
+                <button class="tab" id="tabRegister">Inscription</button>
             </div>
 
-            <!-- Connexion -->
+            <!-- Formulaire de Connexion -->
             <div id="loginForm" class="form active">
                 <h2>Content de te revoir !</h2>
                 <div class="form-group">
@@ -295,15 +301,15 @@
                     <input type="password" id="loginPassword" placeholder="••••••••">
                 </div>
                 <div class="forgot-password">
-                    <a onclick="forgotPassword()">Mot de passe oublié ?</a>
+                    <span id="forgotPassword">Mot de passe oublié ?</span>
                 </div>
-                <button class="btn-primary" onclick="login()" id="loginBtn">Se connecter</button>
+                <button class="btn-primary" id="loginBtn">Se connecter</button>
                 <div class="footer-links">
-                    Pas encore de compte ? <a onclick="showForm('register')">S'inscrire</a>
+                    Pas encore de compte ? <span id="goToRegister">S'inscrire</span>
                 </div>
             </div>
 
-            <!-- Inscription -->
+            <!-- Formulaire d'Inscription -->
             <div id="registerForm" class="form">
                 <h2>Créer un compte</h2>
                 <div class="form-group">
@@ -326,26 +332,26 @@
                     <label>Confirmer le mot de passe</label>
                     <input type="password" id="regConfirm" placeholder="••••••••">
                 </div>
-                <button class="btn-primary" onclick="register()" id="registerBtn">S'inscrire</button>
+                <button class="btn-primary" id="registerBtn">S'inscrire</button>
                 <div class="footer-links">
-                    Déjà inscrit ? <a onclick="showForm('login')">Se connecter</a>
+                    Déjà inscrit ? <span id="goToLogin">Se connecter</span>
                 </div>
             </div>
         </div>
 
         <!-- Features -->
         <div class="features">
-            <div class="feature">
+            <div class="feature" id="featureInstant">
                 <div class="feature-icon">⚡</div>
                 <div class="feature-text">Instantané</div>
                 <div class="feature-small">Transferts en temps réel</div>
             </div>
-            <div class="feature">
+            <div class="feature" id="featureSecure">
                 <div class="feature-icon">🔒</div>
                 <div class="feature-text">Sécurisé</div>
                 <div class="feature-small">Données protégées</div>
             </div>
-            <div class="feature">
+            <div class="feature" id="featureSupport">
                 <div class="feature-icon">💚</div>
                 <div class="feature-text">Support</div>
                 <div class="feature-small">WhatsApp 7j/7</div>
@@ -371,7 +377,7 @@
             setTimeout(() => alert.style.display = 'none', 3000);
         }
 
-        // Fonction pour changer entre connexion et inscription
+        // Fonction pour changer de formulaire
         function showForm(form) {
             const tabs = document.querySelectorAll('.tab');
             const forms = document.querySelectorAll('.form');
@@ -388,9 +394,61 @@
             }
         }
 
+        // === ATTACHER LES ÉVÉNEMENTS AUX BOUTONS ===
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page chargée, attachement des événements...');
+
+            // Tabs
+            document.getElementById('tabLogin').addEventListener('click', function() {
+                showForm('login');
+            });
+
+            document.getElementById('tabRegister').addEventListener('click', function() {
+                showForm('register');
+            });
+
+            // Liens de navigation
+            document.getElementById('goToRegister').addEventListener('click', function() {
+                showForm('register');
+            });
+
+            document.getElementById('goToLogin').addEventListener('click', function() {
+                showForm('login');
+            });
+
+            // Mot de passe oublié
+            document.getElementById('forgotPassword').addEventListener('click', function() {
+                showAlert('📞 Contactez-nous sur WhatsApp pour réinitialiser votre mot de passe', 'info');
+            });
+
+            // Bouton de connexion
+            document.getElementById('loginBtn').addEventListener('click', login);
+
+            // Bouton d'inscription
+            document.getElementById('registerBtn').addEventListener('click', register);
+
+            // Features
+            document.getElementById('featureInstant').addEventListener('click', function() {
+                showAlert('⚡ Transferts instantanés 24/7', 'info');
+            });
+
+            document.getElementById('featureSecure').addEventListener('click', function() {
+                showAlert('🔒 Vos données sont protégées et cryptées', 'info');
+            });
+
+            document.getElementById('featureSupport').addEventListener('click', function() {
+                showAlert('💚 Support WhatsApp: +237600000000', 'info');
+            });
+
+            // Vérifier si déjà connecté
+            if (localStorage.getItem('userId')) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+
         // Fonction de connexion
         async function login() {
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
             const btn = document.getElementById('loginBtn');
 
@@ -413,13 +471,13 @@
                 if (data) {
                     localStorage.setItem('userId', data.id);
                     localStorage.setItem('userName', data.name);
-                    showAlert('Connexion réussie !', 'success');
+                    showAlert('✅ Connexion réussie !', 'success');
                     setTimeout(() => window.location.href = 'dashboard.html', 1500);
                 } else {
-                    showAlert('Email ou mot de passe incorrect', 'error');
+                    showAlert('❌ Email ou mot de passe incorrect', 'error');
                 }
             } catch (error) {
-                showAlert('Erreur de connexion', 'error');
+                showAlert('❌ Erreur de connexion', 'error');
             } finally {
                 btn.classList.remove('loading');
                 btn.disabled = false;
@@ -428,9 +486,9 @@
 
         // Fonction d'inscription
         async function register() {
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const phone = document.getElementById('regPhone').value;
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
             const password = document.getElementById('regPassword').value;
             const confirm = document.getElementById('regConfirm').value;
             const btn = document.getElementById('registerBtn');
@@ -466,27 +524,17 @@
                 if (data && data[0]) {
                     localStorage.setItem('userId', data[0].id);
                     localStorage.setItem('userName', data[0].name);
-                    showAlert('Inscription réussie !', 'success');
+                    showAlert('✅ Inscription réussie !', 'success');
                     setTimeout(() => window.location.href = 'dashboard.html', 1500);
                 } else {
-                    showAlert('Cet email est déjà utilisé', 'error');
+                    showAlert('❌ Cet email est déjà utilisé', 'error');
                 }
             } catch (error) {
-                showAlert('Erreur lors de l\'inscription', 'error');
+                showAlert('❌ Erreur lors de l\'inscription', 'error');
             } finally {
                 btn.classList.remove('loading');
                 btn.disabled = false;
             }
-        }
-
-        // Mot de passe oublié
-        function forgotPassword() {
-            showAlert('Contactez le support sur WhatsApp pour réinitialiser votre mot de passe', 'info');
-        }
-
-        // Vérifier si déjà connecté
-        if (localStorage.getItem('userId')) {
-            window.location.href = 'dashboard.html';
         }
     </script>
 </body>
