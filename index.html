@@ -290,58 +290,6 @@
             border: 1px solid #f5c6cb;
         }
 
-        .info-message {
-            background: linear-gradient(135deg, #fff8f8 0%, #fff0f0 100%);
-            border-left: 4px solid #ff6b6b;
-            padding: 20px;
-            border-radius: 16px;
-            margin-top: 25px;
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            box-shadow: 0 4px 12px rgba(255,107,107,0.1);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 4px 12px rgba(255,107,107,0.1); }
-            50% { box-shadow: 0 4px 20px rgba(255,107,107,0.2); }
-            100% { box-shadow: 0 4px 12px rgba(255,107,107,0.1); }
-        }
-
-        .info-icon {
-            width: 40px;
-            height: 40px;
-            background: #ff6b6b;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.3em;
-            flex-shrink: 0;
-            box-shadow: 0 4px 10px rgba(255,107,107,0.3);
-        }
-
-        .info-content {
-            flex: 1;
-        }
-
-        .info-content p {
-            color: #721c24;
-            font-size: 0.95em;
-            line-height: 1.6;
-            margin: 0;
-            font-weight: 500;
-        }
-
-        .info-content strong {
-            color: #ff6b6b;
-            display: block;
-            margin-bottom: 8px;
-            font-size: 1.1em;
-        }
-
         .footer-text {
             text-align: center;
             margin-top: 20px;
@@ -430,14 +378,6 @@
                 <button type="submit" class="btn-submit" id="submitBtn">
                     CRÉER MON COMPTE
                 </button>
-
-                <!-- Message d'information sur les retraits -->
-                <div class="info-message">
-                    <div class="info-icon">⚠️</div>
-                    <div class="info-content">
-                      
-                    </div>
-                </div>
             </form>
 
             <div class="login-link">
@@ -605,7 +545,7 @@
                                 nom: nom,
                                 email: email,
                                 numero_identite: identite.replace(/\s/g, ''),
-                                solde: 0, // Pas de bonus de bienvenue
+                                solde: 0,
                                 date_inscription: new Date().toISOString()
                             }
                         ]);
