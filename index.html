@@ -23,7 +23,6 @@
             overflow-x: hidden;
         }
 
-        /* Éléments décoratifs */
         body::before {
             content: '';
             position: absolute;
@@ -94,7 +93,9 @@
             position: relative;
             z-index: 1;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            line-height: 1;
+            line-height: 1.2;
+            word-break: keep-all;
+            white-space: nowrap;
         }
 
         .logo span {
@@ -103,6 +104,7 @@
             background: rgba(255,255,255,0.1);
             padding: 0 5px;
             border-radius: 8px;
+            display: inline-block;
         }
 
         .tagline {
@@ -251,6 +253,7 @@
             margin-left: 5px;
             transition: color 0.3s ease;
             border-bottom: 2px solid transparent;
+            cursor: pointer;
         }
 
         .login-link a:hover {
@@ -297,19 +300,6 @@
             color: #999;
         }
 
-        .input-icon {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #999;
-            pointer-events: none;
-        }
-
-        .form-group {
-            position: relative;
-        }
-
         .requirements-list {
             display: flex;
             flex-wrap: wrap;
@@ -323,6 +313,22 @@
             padding: 5px 12px;
             border-radius: 50px;
             color: #1e3c72;
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 2.2em;
+                white-space: normal;
+                word-break: break-word;
+            }
+            
+            .container {
+                margin: 10px;
+            }
+            
+            .form-section {
+                padding: 30px 20px;
+            }
         }
     </style>
 </head>
@@ -341,7 +347,7 @@
 
             <div class="alert" id="alertMessage"></div>
 
-            <form id="registrationForm">
+            <form id="registrationForm" onsubmit="event.preventDefault();">
                 <div class="form-group">
                     <label for="nom">Nom complet</label>
                     <input type="text" id="nom" placeholder="Jean Dupont" required autocomplete="name">
@@ -375,13 +381,13 @@
                     <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe" required autocomplete="new-password">
                 </div>
 
-                <button type="submit" class="btn-submit" id="submitBtn">
+                <button type="button" class="btn-submit" id="submitBtn" onclick="handleRegistration()">
                     CRÉER MON COMPTE
                 </button>
             </form>
 
             <div class="login-link">
-                Déjà un compte ? <a href="dashboard.html">Se connecter</a>
+                Déjà un compte ? <a href="connexion.html" onclick="redirectToLogin(event)">Se connecter</a>
             </div>
 
             <div class="footer-text">
@@ -398,7 +404,6 @@
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         // Éléments du DOM
-        const form = document.getElementById('registrationForm');
         const alertMessage = document.getElementById('alertMessage');
         const submitBtn = document.getElementById('submitBtn');
         const passwordInput = document.getElementById('password');
@@ -407,23 +412,35 @@
         const strengthText = document.getElementById('passwordStrengthText');
         const identiteInput = document.getElementById('identite');
 
+        // Fonction de redirection
+        function redirectToLogin(event) {
+            event.preventDefault();
+            window.location.href = 'connexion.html';
+        }
+
         // Formatage automatique du numéro d'identité
-        identiteInput.addEventListener('input', (e) => {
-            let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-            if (value.length > 2) {
-                value = value.slice(0, 2) + ' ' + value.slice(2, 9);
-            }
-            e.target.value = value;
-        });
+        if (identiteInput) {
+            identiteInput.addEventListener('input', (e) => {
+                let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                if (value.length > 2) {
+                    value = value.slice(0, 2) + ' ' + value.slice(2, 9);
+                }
+                e.target.value = value;
+            });
+        }
 
         // Vérification de la force du mot de passe
-        passwordInput.addEventListener('input', checkPasswordStrength);
-        confirmPasswordInput.addEventListener('input', checkPasswordsMatch);
+        if (passwordInput) {
+            passwordInput.addEventListener('input', checkPasswordStrength);
+        }
+
+        if (confirmPasswordInput) {
+            confirmPasswordInput.addEventListener('input', checkPasswordsMatch);
+        }
 
         function checkPasswordStrength() {
             const password = passwordInput.value;
             let strength = 0;
-            let feedback = '';
             
             // Critères de force
             if (password.length >= 8) strength += 20;
@@ -432,53 +449,67 @@
             if (password.match(/[0-9]/)) strength += 20;
             if (password.match(/[^a-zA-Z0-9]/)) strength += 20;
 
-            strengthBar.style.width = strength + '%';
+            if (strengthBar) {
+                strengthBar.style.width = strength + '%';
+            }
             
             // Couleur et texte selon la force
             if (strength <= 20) {
-                strengthBar.style.background = '#ff6b6b';
-                strengthText.textContent = 'Très faible';
-                strengthText.style.color = '#ff6b6b';
+                if (strengthBar) strengthBar.style.background = '#ff6b6b';
+                if (strengthText) {
+                    strengthText.textContent = 'Très faible';
+                    strengthText.style.color = '#ff6b6b';
+                }
             } else if (strength <= 40) {
-                strengthBar.style.background = '#ffa502';
-                strengthText.textContent = 'Faible';
-                strengthText.style.color = '#ffa502';
+                if (strengthBar) strengthBar.style.background = '#ffa502';
+                if (strengthText) {
+                    strengthText.textContent = 'Faible';
+                    strengthText.style.color = '#ffa502';
+                }
             } else if (strength <= 60) {
-                strengthBar.style.background = '#ffd93e';
-                strengthText.textContent = 'Moyen';
-                strengthText.style.color = '#ffa502';
+                if (strengthBar) strengthBar.style.background = '#ffd93e';
+                if (strengthText) {
+                    strengthText.textContent = 'Moyen';
+                    strengthText.style.color = '#ffa502';
+                }
             } else if (strength <= 80) {
-                strengthBar.style.background = '#1e90ff';
-                strengthText.textContent = 'Bon';
-                strengthText.style.color = '#1e90ff';
+                if (strengthBar) strengthBar.style.background = '#1e90ff';
+                if (strengthText) {
+                    strengthText.textContent = 'Bon';
+                    strengthText.style.color = '#1e90ff';
+                }
             } else {
-                strengthBar.style.background = '#28a745';
-                strengthText.textContent = 'Excellent';
-                strengthText.style.color = '#28a745';
+                if (strengthBar) strengthBar.style.background = '#28a745';
+                if (strengthText) {
+                    strengthText.textContent = 'Excellent';
+                    strengthText.style.color = '#28a745';
+                }
             }
         }
 
         function checkPasswordsMatch() {
-            const password = passwordInput.value;
-            const confirm = confirmPasswordInput.value;
+            const password = passwordInput ? passwordInput.value : '';
+            const confirm = confirmPasswordInput ? confirmPasswordInput.value : '';
             
             if (confirm && password !== confirm) {
                 confirmPasswordInput.classList.add('error');
                 return false;
             } else {
-                confirmPasswordInput.classList.remove('error');
+                if (confirmPasswordInput) confirmPasswordInput.classList.remove('error');
                 return true;
             }
         }
 
         function showAlert(message, type) {
-            alertMessage.textContent = message;
-            alertMessage.className = `alert alert-${type}`;
-            alertMessage.style.display = 'block';
-            
-            setTimeout(() => {
-                alertMessage.style.display = 'none';
-            }, 5000);
+            if (alertMessage) {
+                alertMessage.textContent = message;
+                alertMessage.className = `alert alert-${type}`;
+                alertMessage.style.display = 'block';
+                
+                setTimeout(() => {
+                    alertMessage.style.display = 'none';
+                }, 5000);
+            }
         }
 
         // Validation du numéro d'identité
@@ -488,14 +519,12 @@
         }
 
         // Gestion de l'inscription
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const nom = document.getElementById('nom').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const identite = document.getElementById('identite').value.trim();
-            const password = passwordInput.value;
-            const confirmPassword = confirmPasswordInput.value;
+        async function handleRegistration() {
+            const nom = document.getElementById('nom') ? document.getElementById('nom').value.trim() : '';
+            const email = document.getElementById('email') ? document.getElementById('email').value.trim() : '';
+            const identite = document.getElementById('identite') ? document.getElementById('identite').value.trim() : '';
+            const password = passwordInput ? passwordInput.value : '';
+            const confirmPassword = confirmPasswordInput ? confirmPasswordInput.value : '';
 
             // Validations
             if (!nom || !email || !identite || !password || !confirmPassword) {
@@ -519,8 +548,10 @@
             }
 
             try {
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'CRÉATION EN COURS...';
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'CRÉATION EN COURS...';
+                }
 
                 // Inscription avec Supabase
                 const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -535,7 +566,7 @@
                     throw authError;
                 }
 
-                if (authData.user) {
+                if (authData && authData.user) {
                     // Créer le profil utilisateur
                     const { error: profileError } = await supabase
                         .from('profiles')
@@ -564,20 +595,26 @@
                 console.error('Erreur:', error);
                 showAlert(error.message || 'Une erreur est survenue lors de l\'inscription', 'error');
             } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'CRÉER MON COMPTE';
-            }
-        });
-
-        // Vérifier si l'utilisateur est déjà connecté
-        async function checkExistingSession() {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                // Rediriger vers le dashboard si déjà connecté
-                window.location.href = 'dashboard.html';
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'CRÉER MON COMPTE';
+                }
             }
         }
 
+        // Vérifier si l'utilisateur est déjà connecté
+        async function checkExistingSession() {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user) {
+                    window.location.href = 'dashboard.html';
+                }
+            } catch (error) {
+                console.error('Erreur vérification session:', error);
+            }
+        }
+
+        // Appeler la vérification au chargement
         checkExistingSession();
     </script>
 </body>
