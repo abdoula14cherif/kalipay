@@ -379,7 +379,7 @@
         // Initialisation de Supabase
         const supabaseUrl = 'https://oypihdbuovijjutuyqaj.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         // Éléments du DOM
         const form = document.getElementById('registrationForm');
@@ -568,22 +568,12 @@
                     // Attendre un peu que le trigger crée le profil
                     await new Promise(resolve => setTimeout(resolve, 1000));
                     
-                    showAlert('Compte créé avec succès !', 'success');
+                    showAlert('Compte créé avec succès ! Vérifiez votre email pour confirmer votre compte.', 'success');
                     
-                    // Connexion automatique
-                    const { error: signInError } = await supabase.auth.signInWithPassword({
-                        email: email,
-                        password: password
-                    });
-                    
-                    if (signInError) {
-                        console.error('Erreur connexion auto:', signInError);
-                    }
-                    
-                    // Redirection après 2 secondes
+                    // Redirection après 3 secondes
                     setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 2000);
+                        window.location.href = 'connexion.html';
+                    }, 3000);
                 }
 
             } catch (error) {
