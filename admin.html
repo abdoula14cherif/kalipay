@@ -2,52 +2,45 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>NOVA BANK - Administration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVA BANK - Admin</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            min-height: 100vh;
             background: linear-gradient(135deg, #0b1a2f 0%, #1e3a5f 100%);
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
             padding: 20px;
         }
 
         .container {
-            max-width: 450px;
+            max-width: 400px;
             width: 100%;
             background: white;
             border-radius: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             overflow: hidden;
-            animation: slideUp 0.6s ease;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
         }
 
         .header {
             background: #0b1a2f;
             padding: 30px;
             text-align: center;
-            border-bottom: 4px solid #ff5252;
+            border-bottom: 3px solid #ff5252;
         }
 
         .logo {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 800;
             color: white;
-            letter-spacing: 1px;
         }
 
         .logo span {
@@ -70,69 +63,53 @@
 
         h2 {
             color: #0b1a2f;
-            margin-bottom: 8px;
-            font-size: 1.8rem;
-        }
-
-        .subtitle {
-            color: #6f7d95;
-            margin-bottom: 30px;
-            border-left: 4px solid #ff5252;
-            padding-left: 15px;
+            margin-bottom: 20px;
         }
 
         .form-group {
             margin-bottom: 20px;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #0b1a2f;
-            font-weight: 600;
-            margin-left: 6px;
-        }
-
-        .form-group input {
+        input {
             width: 100%;
-            padding: 16px 20px;
+            padding: 14px 18px;
             border: 2px solid #e6ecf2;
-            border-radius: 40px;
+            border-radius: 30px;
             font-size: 1rem;
-            transition: all 0.2s;
         }
 
-        .form-group input:focus {
+        input:focus {
             outline: none;
             border-color: #0b1a2f;
         }
 
-        .btn-admin {
+        button {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             background: #0b1a2f;
             color: white;
             border: none;
-            border-radius: 40px;
+            border-radius: 30px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
             margin-top: 10px;
         }
 
-        .btn-admin:hover {
+        button:hover {
             background: #1e3a5f;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(11,26,47,0.2);
+        }
+
+        button:disabled {
+            background: #6f7d95;
+            cursor: not-allowed;
         }
 
         .alert {
-            padding: 16px;
-            border-radius: 40px;
+            padding: 12px;
+            border-radius: 30px;
             margin-bottom: 20px;
             display: none;
-            font-weight: 500;
             text-align: center;
         }
 
@@ -142,11 +119,36 @@
             border: 1px solid #ffcdc8;
         }
 
-        .footer-text {
+        .alert-success {
+            background: #e3f5eb;
+            color: #2d9c5c;
+            border: 1px solid #c0e6d3;
+        }
+
+        .footer {
             text-align: center;
             margin-top: 20px;
             color: #8e9daf;
             font-size: 0.8rem;
+        }
+
+        .footer a {
+            color: #8e9daf;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #ff5252;
+        }
+
+        .info-note {
+            background: #f0f4ff;
+            padding: 12px;
+            border-radius: 20px;
+            margin: 15px 0;
+            font-size: 0.9rem;
+            color: #0b1a2f;
+            text-align: center;
         }
     </style>
 </head>
@@ -156,46 +158,109 @@
             <div class="logo">NOVA<span>BANK</span></div>
             <div class="admin-badge">Administration</div>
         </div>
-
         <div class="form-section">
-            <h2>Accès admin</h2>
-            <div class="subtitle">Espace réservé aux administrateurs</div>
+            <h2>Connexion Admin</h2>
+            
+            <div class="info-note">
+                Utilisez vos identifiants NOVA BANK<br>
+                <strong>Email : abdoula13cherif@gmail.com</strong>
+            </div>
 
             <div class="alert" id="alertMessage"></div>
 
             <form id="adminLoginForm">
                 <div class="form-group">
-                    <label>Identifiant admin</label>
-                    <input type="text" id="username" placeholder="admin" value="admin" required>
+                    <input type="email" id="email" placeholder="Votre email" value="abdoula13cherif@gmail.com" required>
                 </div>
                 <div class="form-group">
-                    <label>Mot de passe</label>
-                    <input type="password" id="password" placeholder="••••••••" value="admin123" required>
+                    <input type="password" id="password" placeholder="Votre mot de passe" required>
                 </div>
-                <button type="submit" class="btn-admin">ACCÉDER À L'ADMIN</button>
+                <button type="submit" id="submitBtn">SE CONNECTER</button>
             </form>
 
-            <div class="footer-text">
-                © 2026 NOVA BANK - Accès restreint
+            <div class="footer">
+                <a href="https://kalipay-seven.vercel.app">← Retour au site</a>
             </div>
         </div>
     </div>
 
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            // Admin simple (à changer selon vos besoins)
-            if (username === 'admin' && password === 'admin123') {
+        const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
+        
+        const { createClient } = supabase;
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        const form = document.getElementById('adminLoginForm');
+        const alertMsg = document.getElementById('alertMessage');
+        const submitBtn = document.getElementById('submitBtn');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        // Vérifier si déjà connecté
+        async function checkExistingSession() {
+            const { data: { user } } = await _supabase.auth.getUser();
+            if (user && user.email === 'abdoula13cherif@gmail.com') {
                 sessionStorage.setItem('adminAuth', 'true');
                 window.location.href = 'admin-dashboard.html';
-            } else {
-                const alert = document.getElementById('alertMessage');
-                alert.textContent = 'Identifiants incorrects';
-                alert.className = 'alert alert-error';
-                alert.style.display = 'block';
+            }
+        }
+        checkExistingSession();
+
+        function showAlert(message, type) {
+            alertMsg.textContent = message;
+            alertMsg.className = `alert alert-${type}`;
+            alertMsg.style.display = 'block';
+            setTimeout(() => alertMsg.style.display = 'none', 4000);
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!email || !password) {
+                showAlert('Veuillez remplir tous les champs', 'error');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'CONNEXION...';
+
+            try {
+                const { data, error } = await _supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) throw error;
+
+                // Vérifier que c'est bien l'admin
+                if (data.user.email === 'abdoula13cherif@gmail.com') {
+                    sessionStorage.setItem('adminAuth', 'true');
+                    showAlert('Connexion admin réussie !', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'admin-dashboard.html';
+                    }, 1000);
+                } else {
+                    throw new Error('Accès non autorisé - Compte non admin');
+                }
+
+            } catch (error) {
+                console.error(error);
+                
+                if (error.message.includes('Invalid login')) {
+                    showAlert('Email ou mot de passe incorrect', 'error');
+                } else if (error.message.includes('non autorisé')) {
+                    showAlert('Ce compte n\'a pas les droits admin', 'error');
+                } else {
+                    showAlert('Erreur de connexion', 'error');
+                }
+
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'SE CONNECTER';
             }
         });
     </script>
