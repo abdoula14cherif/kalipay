@@ -3,169 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Admin NOVA BANK</title>
+    <title>NOVA BANK - Administration</title>
     <style>
-        body { font-family: Arial; padding: 20px; background: #f5f7fc; }
+        /* Gardez votre CSS existant */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #f5f7fc; padding: 20px; }
         .container { max-width: 1200px; margin: 0 auto; }
-        .card { background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
-        pre { background: #f0f0f0; padding: 10px; border-radius: 5px; overflow: auto; }
-        .error { color: red; }
-        .success { color: green; }
-        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        .header { background: #0b1a2f; color: white; padding: 20px; border-radius: 40px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.8rem; font-weight: 800; }
+        .logo span { color: #ff5252; }
+        .card { background: white; border-radius: 30px; padding: 25px; margin-bottom: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 15px; background: #f0f4ff; }
+        td { padding: 15px; border-bottom: 1px solid #eee; }
+        .btn { padding: 10px 20px; border: none; border-radius: 40px; cursor: pointer; font-weight: 600; margin: 0 5px; }
+        .btn-primary { background: #0b1a2f; color: white; }
+        .btn-add { background: #e3f5eb; color: #2d9c5c; }
+        .btn-remove { background: #ffeae8; color: #ff5252; }
+        .alert { padding: 15px; border-radius: 30px; margin-bottom: 20px; display: none; }
+        .alert-error { background: #ffeae8; color: #ff5252; }
+        .alert-success { background: #e3f5eb; color: #2d9c5c; }
+        .alert-warning { background: #fff2dd; color: #ff8c42; }
+        .loading { text-align: center; padding: 40px; color: #666; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔧 Diagnostic Admin NOVA BANK</h1>
+        <div class="header">
+            <div class="logo">NOVA<span>BANK</span></div>
+            <div>
+                <span id="adminEmail">Admin</span>
+                <button class="btn" style="background: #ff5252; color: white; margin-left: 10px;" onclick="logout()">Déconnexion</button>
+            </div>
+        </div>
+
+        <div class="alert" id="alertMessage"></div>
         
         <div class="card">
-            <h2>1. Test de connexion Supabase</h2>
-            <button onclick="testConnexion()">Tester la connexion</button>
-            <div id="testResult"></div>
-        </div>
-
-        <div class="card">
-            <h2>2. Session utilisateur</h2>
-            <button onclick="checkSession()">Vérifier ma session</button>
-            <div id="sessionResult"></div>
-        </div>
-
-        <div class="card">
-            <h2>3. Charger tous les utilisateurs</h2>
-            <button onclick="loadAllUsers()">Charger les utilisateurs</button>
-            <div id="usersResult"></div>
-        </div>
-
-        <div class="card">
-            <h2>4. Ajouter du solde</h2>
-            <input type="text" id="userId" placeholder="ID utilisateur">
-            <input type="number" id="montant" placeholder="Montant">
-            <button onclick="addSolde()">Ajouter</button>
-            <div id="addResult"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>Liste des utilisateurs</h2>
+                <button class="btn btn-primary" onclick="forceRefresh()">⟳ Actualiser</button>
+            </div>
+            <div id="usersList">
+                <div class="loading">Chargement...</div>
+            </div>
         </div>
     </div>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // Configuration Supabase
         const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
         
-        // Initialisation
         const { createClient } = supabase;
-        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        // Configuration optimisée
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
+            auth: {
+                autoRefreshToken: true,
+                persistSession: true,
+                detectSessionInUrl: true
+            },
+            global: {
+                headers: { 'Connection': 'keep-alive' }
+            },
+            realtime: {
+                heartbeatIntervalMs: 15000,
+                worker: true
+            }
+        });
 
-        // Fonction pour afficher les résultats
-        function displayResult(elementId, data, error) {
-            const div = document.getElementById(elementId);
-            if (error) {
-                div.innerHTML = `<p class="error">❌ Erreur: ${JSON.stringify(error)}</p>`;
-            } else {
-                div.innerHTML = `<p class="success">✅ Succès!</p><pre>${JSON.stringify(data, null, 2)}</pre>`;
+        let currentUserId = null;
+        let retryCount = 0;
+
+        function showAlert(message, type) {
+            const alert = document.getElementById('alertMessage');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
+            setTimeout(() => alert.style.display = 'none', 5000);
+        }
+
+        // Fonction avec retry automatique
+        async function queryWithRetry(queryFn, maxRetries = 3) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const result = await queryFn();
+                    if (result.error) throw result.error;
+                    retryCount = 0;
+                    return result;
+                } catch (error) {
+                    console.log(`Tentative ${i + 1}/${maxRetries}:`, error.message);
+                    
+                    if (error.message?.includes('Failed to fetch') || error.message?.includes('AbortError')) {
+                        if (i === maxRetries - 1) throw error;
+                        await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 2000));
+                    } else {
+                        throw error;
+                    }
+                }
             }
         }
 
-        // 1. Test de connexion
-        async function testConnexion() {
-            try {
-                const { data, error } = await _supabase.from('profiles').select('count', { count: 'exact', head: true });
-                displayResult('testResult', { message: 'Connexion réussie', count: data }, error);
-            } catch (e) {
-                displayResult('testResult', null, e);
-            }
-        }
-
-        // 2. Vérifier la session
-        async function checkSession() {
+        async function checkAuth() {
             try {
                 const { data: { user }, error } = await _supabase.auth.getUser();
-                displayResult('sessionResult', { user: user }, error);
-            } catch (e) {
-                displayResult('sessionResult', null, e);
-            }
-        }
-
-        // 3. Charger tous les utilisateurs
-        async function loadAllUsers() {
-            try {
-                const { data, error } = await _supabase
-                    .from('profiles')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
                 
-                let html = '<h3>Résultat:</h3>';
-                html += `<p>Nombre d'utilisateurs: ${data?.length || 0}</p>`;
-                
-                if (data && data.length > 0) {
-                    html += '<table border="1" style="width:100%; border-collapse: collapse;">';
-                    html += '<tr><th>ID</th><th>Nom</th><th>Email</th><th>Solde</th><th>Date</th></tr>';
-                    data.forEach(user => {
-                        html += `<tr>
-                            <td>${user.id.substring(0,8)}...</td>
-                            <td>${user.nom || '-'}</td>
-                            <td>${user.email}</td>
-                            <td>${user.solde || 0} €</td>
-                            <td>${new Date(user.created_at).toLocaleString()}</td>
-                        </tr>`;
-                    });
-                    html += '</table>';
-                } else {
-                    html += '<p>Aucun utilisateur trouvé</p>';
+                if (error || !user) {
+                    window.location.href = 'admin.html';
+                    return;
                 }
+
+                if (user.email !== 'abdoula13cherif@gmail.com') {
+                    showAlert('Accès non autorisé', 'error');
+                    setTimeout(() => window.location.href = 'admin.html', 2000);
+                    return;
+                }
+
+                document.getElementById('adminEmail').textContent = user.email;
+                loadUsers();
                 
-                document.getElementById('usersResult').innerHTML = html;
-                
-            } catch (e) {
-                document.getElementById('usersResult').innerHTML = `<p class="error">❌ Erreur: ${e.message}</p>`;
+            } catch (error) {
+                console.error('Auth error:', error);
+                document.getElementById('usersList').innerHTML = `
+                    <div class="alert alert-error">Erreur d'authentification. <button onclick="forceRefresh()">Réessayer</button></div>
+                `;
             }
         }
 
-        // 4. Ajouter du solde
-        async function addSolde() {
-            const userId = document.getElementById('userId').value;
-            const montant = parseFloat(document.getElementById('montant').value);
+        async function loadUsers() {
+            const listDiv = document.getElementById('usersList');
+            listDiv.innerHTML = '<div class="loading">Chargement des utilisateurs...</div>';
             
-            if (!userId || !montant) {
-                document.getElementById('addResult').innerHTML = '<p class="error">Veuillez remplir tous les champs</p>';
+            try {
+                const result = await queryWithRetry(() => 
+                    _supabase.from('profiles').select('*').order('created_at', { ascending: false })
+                );
+
+                if (!result.data || result.data.length === 0) {
+                    listDiv.innerHTML = '<div class="loading">Aucun utilisateur trouvé</div>';
+                    return;
+                }
+
+                let html = '<table><tr><th>Nom</th><th>Email</th><th>ID Carte</th><th>Solde</th><th>Date</th><th>Actions</th></tr>';
+                
+                result.data.forEach(user => {
+                    const isAdmin = user.email === 'abdoula13cherif@gmail.com';
+                    html += `<tr>
+                        <td><strong>${user.nom || '-'}</strong> ${isAdmin ? '👑' : ''}</td>
+                        <td>${user.email}</td>
+                        <td>${user.numero_identite || '-'}</td>
+                        <td>${user.solde?.toFixed(2) || 0} €</td>
+                        <td>${new Date(user.created_at).toLocaleDateString()}</td>
+                        <td>
+                            <button class="btn btn-add" onclick="openAddModal('${user.id}', '${user.nom || ''}', ${user.solde || 0})">+ Ajouter</button>
+                            <button class="btn btn-remove" onclick="openRemoveModal('${user.id}', '${user.nom || ''}', ${user.solde || 0})">- Retirer</button>
+                        </td>
+                    </tr>`;
+                });
+
+                html += '</table>';
+                listDiv.innerHTML = html;
+
+            } catch (error) {
+                console.error('Erreur chargement:', error);
+                listDiv.innerHTML = `
+                    <div class="alert alert-error">
+                        Erreur de connexion: ${error.message}<br>
+                        <button onclick="forceRefresh()" style="margin-top: 10px;">Réessayer</button>
+                    </div>
+                `;
+            }
+        }
+
+        function forceRefresh() {
+            loadUsers();
+        }
+
+        function openAddModal(id, name, balance) {
+            currentUserId = id;
+            const amount = prompt(`Ajouter du solde pour ${name || 'utilisateur'}\nSolde actuel: ${balance} €`, "100");
+            if (amount) addBalance(parseFloat(amount));
+        }
+
+        async function addBalance(amount) {
+            if (!amount || amount <= 0) {
+                showAlert('Montant invalide', 'error');
                 return;
             }
 
             try {
-                // Récupérer le solde actuel
                 const { data: user, error: selectError } = await _supabase
                     .from('profiles')
                     .select('solde')
-                    .eq('id', userId)
+                    .eq('id', currentUserId)
                     .single();
 
                 if (selectError) throw selectError;
 
-                const newBalance = (user.solde || 0) + montant;
+                const newBalance = (user.solde || 0) + amount;
 
-                // Mettre à jour
                 const { error: updateError } = await _supabase
                     .from('profiles')
                     .update({ solde: newBalance })
-                    .eq('id', userId);
+                    .eq('id', currentUserId);
 
                 if (updateError) throw updateError;
 
-                document.getElementById('addResult').innerHTML = `<p class="success">✅ ${montant} € ajouté avec succès! Nouveau solde: ${newBalance} €</p>`;
-                
-                // Recharger la liste
-                loadAllUsers();
-                
-            } catch (e) {
-                document.getElementById('addResult').innerHTML = `<p class="error">❌ Erreur: ${e.message}</p>`;
+                showAlert(`${amount} € ajouté avec succès!`, 'success');
+                loadUsers();
+
+            } catch (error) {
+                showAlert('Erreur: ' + error.message, 'error');
             }
         }
 
-        // Vérifier la session au chargement
-        window.onload = async () => {
-            await checkSession();
-        };
+        function openRemoveModal(id, name, balance) {
+            currentUserId = id;
+            const amount = prompt(`Retirer du solde pour ${name || 'utilisateur'}\nSolde actuel: ${balance} €`, "50");
+            if (amount) removeBalance(parseFloat(amount));
+        }
+
+        async function removeBalance(amount) {
+            if (!amount || amount <= 0) {
+                showAlert('Montant invalide', 'error');
+                return;
+            }
+
+            try {
+                const { data: user, error: selectError } = await _supabase
+                    .from('profiles')
+                    .select('solde')
+                    .eq('id', currentUserId)
+                    .single();
+
+                if (selectError) throw selectError;
+
+                const newBalance = (user.solde || 0) - amount;
+
+                if (newBalance < 0) {
+                    showAlert('Solde insuffisant', 'error');
+                    return;
+                }
+
+                const { error: updateError } = await _supabase
+                    .from('profiles')
+                    .update({ solde: newBalance })
+                    .eq('id', currentUserId);
+
+                if (updateError) throw updateError;
+
+                showAlert(`${amount} € retiré avec succès!`, 'success');
+                loadUsers();
+
+            } catch (error) {
+                showAlert('Erreur: ' + error.message, 'error');
+            }
+        }
+
+        async function logout() {
+            await _supabase.auth.signOut();
+            window.location.href = 'admin.html';
+        }
+
+        checkAuth();
     </script>
 </body>
 </html>
