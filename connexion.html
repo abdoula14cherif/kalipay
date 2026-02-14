@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVA BANK - Connexion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Éléments décoratifs */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .container {
+            max-width: 480px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #29539b 100%);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            border-bottom: 4px solid #ff6b6b;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 8px;
+            transform: translateX(-50%) rotate(45deg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 2.8em;
+            font-weight: 800;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            line-height: 1;
+        }
+
+        .logo span {
+            color: #ff6b6b;
+            font-weight: 900;
+            background: rgba(255,255,255,0.1);
+            padding: 0 5px;
+            border-radius: 8px;
+        }
+
+        .tagline {
+            color: rgba(255,255,255,0.9);
+            margin-top: 15px;
+            font-size: 0.95em;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+            font-weight: 300;
+        }
+
+        .form-section {
+            padding: 40px 30px;
+            background: white;
+        }
+
+        .form-title {
+            font-size: 1.8em;
+            color: #1e3c72;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+            border-left: 4px solid #ff6b6b;
+            padding-left: 15px;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1e3c72;
+            font-weight: 500;
+            font-size: 0.95em;
+            transition: color 0.3s ease;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 16px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .form-group input:hover {
+            background: white;
+            border-color: #b8c7e7;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #1e3c72;
+            background: white;
+            box-shadow: 0 8px 20px rgba(30,60,114,0.15);
+        }
+
+        .form-group input.error {
+            border-color: #ff6b6b;
+            animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translateX(-2px); }
+            20%, 80% { transform: translateX(4px); }
+            30%, 50%, 70% { transform: translateX(-6px); }
+            40%, 60% { transform: translateX(6px); }
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 8px 20px rgba(30,60,114,0.3);
+            letter-spacing: 1px;
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(30,60,114,0.4);
+            background: linear-gradient(135deg, #1e3c72 0%, #2e5cad 100%);
+        }
+
+        .btn-submit:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            background: linear-gradient(135deg, #8699b3 0%, #95a9c7 100%);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+        }
+
+        .register-link a {
+            color: #1e3c72;
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+            transition: color 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .register-link a:hover {
+            color: #ff6b6b;
+            border-bottom-color: #ff6b6b;
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .forgot-password a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password a:hover {
+            color: #ff6b6b;
+        }
+
+        .alert {
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 25px;
+            display: none;
+            animation: slideIn 0.3s ease;
+            font-weight: 500;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8em;
+            color: #999;
+        }
+
+        .demo-credentials {
+            background: #f0f4ff;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            border: 1px dashed #1e3c72;
+        }
+
+        .demo-credentials p {
+            color: #1e3c72;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .demo-credentials small {
+            color: #666;
+            display: block;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">NOVA<span>BANK</span></div>
+            <div class="tagline">Sécurité • Innovation • Confiance</div>
+        </div>
+
+        <div class="form-section">
+            <h2 class="form-title">Connexion</h2>
+            <div class="form-subtitle">
+                Accédez à votre espace personnel
+            </div>
+
+            <div class="alert" id="alertMessage"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Adresse email</label>
+                    <input type="email" id="email" placeholder="jean.dupont@email.com" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" placeholder="Entrez votre mot de passe" required autocomplete="current-password">
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#" onclick="showForgotPassword()">Mot de passe oublié ?</a>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    SE CONNECTER
+                </button>
+            </form>
+
+            <div class="register-link">
+                Pas encore de compte ? <a href="inscription.html">S'inscrire</a>
+            </div>
+
+            <div class="footer-text">
+                © 2026 NOVA BANK. Tous droits réservés.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Initialisation de Supabase
+        const supabaseUrl = 'https://oypihdbuovijjutuyqaj.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Éléments du DOM
+        const form = document.getElementById('loginForm');
+        const alertMessage = document.getElementById('alertMessage');
+        const submitBtn = document.getElementById('submitBtn');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+
+        function showAlert(message, type) {
+            alertMessage.textContent = message;
+            alertMessage.className = `alert alert-${type}`;
+            alertMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                alertMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function showForgotPassword() {
+            showAlert('Veuillez contacter votre conseiller bancaire pour réinitialiser votre mot de passe', 'success');
+        }
+
+        // Gestion de la connexion
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            // Validations
+            if (!email || !password) {
+                showAlert('Veuillez remplir tous les champs', 'error');
+                return;
+            }
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'CONNEXION EN COURS...';
+
+                // Connexion avec Supabase
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password,
+                });
+
+                if (error) {
+                    if (error.message.includes('Invalid login credentials')) {
+                        throw new Error('Email ou mot de passe incorrect');
+                    }
+                    throw error;
+                }
+
+                if (data.user) {
+                    showAlert('Connexion réussie ! Redirection en cours...', 'success');
+                    
+                    // Redirection après 1 seconde
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 1000);
+                }
+
+            } catch (error) {
+                console.error('Erreur:', error);
+                showAlert(error.message || 'Une erreur est survenue lors de la connexion', 'error');
+                
+                // Animation d'erreur sur les champs
+                emailInput.classList.add('error');
+                passwordInput.classList.add('error');
+                
+                setTimeout(() => {
+                    emailInput.classList.remove('error');
+                    passwordInput.classList.remove('error');
+                }, 500);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'SE CONNECTER';
+            }
+        });
+
+        // Vérifier si l'utilisateur est déjà connecté
+        async function checkExistingSession() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                // Rediriger vers le dashboard si déjà connecté
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        checkExistingSession();
+
+        // Supprimer la classe error quand l'utilisateur commence à taper
+        emailInput.addEventListener('input', () => {
+            emailInput.classList.remove('error');
+        });
+
+        passwordInput.addEventListener('input', () => {
+            passwordInput.classList.remove('error');
+        });
+    </script>
+</body>
+</html>
