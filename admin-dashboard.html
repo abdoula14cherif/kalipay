@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOVA BANK - Administration</title>
+    <title>NOVA BANK - Admin</title>
     <style>
         * {
             margin: 0;
@@ -14,16 +14,15 @@
 
         body {
             background: #f5f7fc;
-            min-height: 100vh;
             padding: 20px;
         }
 
         .header {
             background: #0b1a2f;
             color: white;
-            padding: 20px 30px;
+            padding: 20px;
             border-radius: 40px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -38,12 +37,6 @@
             color: #ff5252;
         }
 
-        .admin-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
         .logout-btn {
             background: #ff5252;
             border: none;
@@ -51,12 +44,6 @@
             padding: 10px 25px;
             border-radius: 40px;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 1rem;
-        }
-
-        .logout-btn:hover {
-            background: #ff3333;
         }
 
         .container {
@@ -64,297 +51,57 @@
             margin: 0 auto;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border: 1px solid #eef2f6;
-        }
-
-        .stat-label {
-            color: #6f7d95;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #0b1a2f;
-        }
-
-        .controls {
-            background: white;
-            padding: 20px;
+        .error-box {
+            background: #ffeae8;
+            color: #ff5252;
+            padding: 30px;
             border-radius: 40px;
-            margin-bottom: 30px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            border: 1px solid #eef2f6;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid #ff5252;
         }
 
-        .search-input {
-            flex: 1;
-            padding: 15px 20px;
-            border: 2px solid #e6ecf2;
-            border-radius: 40px;
-            font-size: 1rem;
-            min-width: 250px;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #0b1a2f;
-        }
-
-        .btn-refresh {
+        .retry-btn {
             background: #0b1a2f;
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 15px 40px;
             border-radius: 40px;
-            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 20px;
             cursor: pointer;
         }
 
-        .btn-refresh:hover {
+        .retry-btn:hover {
             background: #1e3a5f;
         }
 
-        .table-container {
-            background: white;
-            border-radius: 40px;
-            padding: 25px;
-            border: 1px solid #eef2f6;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 800px;
-        }
-
-        th {
+        .debug-info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 20px;
+            margin-top: 20px;
+            font-family: monospace;
             text-align: left;
-            padding: 15px;
-            color: #6f7d95;
-            font-weight: 600;
-            border-bottom: 2px solid #eef2f6;
-        }
-
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #eef2f6;
-        }
-
-        .badge-admin {
-            background: #ff5252;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-
-        .balance {
-            font-weight: bold;
-            color: #2d9c5c;
-        }
-
-        .actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-action {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 30px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .btn-add {
-            background: #e3f5eb;
-            color: #2d9c5c;
-        }
-
-        .btn-add:hover {
-            background: #2d9c5c;
-            color: white;
-        }
-
-        .btn-remove {
-            background: #ffeae8;
-            color: #ff5252;
-        }
-
-        .btn-remove:hover {
-            background: #ff5252;
-            color: white;
-        }
-
-        .alert {
-            padding: 15px 25px;
-            border-radius: 40px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .alert-success {
-            background: #e3f5eb;
-            color: #2d9c5c;
-            border: 1px solid #c0e6d3;
-        }
-
-        .alert-error {
-            background: #ffeae8;
-            color: #ff5252;
-            border: 1px solid #ffcdc8;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #8e9daf;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 40px;
-            padding: 30px;
-            max-width: 400px;
-            width: 90%;
-        }
-
-        .modal-content h3 {
-            color: #0b1a2f;
-            margin-bottom: 20px;
-        }
-
-        .modal-content input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e6ecf2;
-            border-radius: 40px;
-            margin: 15px 0;
-            font-size: 1rem;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .modal-buttons button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 40px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .btn-cancel {
-            background: #f0f4ff;
-            color: #0b1a2f;
-        }
-
-        .btn-confirm {
-            background: #0b1a2f;
-            color: white;
         }
     </style>
 </head>
 <body>
+    <div class="header">
+        <div class="logo">NOVA<span>BANK</span></div>
+        <div>
+            <span id="adminEmail">Admin</span>
+            <button class="logout-btn" onclick="logout()">Déconnexion</button>
+        </div>
+    </div>
+
     <div class="container">
-        <div class="header">
-            <div class="logo">NOVA<span>BANK</span></div>
-            <div class="admin-info">
-                <span id="adminEmail">Chargement...</span>
-                <button class="logout-btn" onclick="logout()">Déconnexion</button>
-            </div>
-        </div>
-
-        <div class="alert" id="alertMessage"></div>
-
-        <!-- Statistiques -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">Total utilisateurs</div>
-                <div class="stat-value" id="totalUsers">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Solde total</div>
-                <div class="stat-value" id="totalBalance">0 €</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Solde moyen</div>
-                <div class="stat-value" id="avgBalance">0 €</div>
-            </div>
-        </div>
-
-        <!-- Contrôles -->
-        <div class="controls">
-            <input type="text" class="search-input" id="searchInput" placeholder="Rechercher un utilisateur..." onkeyup="searchUsers()">
-            <button class="btn-refresh" onclick="loadUsers()">Actualiser</button>
-        </div>
-
-        <!-- Tableau -->
-        <div class="table-container">
-            <h2 style="margin-bottom: 20px;">Liste des utilisateurs</h2>
-            <div id="usersTable">
-                <div class="loading">Chargement des utilisateurs...</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Ajout -->
-    <div class="modal" id="addModal">
-        <div class="modal-content">
-            <h3>Ajouter du solde</h3>
-            <div id="addUserInfo" style="background: #f9fcff; padding: 15px; border-radius: 30px; margin-bottom: 15px;"></div>
-            <input type="number" id="addAmount" placeholder="Montant à ajouter (€)">
-            <div class="modal-buttons">
-                <button class="btn-cancel" onclick="closeModal('addModal')">Annuler</button>
-                <button class="btn-confirm" onclick="confirmAdd()">Ajouter</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Retrait -->
-    <div class="modal" id="removeModal">
-        <div class="modal-content">
-            <h3>Retirer du solde</h3>
-            <div id="removeUserInfo" style="background: #f9fcff; padding: 15px; border-radius: 30px; margin-bottom: 15px;"></div>
-            <input type="number" id="removeAmount" placeholder="Montant à retirer (€)">
-            <div class="modal-buttons">
-                <button class="btn-cancel" onclick="closeModal('removeModal')">Annuler</button>
-                <button class="btn-confirm" onclick="confirmRemove()">Retirer</button>
+        <div id="mainContent">
+            <div class="error-box">
+                <h2 style="margin-bottom: 20px;">❌ Erreur de connexion</h2>
+                <p style="margin-bottom: 15px;">Impossible de charger les données.</p>
+                <p style="margin-bottom: 25px;">Cliquez sur le bouton ci-dessous pour réessayer.</p>
+                <button class="retry-btn" onclick="testConnection()">🔄 TESTER LA CONNEXION</button>
             </div>
         </div>
     </div>
@@ -367,144 +114,50 @@
         const { createClient } = supabase;
         const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        let allUsers = [];
-        let currentUserId = null;
+        async function testConnection() {
+            const content = document.getElementById('mainContent');
+            content.innerHTML = '<div style="text-align: center; padding: 40px;">Test en cours...</div>';
 
-        // Vérification unique
-        async function checkAuth() {
-            const { data: { user } } = await _supabase.auth.getUser();
-            
-            if (!user) {
-                window.location.href = 'admin.html';
-                return;
-            }
-
-            document.getElementById('adminEmail').textContent = user.email;
-            loadUsers();
-        }
-
-        async function loadUsers() {
             try {
+                // Test 1: Auth
+                const { data: { user }, error: authError } = await _supabase.auth.getUser();
+                
+                // Test 2: Requête simple avec timeout
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 5000);
+                
                 const { data, error } = await _supabase
                     .from('profiles')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+                    .select('count', { count: 'exact', head: true });
 
-                if (error) throw error;
+                clearTimeout(timeoutId);
 
-                allUsers = data || [];
+                let html = '<div style="background: white; padding: 30px; border-radius: 40px;">';
+                html += '<h2 style="margin-bottom: 20px;">📊 Résultat du diagnostic</h2>';
                 
-                // Mettre à jour les stats
-                document.getElementById('totalUsers').textContent = allUsers.length;
-                const total = allUsers.reduce((sum, u) => sum + (u.solde || 0), 0);
-                document.getElementById('totalBalance').textContent = total.toFixed(2) + ' €';
-                document.getElementById('avgBalance').textContent = (total / (allUsers.length || 1)).toFixed(2) + ' €';
+                html += '<div style="background: #f9fcff; padding: 20px; border-radius: 30px; margin-bottom: 20px;">';
+                html += '<p><strong>✅ Supabase URL:</strong> ' + SUPABASE_URL + '</p>';
+                html += '<p><strong>👤 Utilisateur:</strong> ' + (user ? user.email : 'Non connecté') + '</p>';
+                html += '<p><strong>🔑 Auth Error:</strong> ' + (authError ? authError.message : 'Aucune') + '</p>';
+                html += '<p><strong>📦 Requête Error:</strong> ' + (error ? error.message : 'Aucune') + '</p>';
+                html += '<p><strong>📊 Données:</strong> ' + (data ? 'OK' : 'Pas de données') + '</p>';
+                html += '</div>';
 
-                displayUsers(allUsers);
-                
-            } catch (error) {
-                document.getElementById('usersTable').innerHTML = `<p style="color: red; padding: 40px;">Erreur: ${error.message}</p>`;
+                html += '<button class="retry-btn" onclick="window.location.reload()" style="margin-right: 10px;">⟳ Recharger</button>';
+                html += '<button class="retry-btn" onclick="logout()" style="background: #ff5252;">🚪 Déconnexion</button>';
+                html += '</div>';
+
+                content.innerHTML = html;
+
+            } catch (e) {
+                content.innerHTML = `
+                    <div class="error-box">
+                        <h2>❌ Erreur: ${e.message}</h2>
+                        <p style="margin: 20px 0;">Vérifiez votre connexion internet et réessayez.</p>
+                        <button class="retry-btn" onclick="window.location.reload()">⟳ Recharger</button>
+                    </div>
+                `;
             }
-        }
-
-        function displayUsers(users) {
-            if (!users.length) {
-                document.getElementById('usersTable').innerHTML = '<p style="padding: 40px; text-align: center;">Aucun utilisateur</p>';
-                return;
-            }
-
-            let html = '<table><tr><th>Nom</th><th>Email</th><th>ID</th><th>Solde</th><th>Date</th><th>Actions</th></tr>';
-
-            users.forEach(user => {
-                const isAdmin = user.email === 'abdoula13cherif@gmail.com';
-                html += `<tr>
-                    <td>${user.nom || '-'} ${isAdmin ? '<span class="badge-admin">ADMIN</span>' : ''}</td>
-                    <td>${user.email}</td>
-                    <td>${user.numero_identite || '-'}</td>
-                    <td class="balance">${user.solde?.toFixed(2) || 0} €</td>
-                    <td>${new Date(user.created_at).toLocaleDateString()}</td>
-                    <td class="actions">
-                        <button class="btn-action btn-add" onclick="openAddModal('${user.id}', '${user.nom || ''}', ${user.solde || 0})">+</button>
-                        <button class="btn-action btn-remove" onclick="openRemoveModal('${user.id}', '${user.nom || ''}', ${user.solde || 0})">-</button>
-                    </td>
-                </tr>`;
-            });
-
-            html += '</table>';
-            document.getElementById('usersTable').innerHTML = html;
-        }
-
-        function searchUsers() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            if (!search) return displayUsers(allUsers);
-            
-            const filtered = allUsers.filter(u => 
-                (u.nom && u.nom.toLowerCase().includes(search)) ||
-                u.email.toLowerCase().includes(search)
-            );
-            displayUsers(filtered);
-        }
-
-        function openAddModal(id, name, balance) {
-            currentUserId = id;
-            document.getElementById('addUserInfo').innerHTML = `
-                <p><strong>${name || 'Utilisateur'}</strong></p>
-                <p>Solde actuel: ${balance} €</p>
-            `;
-            document.getElementById('addModal').classList.add('active');
-        }
-
-        async function confirmAdd() {
-            const amount = parseFloat(document.getElementById('addAmount').value);
-            if (!amount || amount <= 0) return alert('Montant invalide');
-
-            const user = allUsers.find(u => u.id === currentUserId);
-            const newBalance = (user.solde || 0) + amount;
-
-            const { error } = await _supabase
-                .from('profiles')
-                .update({ solde: newBalance })
-                .eq('id', currentUserId);
-
-            if (error) return alert('Erreur: ' + error.message);
-            
-            alert(`${amount} € ajouté !`);
-            closeModal('addModal');
-            loadUsers();
-        }
-
-        function openRemoveModal(id, name, balance) {
-            currentUserId = id;
-            document.getElementById('removeUserInfo').innerHTML = `
-                <p><strong>${name || 'Utilisateur'}</strong></p>
-                <p>Solde actuel: ${balance} €</p>
-            `;
-            document.getElementById('removeModal').classList.add('active');
-        }
-
-        async function confirmRemove() {
-            const amount = parseFloat(document.getElementById('removeAmount').value);
-            if (!amount || amount <= 0) return alert('Montant invalide');
-
-            const user = allUsers.find(u => u.id === currentUserId);
-            const newBalance = (user.solde || 0) - amount;
-
-            if (newBalance < 0) return alert('Solde insuffisant');
-
-            const { error } = await _supabase
-                .from('profiles')
-                .update({ solde: newBalance })
-                .eq('id', currentUserId);
-
-            if (error) return alert('Erreur: ' + error.message);
-            
-            alert(`${amount} € retiré !`);
-            closeModal('removeModal');
-            loadUsers();
-        }
-
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
         }
 
         async function logout() {
@@ -512,7 +165,8 @@
             window.location.href = 'admin.html';
         }
 
-        checkAuth();
+        // Test auto au chargement
+        window.onload = testConnection;
     </script>
 </body>
 </html>
