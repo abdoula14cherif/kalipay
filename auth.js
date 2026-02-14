@@ -4,8 +4,9 @@
 const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
 
-// Initialisation de Supabase
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// ✅ CORRECTION: Initialisation correcte de Supabase
+const { createClient } = supabase;
+const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ==================== GESTION DES UTILISATEURS ====================
 
@@ -26,7 +27,7 @@ async function registerUser(userData) {
         const cleanIdentite = identite.replace(/\s/g, '').toUpperCase();
         
         // Inscription avec Supabase
-        const { data, error } = await supabase.auth.signUp({
+        const { data, error } = await _supabase.auth.signUp({
             email: email,
             password: password,
             options: {
@@ -42,9 +43,6 @@ async function registerUser(userData) {
         if (data && data.user) {
             // Attendre que le trigger crée le profil
             await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            // Connexion automatique après inscription
-            await loginUser(email, password);
             
             return {
                 success: true,
@@ -75,7 +73,7 @@ async function registerUser(userData) {
  */
 async function loginUser(email, password) {
     try {
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await _supabase.auth.signInWithPassword({
             email: email,
             password: password
         });
@@ -122,7 +120,7 @@ async function loginUser(email, password) {
  */
 async function logoutUser() {
     try {
-        const { error } = await supabase.auth.signOut();
+        const { error } = await _supabase.auth.signOut();
         if (error) throw error;
         
         return {
@@ -146,12 +144,12 @@ async function logoutUser() {
  */
 async function getUserProfile() {
     try {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        const { data: { user }, error: userError } = await _supabase.auth.getUser();
         
         if (userError) throw userError;
         if (!user) throw new Error('Utilisateur non connecté');
 
-        const { data, error } = await supabase
+        const { data, error } = await _supabase
             .from('profiles')
             .select('*')
             .eq('id', user.id)
@@ -174,223 +172,25 @@ async function getUserProfile() {
 }
 
 /**
- * Mettre à jour le profil utilisateur
- * @param {Object} profileData - Données à mettre à jour
- * @returns {Promise<Object>} - Résultat de la mise à jour
+ * Vérifier si l'utilisateur est admin
+ * @returns {Promise<boolean>}
  */
-async function updateUserProfile(profileData) {
+async function isAdmin() {
     try {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        const { data: { user } } = await _supabase.auth.getUser();
+        if (!user) return false;
         
-        if (userError) throw userError;
-        if (!user) throw new Error('Utilisateur non connecté');
-
-        const { data, error } = await supabase
+        const { data, error } = await _supabase
             .from('profiles')
-            .update(profileData)
-            .eq('id', user.id)
-            .select()
-            .single();
-
-        if (error) throw error;
-
-        return {
-            success: true,
-            profile: data,
-            message: 'Profil mis à jour'
-        };
-
-    } catch (error) {
-        console.error('Erreur updateUserProfile:', error);
-        return {
-            success: false,
-            message: error.message || 'Erreur lors de la mise à jour'
-        };
-    }
-}
-
-// ==================== GESTION DES TRANSACTIONS ====================
-
-/**
- * Créer une demande de retrait
- * @param {number} montant - Montant du retrait
- * @param {string} description - Description optionnelle
- * @returns {Promise<Object>} - Résultat de la demande
- */
-async function createWithdrawRequest(montant, description = '') {
-    try {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
-        
-        if (userError) throw userError;
-        if (!user) throw new Error('Utilisateur non connecté');
-
-        // Vérifier le solde
-        const { data: profile, error: profileError } = await supabase
-            .from('profiles')
-            .select('solde')
+            .select('role')
             .eq('id', user.id)
             .single();
-
-        if (profileError) throw profileError;
-
-        if (profile.solde < montant) {
-            throw new Error('Solde insuffisant');
-        }
-
-        // Créer la transaction
-        const { data, error } = await supabase
-            .from('transactions')
-            .insert([
-                {
-                    user_id: user.id,
-                    type: 'retrait',
-                    montant: montant,
-                    description: description,
-                    statut: 'en_attente',
-                    documents_fournis: false
-                }
-            ])
-            .select()
-            .single();
-
-        if (error) throw error;
-
-        return {
-            success: true,
-            transaction: data,
-            message: 'Demande de retrait enregistrée'
-        };
-
-    } catch (error) {
-        console.error('Erreur createWithdrawRequest:', error);
-        return {
-            success: false,
-            message: error.message || 'Erreur lors de la demande'
-        };
-    }
-}
-
-/**
- * Récupérer l'historique des transactions
- * @param {string} filter - Filtre (all, incoming, outgoing, pending)
- * @returns {Promise<Object>} - Liste des transactions
- */
-async function getTransactions(filter = 'all') {
-    try {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
         
-        if (userError) throw userError;
-        if (!user) throw new Error('Utilisateur non connecté');
-
-        let query = supabase
-            .from('transactions')
-            .select('*')
-            .eq('user_id', user.id)
-            .order('date_transaction', { ascending: false });
-
-        if (filter === 'incoming') {
-            query = query.gt('montant', 0);
-        } else if (filter === 'outgoing') {
-            query = query.lt('montant', 0);
-        } else if (filter === 'pending') {
-            query = query.eq('statut', 'en_attente');
-        }
-
-        const { data, error } = await query;
-
-        if (error) throw error;
-
-        return {
-            success: true,
-            transactions: data
-        };
-
-    } catch (error) {
-        console.error('Erreur getTransactions:', error);
-        return {
-            success: false,
-            message: error.message || 'Erreur lors du chargement'
-        };
-    }
-}
-
-// ==================== GESTION DES DOCUMENTS ====================
-
-/**
- * Ajouter un document à une transaction
- * @param {number} transactionId - ID de la transaction
- * @param {string} typeDocument - Type de document
- * @param {string} cheminFichier - Chemin du fichier
- * @returns {Promise<Object>} - Résultat de l'ajout
- */
-async function addDocument(transactionId, typeDocument, cheminFichier) {
-    try {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (error || !data) return false;
         
-        if (userError) throw userError;
-        if (!user) throw new Error('Utilisateur non connecté');
-
-        const { data, error } = await supabase
-            .from('documents')
-            .insert([
-                {
-                    user_id: user.id,
-                    transaction_id: transactionId,
-                    type_document: typeDocument,
-                    chemin_fichier: cheminFichier
-                }
-            ])
-            .select()
-            .single();
-
-        if (error) throw error;
-
-        return {
-            success: true,
-            document: data,
-            message: 'Document ajouté'
-        };
-
-    } catch (error) {
-        console.error('Erreur addDocument:', error);
-        return {
-            success: false,
-            message: error.message || 'Erreur lors de l\'ajout'
-        };
-    }
-}
-
-/**
- * Récupérer les documents d'une transaction
- * @param {number} transactionId - ID de la transaction
- * @returns {Promise<Object>} - Liste des documents
- */
-async function getDocuments(transactionId) {
-    try {
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
-        
-        if (userError) throw userError;
-        if (!user) throw new Error('Utilisateur non connecté');
-
-        const { data, error } = await supabase
-            .from('documents')
-            .select('*')
-            .eq('user_id', user.id)
-            .eq('transaction_id', transactionId);
-
-        if (error) throw error;
-
-        return {
-            success: true,
-            documents: data
-        };
-
-    } catch (error) {
-        console.error('Erreur getDocuments:', error);
-        return {
-            success: false,
-            message: error.message || 'Erreur lors du chargement'
-        };
+        return data.role === 'admin';
+    } catch {
+        return false;
     }
 }
 
@@ -402,7 +202,7 @@ async function getDocuments(transactionId) {
  */
 async function isAuthenticated() {
     try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user } } = await _supabase.auth.getUser();
         return !!user;
     } catch {
         return false;
@@ -415,7 +215,7 @@ async function isAuthenticated() {
  */
 async function getCurrentUser() {
     try {
-        const { data: { user } } = await supabase.auth.getUser();
+        const { data: { user } } = await _supabase.auth.getUser();
         return user;
     } catch {
         return null;
@@ -509,15 +309,7 @@ window.NOVABANK = {
     
     // Profils
     getProfile: getUserProfile,
-    updateProfile: updateUserProfile,
-    
-    // Transactions
-    createWithdraw: createWithdrawRequest,
-    getTransactions: getTransactions,
-    
-    // Documents
-    addDocument: addDocument,
-    getDocuments: getDocuments,
+    isAdmin: isAdmin,
     
     // Utilitaires
     isAuthenticated: isAuthenticated,
@@ -528,7 +320,7 @@ window.NOVABANK = {
     checkPasswordStrength: checkPasswordStrength,
     
     // Constantes
-    supabase: supabase
+    supabase: _supabase
 };
 
 console.log('✅ Auth.js chargé - NOVA BANK');
