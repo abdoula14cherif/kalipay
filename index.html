@@ -14,27 +14,48 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Éléments décoratifs */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .container {
-            max-width: 500px;
+            max-width: 480px;
             width: 100%;
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             overflow: hidden;
-            animation: slideUp 0.5s ease;
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes slideUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(40px);
             }
             to {
                 opacity: 1;
@@ -43,52 +64,55 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            background: linear-gradient(135deg, #1e3c72 0%, #29539b 100%);
             padding: 40px 30px;
             text-align: center;
             position: relative;
-            overflow: hidden;
+            border-bottom: 4px solid #ff6b6b;
         }
 
-        .header::before {
+        .header::after {
             content: '';
             position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 8px;
+            transform: translateX(-50%) rotate(45deg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .logo {
-            font-size: 2.5em;
+            font-size: 2.8em;
             font-weight: 800;
             color: white;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
             position: relative;
             z-index: 1;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            line-height: 1;
         }
 
         .logo span {
             color: #ff6b6b;
             font-weight: 900;
+            background: rgba(255,255,255,0.1);
+            padding: 0 5px;
+            border-radius: 8px;
         }
 
         .tagline {
             color: rgba(255,255,255,0.9);
-            margin-top: 10px;
-            font-size: 0.9em;
+            margin-top: 15px;
+            font-size: 0.95em;
             letter-spacing: 1px;
             position: relative;
             z-index: 1;
+            font-weight: 300;
         }
 
         .form-section {
@@ -99,7 +123,7 @@
         .form-title {
             font-size: 1.8em;
             color: #1e3c72;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 600;
         }
 
@@ -109,6 +133,7 @@
             font-size: 0.95em;
             border-left: 4px solid #ff6b6b;
             padding-left: 15px;
+            line-height: 1.5;
         }
 
         .form-group {
@@ -122,80 +147,95 @@
             color: #1e3c72;
             font-weight: 500;
             font-size: 0.95em;
+            transition: color 0.3s ease;
         }
 
         .form-group input {
             width: 100%;
-            padding: 15px 20px;
+            padding: 16px 20px;
             border: 2px solid #e0e0e0;
-            border-radius: 12px;
+            border-radius: 16px;
             font-size: 1em;
             transition: all 0.3s ease;
-            background: #f8f9fa;
+            background: #f8fafc;
+        }
+
+        .form-group input:hover {
+            background: white;
+            border-color: #b8c7e7;
         }
 
         .form-group input:focus {
             outline: none;
             border-color: #1e3c72;
             background: white;
-            box-shadow: 0 5px 20px rgba(30,60,114,0.1);
+            box-shadow: 0 8px 20px rgba(30,60,114,0.15);
         }
 
         .form-group input.error {
             border-color: #ff6b6b;
-            animation: shake 0.5s ease;
+            animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
         }
 
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+            10%, 90% { transform: translateX(-2px); }
+            20%, 80% { transform: translateX(4px); }
+            30%, 50%, 70% { transform: translateX(-6px); }
+            40%, 60% { transform: translateX(6px); }
         }
 
         .password-strength {
-            height: 4px;
+            height: 6px;
             background: #e0e0e0;
-            border-radius: 2px;
-            margin-top: 10px;
+            border-radius: 3px;
+            margin-top: 12px;
             overflow: hidden;
         }
 
         .password-strength-bar {
             height: 100%;
             width: 0;
-            transition: all 0.3s ease;
+            transition: width 0.3s ease, background 0.3s ease;
+            border-radius: 3px;
         }
 
         .password-strength-text {
             font-size: 0.8em;
-            margin-top: 5px;
+            margin-top: 6px;
             text-align: right;
+            font-weight: 500;
         }
 
         .btn-submit {
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             font-size: 1.1em;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 20px;
-            box-shadow: 0 10px 20px rgba(30,60,114,0.2);
+            margin-top: 15px;
+            box-shadow: 0 8px 20px rgba(30,60,114,0.3);
+            letter-spacing: 1px;
         }
 
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(30,60,114,0.3);
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(30,60,114,0.4);
+            background: linear-gradient(135deg, #1e3c72 0%, #2e5cad 100%);
+        }
+
+        .btn-submit:active:not(:disabled) {
+            transform: translateY(-1px);
         }
 
         .btn-submit:disabled {
             opacity: 0.7;
             cursor: not-allowed;
-            transform: none;
+            background: linear-gradient(135deg, #8699b3 0%, #95a9c7 100%);
         }
 
         .login-link {
@@ -210,24 +250,27 @@
             font-weight: 600;
             margin-left: 5px;
             transition: color 0.3s ease;
+            border-bottom: 2px solid transparent;
         }
 
         .login-link a:hover {
             color: #ff6b6b;
+            border-bottom-color: #ff6b6b;
         }
 
         .alert {
-            padding: 15px 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 25px;
             display: none;
             animation: slideIn 0.3s ease;
+            font-weight: 500;
         }
 
         @keyframes slideIn {
             from {
                 opacity: 0;
-                transform: translateY(-10px);
+                transform: translateY(-15px);
             }
             to {
                 opacity: 1;
@@ -247,37 +290,91 @@
             border: 1px solid #f5c6cb;
         }
 
-        .info-box {
-            background: linear-gradient(135deg, #fff5f5 0%, #fff0f0 100%);
+        .info-message {
+            background: linear-gradient(135deg, #fff8f8 0%, #fff0f0 100%);
             border-left: 4px solid #ff6b6b;
-            padding: 15px;
-            border-radius: 12px;
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #666;
-        }
-
-        .info-box i {
-            color: #ff6b6b;
-            margin-right: 10px;
-        }
-
-        .bonus-badge {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 50px;
-            display: inline-block;
-            font-size: 0.9em;
-            font-weight: 600;
-            margin-top: 10px;
+            padding: 20px;
+            border-radius: 16px;
+            margin-top: 25px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            box-shadow: 0 4px 12px rgba(255,107,107,0.1);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% { box-shadow: 0 4px 12px rgba(255,107,107,0.1); }
+            50% { box-shadow: 0 4px 20px rgba(255,107,107,0.2); }
+            100% { box-shadow: 0 4px 12px rgba(255,107,107,0.1); }
+        }
+
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3em;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(255,107,107,0.3);
+        }
+
+        .info-content {
+            flex: 1;
+        }
+
+        .info-content p {
+            color: #721c24;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .info-content strong {
+            color: #ff6b6b;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .footer-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.8em;
+            color: #999;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            pointer-events: none;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .requirements-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 0.8em;
+        }
+
+        .requirement {
+            background: #f0f4ff;
+            padding: 5px 12px;
+            border-radius: 50px;
+            color: #1e3c72;
         }
     </style>
 </head>
@@ -285,34 +382,40 @@
     <div class="container">
         <div class="header">
             <div class="logo">NOVA<span>BANK</span></div>
-            <div class="tagline">L'innovation à votre service</div>
+            <div class="tagline">Sécurité • Innovation • Confiance</div>
         </div>
 
         <div class="form-section">
             <h2 class="form-title">Créer un compte</h2>
-            <div class="form-subtitle">Rejoignez NOVA BANK et bénéficiez de 500€ offerts</div>
+            <div class="form-subtitle">
+                Rejoignez NOVA BANK pour une expérience bancaire moderne et sécurisée
+            </div>
 
             <div class="alert" id="alertMessage"></div>
 
             <form id="registrationForm">
                 <div class="form-group">
                     <label for="nom">Nom complet</label>
-                    <input type="text" id="nom" placeholder="Jean Dupont" required>
+                    <input type="text" id="nom" placeholder="Jean Dupont" required autocomplete="name">
                 </div>
 
                 <div class="form-group">
                     <label for="email">Adresse email</label>
-                    <input type="email" id="email" placeholder="jean.dupont@email.com" required>
+                    <input type="email" id="email" placeholder="jean.dupont@email.com" required autocomplete="email">
                 </div>
 
                 <div class="form-group">
                     <label for="identite">Numéro de carte d'identité</label>
-                    <input type="text" id="identite" placeholder="AB123456" required>
+                    <input type="text" id="identite" placeholder="AB 123456" required autocomplete="off">
+                    <div class="requirements-list">
+                        <span class="requirement">8 à 12 caractères</span>
+                        <span class="requirement">Lettres et chiffres</span>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label for="password">Mot de passe</label>
-                    <input type="password" id="password" placeholder="••••••••" required>
+                    <input type="password" id="password" placeholder="Créez un mot de passe sécurisé" required autocomplete="new-password">
                     <div class="password-strength">
                         <div class="password-strength-bar" id="passwordStrengthBar"></div>
                     </div>
@@ -321,24 +424,28 @@
 
                 <div class="form-group">
                     <label for="confirmPassword">Confirmer le mot de passe</label>
-                    <input type="password" id="confirmPassword" placeholder="••••••••" required>
+                    <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe" required autocomplete="new-password">
                 </div>
 
                 <button type="submit" class="btn-submit" id="submitBtn">
                     CRÉER MON COMPTE
                 </button>
 
-                <div class="bonus-badge">
-                    🎁 500€ offerts à l'inscription !
-                </div>
-
-                <div class="info-box">
-                    <i>ℹ️</i> Pour tout retrait, des documents justificatifs vous seront demandés conformément à la réglementation bancaire.
+                <!-- Message d'information sur les retraits -->
+                <div class="info-message">
+                    <div class="info-icon">⚠️</div>
+                    <div class="info-content">
+                      
+                    </div>
                 </div>
             </form>
 
             <div class="login-link">
                 Déjà un compte ? <a href="dashboard.html">Se connecter</a>
+            </div>
+
+            <div class="footer-text">
+                © 2026 NOVA BANK. Tous droits réservés.
             </div>
         </div>
     </div>
@@ -358,6 +465,16 @@
         const confirmPasswordInput = document.getElementById('confirmPassword');
         const strengthBar = document.getElementById('passwordStrengthBar');
         const strengthText = document.getElementById('passwordStrengthText');
+        const identiteInput = document.getElementById('identite');
+
+        // Formatage automatique du numéro d'identité
+        identiteInput.addEventListener('input', (e) => {
+            let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (value.length > 2) {
+                value = value.slice(0, 2) + ' ' + value.slice(2, 9);
+            }
+            e.target.value = value;
+        });
 
         // Vérification de la force du mot de passe
         passwordInput.addEventListener('input', checkPasswordStrength);
@@ -366,24 +483,31 @@
         function checkPasswordStrength() {
             const password = passwordInput.value;
             let strength = 0;
+            let feedback = '';
             
-            if (password.length >= 8) strength += 25;
-            if (password.match(/[a-z]+/)) strength += 25;
-            if (password.match(/[A-Z]+/)) strength += 25;
-            if (password.match(/[0-9]+/)) strength += 25;
-            if (password.match(/[$@#&!]+/)) strength += 25;
+            // Critères de force
+            if (password.length >= 8) strength += 20;
+            if (password.match(/[a-z]/)) strength += 20;
+            if (password.match(/[A-Z]/)) strength += 20;
+            if (password.match(/[0-9]/)) strength += 20;
+            if (password.match(/[^a-zA-Z0-9]/)) strength += 20;
 
-            strengthBar.style.width = Math.min(strength, 100) + '%';
+            strengthBar.style.width = strength + '%';
             
-            if (strength <= 25) {
+            // Couleur et texte selon la force
+            if (strength <= 20) {
                 strengthBar.style.background = '#ff6b6b';
-                strengthText.textContent = 'Faible';
+                strengthText.textContent = 'Très faible';
                 strengthText.style.color = '#ff6b6b';
-            } else if (strength <= 50) {
+            } else if (strength <= 40) {
                 strengthBar.style.background = '#ffa502';
+                strengthText.textContent = 'Faible';
+                strengthText.style.color = '#ffa502';
+            } else if (strength <= 60) {
+                strengthBar.style.background = '#ffd93e';
                 strengthText.textContent = 'Moyen';
                 strengthText.style.color = '#ffa502';
-            } else if (strength <= 75) {
+            } else if (strength <= 80) {
                 strengthBar.style.background = '#1e90ff';
                 strengthText.textContent = 'Bon';
                 strengthText.style.color = '#1e90ff';
@@ -417,19 +541,30 @@
             }, 5000);
         }
 
+        // Validation du numéro d'identité
+        function validateIdentite(identite) {
+            const cleaned = identite.replace(/\s/g, '');
+            return cleaned.length >= 6 && cleaned.length <= 12;
+        }
+
         // Gestion de l'inscription
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const nom = document.getElementById('nom').value;
-            const email = document.getElementById('email').value;
-            const identite = document.getElementById('identite').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
+            const nom = document.getElementById('nom').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const identite = document.getElementById('identite').value.trim();
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
 
-            // Validation
+            // Validations
             if (!nom || !email || !identite || !password || !confirmPassword) {
                 showAlert('Veuillez remplir tous les champs', 'error');
+                return;
+            }
+
+            if (!validateIdentite(identite)) {
+                showAlert('Le numéro d\'identité doit contenir entre 6 et 12 caractères', 'error');
                 return;
             }
 
@@ -453,10 +588,15 @@
                     password: password,
                 });
 
-                if (authError) throw authError;
+                if (authError) {
+                    if (authError.message.includes('User already registered')) {
+                        throw new Error('Un compte existe déjà avec cet email');
+                    }
+                    throw authError;
+                }
 
                 if (authData.user) {
-                    // Créer le profil utilisateur avec solde initial de 500€
+                    // Créer le profil utilisateur
                     const { error: profileError } = await supabase
                         .from('profiles')
                         .insert([
@@ -464,15 +604,15 @@
                                 id: authData.user.id,
                                 nom: nom,
                                 email: email,
-                                numero_identite: identite,
-                                solde: 500.00,
+                                numero_identite: identite.replace(/\s/g, ''),
+                                solde: 0, // Pas de bonus de bienvenue
                                 date_inscription: new Date().toISOString()
                             }
                         ]);
 
                     if (profileError) throw profileError;
 
-                    showAlert('Compte créé avec succès ! 500€ ont été crédités sur votre compte.', 'success');
+                    showAlert('Compte créé avec succès !', 'success');
                     
                     // Redirection après 2 secondes
                     setTimeout(() => {
@@ -488,6 +628,17 @@
                 submitBtn.textContent = 'CRÉER MON COMPTE';
             }
         });
+
+        // Vérifier si l'utilisateur est déjà connecté
+        async function checkExistingSession() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                // Rediriger vers le dashboard si déjà connecté
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        checkExistingSession();
     </script>
 </body>
 </html>
