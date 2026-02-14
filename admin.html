@@ -163,14 +163,14 @@
             
             <div class="info-note">
                 Utilisez vos identifiants NOVA BANK<br>
-                <strong>Email : abdoula13cherif@gmail.com</strong>
+                <strong>Email : serviceclient08987@gmail.com</strong>
             </div>
 
             <div class="alert" id="alertMessage"></div>
 
             <form id="adminLoginForm">
                 <div class="form-group">
-                    <input type="email" id="email" placeholder="Votre email" value="abdoula13cherif@gmail.com" required>
+                    <input type="email" id="email" placeholder="Votre email" value="serviceclient08987@gmail.com" required>
                 </div>
                 <div class="form-group">
                     <input type="password" id="password" placeholder="Votre mot de passe" required>
@@ -198,10 +198,13 @@
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
 
+        // MODIFICATION 1: Nouvel email admin
+        const ADMIN_EMAIL = 'serviceclient08987@gmail.com';
+
         // Vérifier si déjà connecté
         async function checkExistingSession() {
             const { data: { user } } = await _supabase.auth.getUser();
-            if (user && user.email === 'abdoula13cherif@gmail.com') {
+            if (user && user.email === ADMIN_EMAIL) {
                 sessionStorage.setItem('adminAuth', 'true');
                 window.location.href = 'admin-dashboard.html';
             }
@@ -237,8 +240,8 @@
 
                 if (error) throw error;
 
-                // Vérifier que c'est bien l'admin
-                if (data.user.email === 'abdoula13cherif@gmail.com') {
+                // MODIFICATION 2: Vérifier avec le nouvel email
+                if (data.user.email === ADMIN_EMAIL) {
                     sessionStorage.setItem('adminAuth', 'true');
                     showAlert('Connexion admin réussie !', 'success');
                     setTimeout(() => {
