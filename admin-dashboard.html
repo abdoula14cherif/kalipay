@@ -13,79 +13,137 @@
         }
 
         body {
-            background: #f5f7fc;
+            background: linear-gradient(135deg, #0b1a2f 0%, #1e3a5f 100%);
             min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 60px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
         }
 
         .header {
             background: #0b1a2f;
-            color: white;
-            padding: 20px;
-            border-radius: 40px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 40px;
+            text-align: center;
+            border-bottom: 4px solid #ff5252;
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 2px;
         }
 
         .logo span {
             color: #ff5252;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .content {
+            padding: 50px;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            color: #0b1a2f;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #6f7d95;
+            text-align: center;
+            margin-bottom: 40px;
+            border-left: 4px solid #ff5252;
+            padding-left: 20px;
         }
 
         .error-box {
-            background: white;
+            background: #fff8f5;
             border: 3px solid #ff5252;
             border-radius: 40px;
             padding: 40px;
-            text-align: center;
-            margin: 20px 0;
+            margin: 30px 0;
         }
 
         .error-icon {
-            font-size: 4rem;
+            font-size: 5rem;
+            text-align: center;
             margin-bottom: 20px;
         }
 
-        h2 {
+        .error-message {
+            font-size: 1.3rem;
             color: #ff5252;
-            font-size: 2rem;
-            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 30px;
         }
 
-        p {
-            color: #666;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            line-height: 1.6;
+        .info-list {
+            background: white;
+            border-radius: 30px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .info-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #ffcdc8;
+            color: #0b1a2f;
+            font-size: 1.1rem;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-item strong {
+            color: #ff5252;
+            margin-right: 10px;
+        }
+
+        .debug-box {
+            background: #f0f4ff;
+            border-radius: 30px;
+            padding: 25px;
+            margin: 30px 0;
+            font-family: monospace;
+        }
+
+        .debug-box p {
+            margin: 10px 0;
+            color: #0b1a2f;
         }
 
         .btn-group {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: 30px;
+            margin: 40px 0 20px;
         }
 
         .btn {
-            padding: 15px 40px;
+            padding: 18px 40px;
             border: none;
-            border-radius: 40px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
+            min-width: 200px;
         }
 
         .btn-primary {
@@ -95,7 +153,8 @@
 
         .btn-primary:hover {
             background: #1e3a5f;
-            transform: translateY(-3px);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(11,26,47,0.3);
         }
 
         .btn-danger {
@@ -105,7 +164,8 @@
 
         .btn-danger:hover {
             background: #ff3333;
-            transform: translateY(-3px);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255,82,82,0.3);
         }
 
         .btn-secondary {
@@ -117,99 +177,102 @@
             background: #e0e8ff;
         }
 
-        .info-card {
-            background: #f9fcff;
-            border-radius: 30px;
-            padding: 30px;
-            margin-top: 30px;
-            text-align: left;
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #8e9daf;
+            font-size: 0.9rem;
         }
 
-        .info-card h3 {
+        .footer a {
             color: #0b1a2f;
-            margin-bottom: 15px;
+            text-decoration: none;
+            font-weight: 600;
         }
 
-        .info-card ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .info-card li {
-            padding: 10px 0;
-            border-bottom: 1px solid #eef2f6;
-            color: #666;
-        }
-
-        .info-card li:last-child {
-            border-bottom: none;
-        }
-
-        .highlight {
+        .footer a:hover {
             color: #ff5252;
-            font-weight: bold;
         }
 
-        .debug-info {
-            background: #f0f0f0;
-            padding: 20px;
-            border-radius: 20px;
-            font-family: monospace;
-            margin-top: 30px;
-            text-align: left;
+        .timestamp {
+            font-size: 0.9rem;
+            color: #8e9daf;
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">NOVA<span>BANK</span></div>
-        <div>
-            <span id="adminEmail">Admin</span>
-        </div>
-    </div>
-
     <div class="container">
-        <div class="error-box">
-            <div class="error-icon">🌐</div>
-            <h2>Problème de connexion</h2>
-            
-            <p>
-                Impossible d'établir une connexion stable avec le serveur.<br>
-                Cela peut être dû à :
-            </p>
+        <div class="header">
+            <div class="logo">NOVA<span>BANK</span></div>
+        </div>
 
-            <div class="info-card">
-                <ul>
-                    <li>🔸 <span class="highlight">Timeout</span> - La requête prend trop de temps</li>
-                    <li>🔸 <span class="highlight">Réseau instable</span> - Connexion internet intermittente</li>
-                    <li>🔸 <span class="highlight">Serveur surchargé</span> - Trop de requêtes simultanées</li>
-                    <li>🔸 <span class="highlight">Cache navigateur</span> - Données obsolètes</li>
-                </ul>
+        <div class="content">
+            <div class="title">Problème de connexion</div>
+            <div class="subtitle">
+                Impossible d'établir une connexion stable avec le serveur
             </div>
 
-            <div class="btn-group">
-                <button class="btn btn-primary" onclick="window.location.reload()">⟳ Recharger la page</button>
-                <button class="btn btn-secondary" onclick="clearCache()">🗑️ Vider le cache</button>
-                <button class="btn btn-danger" onclick="logout()">🚪 Déconnexion</button>
+            <div class="error-box">
+                <div class="error-icon">🌐</div>
+                <div class="error-message">
+                    La connexion a été interrompue
+                </div>
+
+                <div class="info-list">
+                    <div class="info-item">
+                        <strong>1.</strong> Timeout - La requête prend trop de temps
+                    </div>
+                    <div class="info-item">
+                        <strong>2.</strong> Réseau instable - Connexion internet intermittente
+                    </div>
+                    <div class="info-item">
+                        <strong>3.</strong> Serveur surchargé - Trop de requêtes simultanées
+                    </div>
+                    <div class="info-item">
+                        <strong>4.</strong> Cache navigateur - Données obsolètes
+                    </div>
+                </div>
+
+                <div class="debug-box">
+                    <p><strong>🔍 Informations techniques :</strong></p>
+                    <p>URL: https://oypihdbuovijjutuyqaj.supabase.co</p>
+                    <p>Erreur: AbortError - signal is aborted without reason</p>
+                    <p>Timestamp: 2026-02-14 12 h 31 min 13 s</p>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="window.location.reload()">
+                        ⟳ RECHARGER
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearCache()">
+                        🗑️ VIDER LE CACHE
+                    </button>
+                    <button class="btn btn-danger" onclick="logout()">
+                        🚪 DÉCONNEXION
+                    </button>
+                </div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="retryWithDelay()" style="padding: 15px 30px; font-size: 1rem;">
+                        ⏱️ Réessayer dans 5 secondes
+                    </button>
+                </div>
             </div>
 
-            <div class="debug-info" id="debugInfo">
-                <p><strong>Informations techniques :</strong></p>
-                <p>URL: https://oypihdbuovijjutuyqaj.supabase.co</p>
-                <p>Erreur: AbortError - signal is aborted without reason</p>
-                <p>Timestamp: <span id="timestamp"></span></p>
+            <div class="footer">
+                <p>Si le problème persiste, contactez le support technique</p>
+                <p><a href="mailto:Serviceclient08987@gmail.com">Serviceclient08987@gmail.com</a></p>
             </div>
 
-            <p style="margin-top: 30px; font-size: 0.9rem; color: #999;">
-                Si le problème persiste, contactez le support technique.
-            </p>
+            <div class="timestamp">
+                NOVA BANK - Administration
+            </div>
         </div>
     </div>
 
     <script>
-        // Afficher le timestamp
-        document.getElementById('timestamp').textContent = new Date().toLocaleString();
-
         function clearCache() {
             if ('caches' in window) {
                 caches.keys().then(function(names) {
@@ -218,12 +281,31 @@
                     }
                 });
             }
-            alert('🧹 Cache vidé ! Rechargement...');
-            window.location.reload();
+            
+            // Supprimer le session storage
+            sessionStorage.clear();
+            
+            // Afficher un message
+            alert('🧹 Cache et session vidés ! Rechargement...');
+            
+            // Recharger après un court délai
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        }
+
+        function retryWithDelay() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '⏳ Réessai dans 5 secondes...';
+            
+            setTimeout(() => {
+                window.location.reload();
+            }, 5000);
         }
 
         function logout() {
-            // Supprimer les données de session
+            // Supprimer toutes les données
             sessionStorage.clear();
             localStorage.clear();
             
@@ -232,13 +314,15 @@
                 document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
             });
 
+            // Redirection
             window.location.href = 'admin.html';
         }
 
-        // Option pour réessayer en mode dégradé
-        function tryDegradedMode() {
-            alert('Tentative de connexion en mode dégradé...');
-            window.location.href = 'admin-simple.html'; // Si vous avez une version simplifiée
+        // Option pour forcer un mode simplifié
+        function forceSimpleMode() {
+            alert('Tentative en mode simplifié...');
+            // Rediriger vers une version sans Supabase si elle existe
+            window.location.href = 'admin-offline.html';
         }
     </script>
 </body>
