@@ -172,6 +172,10 @@
             background: var(--primary-red);
         }
 
+        .alert.info {
+            background: var(--primary-blue);
+        }
+
         @keyframes slideIn {
             from {
                 transform: translateX(100%);
@@ -215,6 +219,7 @@
             color: var(--primary-blue);
             text-decoration: none;
             font-size: 0.9rem;
+            cursor: pointer;
         }
 
         .validation-message {
@@ -232,6 +237,7 @@
             color: var(--primary-blue);
             text-decoration: none;
             font-weight: 500;
+            cursor: pointer;
         }
 
         .features {
@@ -283,19 +289,17 @@
                 <div class="form-group">
                     <label>Email</label>
                     <input type="email" id="loginEmail" placeholder="ton@email.com">
-                    <div class="validation-message" id="loginEmailError"></div>
                 </div>
                 <div class="form-group">
                     <label>Mot de passe</label>
                     <input type="password" id="loginPassword" placeholder="••••••••">
-                    <div class="validation-message" id="loginPasswordError"></div>
                 </div>
                 <div class="forgot-password">
-                    <a href="#" onclick="forgotPassword()">Mot de passe oublié ?</a>
+                    <a onclick="forgotPassword()">Mot de passe oublié ?</a>
                 </div>
                 <button class="btn-primary" onclick="login()" id="loginBtn">Se connecter</button>
                 <div class="footer-links">
-                    Pas encore de compte ? <a href="#" onclick="showForm('register')">S'inscrire</a>
+                    Pas encore de compte ? <a onclick="showForm('register')">S'inscrire</a>
                 </div>
             </div>
 
@@ -324,7 +328,7 @@
                 </div>
                 <button class="btn-primary" onclick="register()" id="registerBtn">S'inscrire</button>
                 <div class="footer-links">
-                    Déjà inscrit ? <a href="#" onclick="showForm('login')">Se connecter</a>
+                    Déjà inscrit ? <a onclick="showForm('login')">Se connecter</a>
                 </div>
             </div>
         </div>
@@ -352,12 +356,13 @@
     <div id="alertMessage" class="alert"></div>
 
     <script>
-        // Configuration Supabase (via variables Vercel)
-        const SUPABASE_URL = window.VITE_SUPABASE_URL || 'https://oypihdbuovijjutuyqaj.supabase.co';
-        const SUPABASE_ANON_KEY = window.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
+        // Configuration Supabase
+        const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
         
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        // Fonction pour afficher les alertes
         function showAlert(message, type) {
             const alert = document.getElementById('alertMessage');
             alert.textContent = message;
@@ -366,19 +371,24 @@
             setTimeout(() => alert.style.display = 'none', 3000);
         }
 
+        // Fonction pour changer entre connexion et inscription
         function showForm(form) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+            const tabs = document.querySelectorAll('.tab');
+            const forms = document.querySelectorAll('.form');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            forms.forEach(f => f.classList.remove('active'));
             
             if (form === 'login') {
-                document.querySelectorAll('.tab')[0].classList.add('active');
+                tabs[0].classList.add('active');
                 document.getElementById('loginForm').classList.add('active');
             } else {
-                document.querySelectorAll('.tab')[1].classList.add('active');
+                tabs[1].classList.add('active');
                 document.getElementById('registerForm').classList.add('active');
             }
         }
 
+        // Fonction de connexion
         async function login() {
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
@@ -416,6 +426,7 @@
             }
         }
 
+        // Fonction d'inscription
         async function register() {
             const name = document.getElementById('regName').value;
             const email = document.getElementById('regEmail').value;
@@ -458,18 +469,19 @@
                     showAlert('Inscription réussie !', 'success');
                     setTimeout(() => window.location.href = 'dashboard.html', 1500);
                 } else {
-                    showAlert("Cet email est déjà utilisé", 'error');
+                    showAlert('Cet email est déjà utilisé', 'error');
                 }
             } catch (error) {
-                showAlert("Erreur lors de l'inscription", 'error');
+                showAlert('Erreur lors de l\'inscription', 'error');
             } finally {
                 btn.classList.remove('loading');
                 btn.disabled = false;
             }
         }
 
+        // Mot de passe oublié
         function forgotPassword() {
-            showAlert('Contactez le support pour réinitialiser votre mot de passe', 'info');
+            showAlert('Contactez le support sur WhatsApp pour réinitialiser votre mot de passe', 'info');
         }
 
         // Vérifier si déjà connecté
