@@ -19,223 +19,130 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        body::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
-            animation: rotate 30s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
         }
 
         .container {
-            max-width: 480px;
+            max-width: 450px;
             width: 100%;
             background: white;
-            border-radius: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-radius: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
             overflow: hidden;
-            position: relative;
-            z-index: 1;
-            animation: slideUp 0.6s ease;
+            animation: fadeIn 0.5s ease;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .header {
             background: #0b1a2f;
-            padding: 40px 30px;
+            padding: 30px 20px;
             text-align: center;
-            position: relative;
-            border-bottom: 4px solid #ff5252;
-        }
-
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 40px;
-            background: white;
-            border-radius: 12px;
-            transform: translateX(-50%) rotate(45deg);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-bottom: 3px solid #ff5252;
         }
 
         .logo {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 800;
             color: white;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            z-index: 1;
-            line-height: 1.2;
+            letter-spacing: 1px;
         }
 
         .logo span {
             color: #ff5252;
-            font-weight: 800;
-            background: rgba(255,255,255,0.1);
-            padding: 0 8px;
-            border-radius: 12px;
         }
 
         .tagline {
-            color: rgba(255,255,255,0.8);
-            margin-top: 12px;
+            color: rgba(255,255,255,0.7);
+            margin-top: 8px;
             font-size: 0.9rem;
-            letter-spacing: 1px;
-            position: relative;
-            z-index: 1;
         }
 
         .form-section {
-            padding: 40px 30px;
-            background: white;
+            padding: 30px 25px;
         }
 
         .form-title {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: #0b1a2f;
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             font-weight: 700;
         }
 
         .form-subtitle {
             color: #6f7d95;
-            margin-bottom: 30px;
-            font-size: 0.95rem;
-            border-left: 4px solid #ff5252;
-            padding-left: 15px;
-            line-height: 1.5;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            border-left: 3px solid #ff5252;
+            padding-left: 12px;
         }
 
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: #0b1a2f;
             font-weight: 600;
             font-size: 0.9rem;
-            margin-left: 6px;
+            margin-left: 5px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 16px 20px;
+            padding: 14px 18px;
             border: 2px solid #e6ecf2;
-            border-radius: 40px;
+            border-radius: 30px;
             font-size: 1rem;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
             background: #f9fcff;
-            color: #0b1a2f;
-            font-weight: 500;
-        }
-
-        .form-group input:hover {
-            background: white;
-            border-color: #b8c7e7;
         }
 
         .form-group input:focus {
             outline: none;
             border-color: #0b1a2f;
             background: white;
-            box-shadow: 0 8px 20px rgba(11,26,47,0.08);
         }
 
         .form-group input.error {
             border-color: #ff5252;
-            animation: shake 0.5s ease;
-        }
-
-        @keyframes shake {
-            10%, 90% { transform: translateX(-2px); }
-            20%, 80% { transform: translateX(4px); }
-            30%, 50%, 70% { transform: translateX(-6px); }
-            40%, 60% { transform: translateX(6px); }
-        }
-
-        .password-strength {
-            height: 6px;
-            background: #e6ecf2;
-            border-radius: 3px;
-            margin-top: 12px;
-            overflow: hidden;
-        }
-
-        .password-strength-bar {
-            height: 100%;
-            width: 0;
-            transition: width 0.3s ease;
-            border-radius: 3px;
-        }
-
-        .password-strength-text {
-            font-size: 0.8rem;
-            margin-top: 6px;
-            text-align: right;
-            font-weight: 500;
         }
 
         .btn-submit {
             width: 100%;
-            padding: 18px;
+            padding: 16px;
             background: #0b1a2f;
             color: white;
             border: none;
-            border-radius: 40px;
-            font-size: 1.1rem;
+            border-radius: 30px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            box-shadow: 0 8px 20px rgba(11,26,47,0.2);
-            letter-spacing: 0.5px;
+            transition: all 0.2s;
+            margin-top: 10px;
         }
 
-        .btn-submit:hover:not(:disabled) {
+        .btn-submit:hover {
             background: #1e3a5f;
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(11,26,47,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(11,26,47,0.2);
         }
 
         .btn-submit:disabled {
-            opacity: 0.7;
+            opacity: 0.6;
             cursor: not-allowed;
-            background: #6f7d95;
+            transform: none;
         }
 
         .login-link {
             text-align: center;
-            margin-top: 25px;
+            margin-top: 20px;
             color: #6f7d95;
+            font-size: 0.95rem;
         }
 
         .login-link a {
@@ -243,35 +150,19 @@
             text-decoration: none;
             font-weight: 700;
             margin-left: 5px;
-            transition: color 0.3s ease;
-            border-bottom: 2px solid transparent;
-            cursor: pointer;
         }
 
         .login-link a:hover {
             color: #ff5252;
-            border-bottom-color: #ff5252;
         }
 
         .alert {
-            padding: 16px 20px;
-            border-radius: 40px;
-            margin-bottom: 25px;
+            padding: 14px 18px;
+            border-radius: 30px;
+            margin-bottom: 20px;
             display: none;
-            animation: slideIn 0.3s ease;
             font-weight: 500;
-            width: 100%;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            text-align: center;
         }
 
         .alert-success {
@@ -292,22 +183,6 @@
             font-size: 0.8rem;
             color: #8e9daf;
         }
-
-        .requirements-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-            font-size: 0.8rem;
-        }
-
-        .requirement {
-            background: #f0f4ff;
-            padding: 6px 14px;
-            border-radius: 30px;
-            color: #0b1a2f;
-            font-weight: 500;
-        }
     </style>
 </head>
 <body>
@@ -318,45 +193,27 @@
         </div>
 
         <div class="form-section">
-            <h2 class="form-title">Créer un compte</h2>
+            <h2 class="form-title">Inscription</h2>
             <div class="form-subtitle">
-                Rejoignez NOVA BANK pour une expérience bancaire moderne et sécurisée
+                Créez votre compte en quelques secondes
             </div>
 
             <div class="alert" id="alertMessage"></div>
 
-            <form id="registrationForm">
+            <form id="registerForm">
                 <div class="form-group">
-                    <label for="nom">Nom complet</label>
+                    <label>Nom complet</label>
                     <input type="text" id="nom" placeholder="Jean Dupont" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Adresse email</label>
-                    <input type="email" id="email" placeholder="jean.dupont@email.com" required>
+                    <label>Email</label>
+                    <input type="email" id="email" placeholder="jean@email.com" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="identite">Numéro de carte d'identité</label>
-                    <input type="text" id="identite" placeholder="AB 123456" required>
-                    <div class="requirements-list">
-                        <span class="requirement">8 à 12 caractères</span>
-                        <span class="requirement">Lettres et chiffres</span>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Mot de passe</label>
-                    <input type="password" id="password" placeholder="Créez un mot de passe sécurisé" required>
-                    <div class="password-strength">
-                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
-                    </div>
-                    <div class="password-strength-text" id="passwordStrengthText"></div>
-                </div>
-
-                <div class="form-group">
-                    <label for="confirmPassword">Confirmer le mot de passe</label>
-                    <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe" required>
+                    <label>Mot de passe</label>
+                    <input type="password" id="password" placeholder="6 caractères minimum" required>
                 </div>
 
                 <button type="submit" class="btn-submit" id="submitBtn">
@@ -369,227 +226,96 @@
             </div>
 
             <div class="footer-text">
-                © 2026 NOVA BANK - Tous droits réservés
+                © 2026 NOVA BANK
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // Initialisation de Supabase
-        const supabaseUrl = 'https://oypihdbuovijjutuyqaj.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        // Initialisation Supabase
+        const supabase = window.supabase.createClient(
+            'https://oypihdbuovijjutuyqaj.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s'
+        );
 
-        // Éléments du DOM
-        const form = document.getElementById('registrationForm');
-        const alertMessage = document.getElementById('alertMessage');
+        // Éléments
+        const form = document.getElementById('registerForm');
+        const alertMsg = document.getElementById('alertMessage');
         const submitBtn = document.getElementById('submitBtn');
+        const nomInput = document.getElementById('nom');
+        const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        const strengthBar = document.getElementById('passwordStrengthBar');
-        const strengthText = document.getElementById('passwordStrengthText');
-        const identiteInput = document.getElementById('identite');
 
-        // Empêcher la soumission par défaut du formulaire
-        form.addEventListener('submit', (e) => {
+        // Vérifier si déjà connecté
+        async function checkUser() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) window.location.href = 'dashboard.html';
+        }
+        checkUser();
+
+        // Afficher message
+        function showMessage(msg, type) {
+            alertMsg.textContent = msg;
+            alertMsg.className = `alert alert-${type}`;
+            alertMsg.style.display = 'block';
+            setTimeout(() => alertMsg.style.display = 'none', 4000);
+        }
+
+        // Soumission formulaire
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            return false;
-        });
 
-        // Vérifier si l'utilisateur est déjà connecté
-        async function checkExistingSession() {
-            try {
-                const { data: { user }, error } = await supabase.auth.getUser();
-                if (user) {
-                    window.location.href = 'dashboard.html';
-                }
-            } catch (error) {
-                console.log('Aucune session existante');
-            }
-        }
-
-        // Appeler la vérification au chargement
-        checkExistingSession();
-
-        // Formatage automatique du numéro d'identité
-        if (identiteInput) {
-            identiteInput.addEventListener('input', (e) => {
-                let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-                if (value.length > 2) {
-                    value = value.slice(0, 2) + ' ' + value.slice(2, 9);
-                }
-                e.target.value = value;
-            });
-        }
-
-        // Vérification de la force du mot de passe
-        if (passwordInput) {
-            passwordInput.addEventListener('input', checkPasswordStrength);
-        }
-
-        if (confirmPasswordInput) {
-            confirmPasswordInput.addEventListener('input', checkPasswordsMatch);
-        }
-
-        function checkPasswordStrength() {
+            const nom = nomInput.value.trim();
+            const email = emailInput.value.trim();
             const password = passwordInput.value;
-            let strength = 0;
-            
-            if (password.length >= 8) strength += 20;
-            if (password.match(/[a-z]/)) strength += 20;
-            if (password.match(/[A-Z]/)) strength += 20;
-            if (password.match(/[0-9]/)) strength += 20;
-            if (password.match(/[^a-zA-Z0-9]/)) strength += 20;
 
-            if (strengthBar) {
-                strengthBar.style.width = strength + '%';
-            }
-            
-            if (strength <= 20) {
-                if (strengthBar) strengthBar.style.background = '#ff5252';
-                if (strengthText) {
-                    strengthText.textContent = 'Très faible';
-                    strengthText.style.color = '#ff5252';
-                }
-            } else if (strength <= 40) {
-                if (strengthBar) strengthBar.style.background = '#ff8c42';
-                if (strengthText) {
-                    strengthText.textContent = 'Faible';
-                    strengthText.style.color = '#ff8c42';
-                }
-            } else if (strength <= 60) {
-                if (strengthBar) strengthBar.style.background = '#ffd966';
-                if (strengthText) {
-                    strengthText.textContent = 'Moyen';
-                    strengthText.style.color = '#ff8c42';
-                }
-            } else if (strength <= 80) {
-                if (strengthBar) strengthBar.style.background = '#2d9c5c';
-                if (strengthText) {
-                    strengthText.textContent = 'Bon';
-                    strengthText.style.color = '#2d9c5c';
-                }
-            } else {
-                if (strengthBar) strengthBar.style.background = '#2d9c5c';
-                if (strengthText) {
-                    strengthText.textContent = 'Excellent';
-                    strengthText.style.color = '#2d9c5c';
-                }
-            }
-        }
-
-        function checkPasswordsMatch() {
-            const password = passwordInput ? passwordInput.value : '';
-            const confirm = confirmPasswordInput ? confirmPasswordInput.value : '';
-            
-            if (confirm && password !== confirm) {
-                confirmPasswordInput.classList.add('error');
-                return false;
-            } else {
-                if (confirmPasswordInput) confirmPasswordInput.classList.remove('error');
-                return true;
-            }
-        }
-
-        function showAlert(message, type) {
-            if (alertMessage) {
-                alertMessage.textContent = message;
-                alertMessage.className = `alert alert-${type}`;
-                alertMessage.style.display = 'block';
-                
-                setTimeout(() => {
-                    alertMessage.style.display = 'none';
-                }, 5000);
-            }
-        }
-
-        function validateIdentite(identite) {
-            const cleaned = identite.replace(/\s/g, '');
-            return cleaned.length >= 6 && cleaned.length <= 12;
-        }
-
-        // Gestion de l'inscription - Version corrigée
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            const nom = document.getElementById('nom').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const identite = document.getElementById('identite').value.trim();
-            const password = passwordInput.value;
-            const confirmPassword = confirmPasswordInput.value;
-
-            // Validations
-            if (!nom || !email || !identite || !password || !confirmPassword) {
-                showAlert('Veuillez remplir tous les champs', 'error');
-                return false;
-            }
-
-            if (!validateIdentite(identite)) {
-                showAlert('Le numéro d\'identité doit contenir entre 6 et 12 caractères', 'error');
-                return false;
-            }
-
-            if (password !== confirmPassword) {
-                showAlert('Les mots de passe ne correspondent pas', 'error');
-                return false;
+            // Validations simples
+            if (!nom || !email || !password) {
+                showMessage('Tous les champs sont requis', 'error');
+                return;
             }
 
             if (password.length < 6) {
-                showAlert('Le mot de passe doit contenir au moins 6 caractères', 'error');
-                return false;
+                showMessage('Mot de passe trop court (6 caractères min)', 'error');
+                return;
             }
 
             try {
                 submitBtn.disabled = true;
-                submitBtn.textContent = 'CRÉATION EN COURS...';
+                submitBtn.textContent = 'CRÉATION...';
 
-                console.log('Tentative d\'inscription pour:', email);
-
-                // Inscription avec Supabase
-                const { data: authData, error: authError } = await supabase.auth.signUp({
+                // Inscription
+                const { data, error } = await supabase.auth.signUp({
                     email: email,
                     password: password,
                     options: {
                         data: {
-                            nom: nom,
-                            numero_identite: identite.replace(/\s/g, '')
+                            nom: nom
                         }
                     }
                 });
 
-                if (authError) {
-                    console.error('Auth Error:', authError);
-                    
-                    if (authError.message.includes('User already registered')) {
-                        throw new Error('Un compte existe déjà avec cet email');
-                    } else if (authError.message.includes('password')) {
-                        throw new Error('Le mot de passe doit contenir au moins 6 caractères');
-                    } else {
-                        throw new Error(authError.message);
-                    }
-                }
+                if (error) throw error;
 
-                if (authData && authData.user) {
-                    console.log('Utilisateur créé avec succès:', authData.user);
-                    
-                    showAlert('Compte créé avec succès ! Redirection vers la connexion...', 'success');
-                    
-                    // Redirection après 2 secondes
-                    setTimeout(() => {
-                        window.location.href = 'connexion.html';
-                    }, 2000);
-                    
-                    return true;
+                if (data.user) {
+                    showMessage('Compte créé ! Redirection...', 'success');
+                    setTimeout(() => window.location.href = 'connexion.html', 2000);
                 }
 
             } catch (error) {
-                console.error('Erreur complète:', error);
-                showAlert(error.message || 'Une erreur est survenue lors de l\'inscription', 'error');
+                console.error(error);
+                
+                if (error.message.includes('already')) {
+                    showMessage('Cet email est déjà utilisé', 'error');
+                } else if (error.message.includes('password')) {
+                    showMessage('Mot de passe trop faible', 'error');
+                } else {
+                    showMessage('Erreur : ' + error.message, 'error');
+                }
+                
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'CRÉER MON COMPTE';
-                return false;
             }
         });
     </script>
