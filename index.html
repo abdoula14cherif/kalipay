@@ -2,124 +2,311 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>NOVA BANK - Inscription</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         body {
-            background: #0b1a2f;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0b1a2f 0%, #1e3a5f 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .container {
-            max-width: 400px;
+            max-width: 480px;
             width: 100%;
             background: white;
-            border-radius: 20px;
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 1;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .header {
             background: #0b1a2f;
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
-            border-bottom: 3px solid #ff5252;
+            position: relative;
+            border-bottom: 4px solid #ff5252;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border-radius: 12px;
+            transform: translateX(-50%) rotate(45deg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .logo {
-            font-size: 2rem;
-            font-weight: bold;
+            font-size: 2.5rem;
+            font-weight: 800;
             color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 1;
+            line-height: 1.2;
         }
 
         .logo span {
             color: #ff5252;
+            font-weight: 800;
+            background: rgba(255,255,255,0.1);
+            padding: 0 8px;
+            border-radius: 12px;
+        }
+
+        .tagline {
+            color: rgba(255,255,255,0.8);
+            margin-top: 12px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
         }
 
         .form-section {
-            padding: 30px;
+            padding: 40px 30px;
+            background: white;
         }
 
-        h2 {
+        .form-title {
+            font-size: 1.8rem;
             color: #0b1a2f;
-            margin-bottom: 20px;
-            text-align: center;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .form-subtitle {
+            color: #6f7d95;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+            border-left: 4px solid #ff5252;
+            padding-left: 15px;
+            line-height: 1.5;
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 24px;
         }
 
-        input {
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #0b1a2f;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-left: 6px;
+        }
+
+        .form-group input {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
+            padding: 16px 20px;
+            border: 2px solid #e6ecf2;
+            border-radius: 40px;
             font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f9fcff;
+            color: #0b1a2f;
+            font-weight: 500;
         }
 
-        input:focus {
-            border-color: #0b1a2f;
+        .form-group input:hover {
+            background: white;
+            border-color: #b8c7e7;
+        }
+
+        .form-group input:focus {
             outline: none;
+            border-color: #0b1a2f;
+            background: white;
+            box-shadow: 0 8px 20px rgba(11,26,47,0.08);
         }
 
-        button {
+        .form-group input.error {
+            border-color: #ff5252;
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes shake {
+            10%, 90% { transform: translateX(-2px); }
+            20%, 80% { transform: translateX(4px); }
+            30%, 50%, 70% { transform: translateX(-6px); }
+            40%, 60% { transform: translateX(6px); }
+        }
+
+        .password-strength {
+            height: 6px;
+            background: #e6ecf2;
+            border-radius: 3px;
+            margin-top: 12px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .password-strength-text {
+            font-size: 0.8rem;
+            margin-top: 6px;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .btn-submit {
             width: 100%;
-            padding: 14px;
+            padding: 18px;
             background: #0b1a2f;
             color: white;
             border: none;
-            border-radius: 10px;
-            font-size: 1rem;
+            border-radius: 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        button:hover {
-            background: #1e3a5f;
-        }
-
-        .link {
-            text-align: center;
+            transition: all 0.3s ease;
             margin-top: 20px;
+            box-shadow: 0 8px 20px rgba(11,26,47,0.2);
+            letter-spacing: 0.5px;
         }
 
-        .link a {
+        .btn-submit:hover:not(:disabled) {
+            background: #1e3a5f;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(11,26,47,0.3);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            background: #6f7d95;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            color: #6f7d95;
+        }
+
+        .login-link a {
             color: #0b1a2f;
             text-decoration: none;
-            font-weight: bold;
+            font-weight: 700;
+            margin-left: 5px;
+            transition: color 0.3s ease;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
         }
 
-        .message {
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 15px;
+        .login-link a:hover {
+            color: #ff5252;
+            border-bottom-color: #ff5252;
+        }
+
+        .alert {
+            padding: 16px 20px;
+            border-radius: 40px;
+            margin-bottom: 25px;
             display: none;
+            animation: slideIn 0.3s ease;
+            font-weight: 500;
+            width: 100%;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-success {
+            background: #e3f5eb;
+            color: #2d9c5c;
+            border: 1px solid #c0e6d3;
+        }
+
+        .alert-error {
+            background: #ffeae8;
+            color: #ff5252;
+            border: 1px solid #ffcdc8;
+        }
+
+        .footer-text {
             text-align: center;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            color: #8e9daf;
         }
 
-        .success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        .requirements-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 0.8rem;
         }
 
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        .requirement {
+            background: #f0f4ff;
+            padding: 6px 14px;
+            border-radius: 30px;
+            color: #0b1a2f;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -127,119 +314,231 @@
     <div class="container">
         <div class="header">
             <div class="logo">NOVA<span>BANK</span></div>
+            <div class="tagline">Sécurité - Innovation - Confiance</div>
         </div>
 
         <div class="form-section">
-            <h2>Inscription</h2>
-            
-            <div id="message" class="message"></div>
+            <h2 class="form-title">Créer un compte</h2>
+            <div class="form-subtitle">
+                Rejoignez NOVA BANK pour une expérience bancaire moderne et sécurisée
+            </div>
 
-            <form id="registerForm">
+            <div class="alert" id="alertMessage"></div>
+
+            <form id="registrationForm">
                 <div class="form-group">
-                    <input type="text" id="nom" placeholder="Nom complet" required>
+                    <label for="nom">Nom complet</label>
+                    <input type="text" id="nom" placeholder="Jean Dupont" required>
                 </div>
+
                 <div class="form-group">
-                    <input type="email" id="email" placeholder="Email" required>
+                    <label for="email">Adresse email</label>
+                    <input type="email" id="email" placeholder="jean.dupont@email.com" required>
                 </div>
+
                 <div class="form-group">
-                    <input type="password" id="password" placeholder="Mot de passe" required>
+                    <label for="identite">Numéro de carte d'identité</label>
+                    <input type="text" id="identite" placeholder="AB 123456" required>
+                    <div class="requirements-list">
+                        <span class="requirement">8 à 12 caractères</span>
+                        <span class="requirement">Lettres et chiffres</span>
+                    </div>
                 </div>
-                <button type="submit" id="submitBtn">S'INSCRIRE</button>
+
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" placeholder="Créez un mot de passe sécurisé" required>
+                    <div class="password-strength">
+                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                    </div>
+                    <div class="password-strength-text" id="passwordStrengthText"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmer le mot de passe</label>
+                    <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe" required>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    CRÉER MON COMPTE
+                </button>
             </form>
 
-            <div class="link">
+            <div class="login-link">
                 Déjà un compte ? <a href="connexion.html">Se connecter</a>
+            </div>
+
+            <div class="footer-text">
+                © 2026 NOVA BANK - Tous droits réservés
             </div>
         </div>
     </div>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        // TESTS POUR VOIR SI SUPA BASE MARCHE
-        console.log('✅ Page chargée');
-        
-        // Tes identifiants
+        // Initialisation Supabase
         const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
         
-        // Initialisation
         const { createClient } = supabase;
         const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-        
-        console.log('✅ Supabase initialisé');
 
-        // Récupérer les éléments
-        const form = document.getElementById('registerForm');
-        const messageDiv = document.getElementById('message');
+        // Éléments du DOM
+        const form = document.getElementById('registrationForm');
+        const alertMessage = document.getElementById('alertMessage');
         const submitBtn = document.getElementById('submitBtn');
-
-        // Fonction pour afficher les messages
-        function showMessage(text, type) {
-            messageDiv.textContent = text;
-            messageDiv.className = `message ${type}`;
-            messageDiv.style.display = 'block';
-        }
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const strengthBar = document.getElementById('passwordStrengthBar');
+        const strengthText = document.getElementById('passwordStrengthText');
+        const identiteInput = document.getElementById('identite');
 
         // Vérifier si déjà connecté
         _supabase.auth.getUser().then(({ data: { user } }) => {
-            if (user) {
-                console.log('Utilisateur déjà connecté');
-                window.location.href = 'dashboard.html';
-            }
+            if (user) window.location.href = 'dashboard.html';
         });
 
-        // Gérer l'inscription
+        // Formatage du numéro d'identité
+        identiteInput.addEventListener('input', (e) => {
+            let value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+            if (value.length > 2) {
+                value = value.slice(0, 2) + ' ' + value.slice(2, 9);
+            }
+            e.target.value = value;
+        });
+
+        // Force du mot de passe
+        passwordInput.addEventListener('input', checkPasswordStrength);
+        confirmPasswordInput.addEventListener('input', checkPasswordsMatch);
+
+        function checkPasswordStrength() {
+            const password = passwordInput.value;
+            let strength = 0;
+            
+            if (password.length >= 8) strength += 20;
+            if (password.match(/[a-z]/)) strength += 20;
+            if (password.match(/[A-Z]/)) strength += 20;
+            if (password.match(/[0-9]/)) strength += 20;
+            if (password.match(/[^a-zA-Z0-9]/)) strength += 20;
+
+            strengthBar.style.width = strength + '%';
+            
+            if (strength <= 20) {
+                strengthBar.style.background = '#ff5252';
+                strengthText.textContent = 'Très faible';
+                strengthText.style.color = '#ff5252';
+            } else if (strength <= 40) {
+                strengthBar.style.background = '#ff8c42';
+                strengthText.textContent = 'Faible';
+                strengthText.style.color = '#ff8c42';
+            } else if (strength <= 60) {
+                strengthBar.style.background = '#ffd966';
+                strengthText.textContent = 'Moyen';
+                strengthText.style.color = '#ff8c42';
+            } else if (strength <= 80) {
+                strengthBar.style.background = '#2d9c5c';
+                strengthText.textContent = 'Bon';
+                strengthText.style.color = '#2d9c5c';
+            } else {
+                strengthBar.style.background = '#2d9c5c';
+                strengthText.textContent = 'Excellent';
+                strengthText.style.color = '#2d9c5c';
+            }
+        }
+
+        function checkPasswordsMatch() {
+            const password = passwordInput.value;
+            const confirm = confirmPasswordInput.value;
+            
+            if (confirm && password !== confirm) {
+                confirmPasswordInput.classList.add('error');
+                return false;
+            } else {
+                confirmPasswordInput.classList.remove('error');
+                return true;
+            }
+        }
+
+        function showAlert(message, type) {
+            alertMessage.textContent = message;
+            alertMessage.className = `alert alert-${type}`;
+            alertMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                alertMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function validateIdentite(identite) {
+            const cleaned = identite.replace(/\s/g, '');
+            return cleaned.length >= 6 && cleaned.length <= 12;
+        }
+
+        // Inscription
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            console.log('Formulaire soumis');
-            
-            const nom = document.getElementById('nom').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            console.log('Email:', email);
-            console.log('Nom:', nom);
-            
-            if (!nom || !email || !password) {
-                showMessage('Tous les champs sont requis', 'error');
+
+            const nom = document.getElementById('nom').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const identite = document.getElementById('identite').value.trim();
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+
+            if (!nom || !email || !identite || !password || !confirmPassword) {
+                showAlert('Veuillez remplir tous les champs', 'error');
                 return;
             }
-            
+
+            if (!validateIdentite(identite)) {
+                showAlert('Le numéro d\'identité doit contenir entre 6 et 12 caractères', 'error');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showAlert('Les mots de passe ne correspondent pas', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showAlert('Le mot de passe doit contenir au moins 6 caractères', 'error');
+                return;
+            }
+
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Inscription...';
-            
+            submitBtn.textContent = 'CRÉATION...';
+
             try {
-                console.log('Tentative inscription...');
-                
                 const { data, error } = await _supabase.auth.signUp({
                     email: email,
                     password: password,
                     options: {
                         data: {
-                            nom: nom
+                            nom: nom,
+                            numero_identite: identite.replace(/\s/g, '')
                         }
                     }
                 });
+
+                if (error) throw error;
+
+                if (data.user) {
+                    showAlert('Compte créé avec succès ! Redirection...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'connexion.html';
+                    }, 2000);
+                }
+
+            } catch (error) {
+                console.error(error);
                 
-                if (error) {
-                    console.error('Erreur:', error);
-                    throw error;
+                if (error.message.includes('User already registered')) {
+                    showAlert('Un compte existe déjà avec cet email', 'error');
+                } else {
+                    showAlert(error.message, 'error');
                 }
                 
-                console.log('Succès:', data);
-                
-                showMessage('Compte créé ! Redirection...', 'success');
-                
-                setTimeout(() => {
-                    window.location.href = 'connexion.html';
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Erreur complète:', error);
-                showMessage(error.message || 'Erreur inconnue', 'error');
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'S\'INSCRIRE';
+                submitBtn.textContent = 'CRÉER MON COMPTE';
             }
         });
     </script>
