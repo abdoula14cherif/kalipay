@@ -601,7 +601,7 @@
             </div>
             <div class="balance-hero">
                 <div class="label">Solde disponible</div>
-                <div class="amount" id="currentBalance">0.00 <small>FCFA</small></div>
+                <div class="amount" id="currentBalance">0.00 <small>€</small></div>
             </div>
             <div class="hero-actions">
                 <a href="recharge.html" class="hero-btn primary">+ Recharger</a>
@@ -613,12 +613,12 @@
         <div class="balance-cards">
             <div class="balance-card">
                 <div class="balance-label">Compte épargne</div>
-                <div class="balance-amount" id="savingsBalance">0.00 <small>FCFA</small></div>
+                <div class="balance-amount" id="savingsBalance">0.00 <small>€</small></div>
                 <div class="card-footer up">Taux 2.5% annuel</div>
             </div>
             <div class="balance-card">
                 <div class="balance-label">Cashback cumulé</div>
-                <div class="balance-amount" id="cashbackBalance">0.00 <small>FCFA</small></div>
+                <div class="balance-amount" id="cashbackBalance">0.00 <small>€</small></div>
                 <div class="card-footer neutral">Crédité automatiquement</div>
             </div>
             <div class="balance-card">
@@ -782,9 +782,9 @@
                 if (data) {
                     userProfile = data;
                     const solde = data.solde || 0;
-                    document.getElementById('currentBalance').innerHTML = solde.toFixed(2) + ' <small>FCFA</small>';
-                    document.getElementById('savingsBalance').innerHTML = (solde * 0.3).toFixed(2) + ' <small>FCFA</small>';
-                    document.getElementById('cashbackBalance').innerHTML = (data.cashback || 0).toFixed(2) + ' <small>FCFA</small>';
+                    document.getElementById('currentBalance').innerHTML = solde.toFixed(2) + ' <small>€</small>';
+                    document.getElementById('savingsBalance').innerHTML = (solde * 0.3).toFixed(2) + ' <small>€</small>';
+                    document.getElementById('cashbackBalance').innerHTML = (data.cashback || 0).toFixed(2) + ' <small>€</small>';
 
                     const shortName = data.nom?.split(' ')[0] || 'Utilisateur';
                     document.getElementById('welcomeMessage').textContent = `Bonjour ${shortName}`;
@@ -853,7 +853,7 @@
                                 <div class="title">${tx.type || (isIn ? 'Recharge' : 'Retrait')}</div>
                                 <div class="date">${date}</div>
                             </div>
-                            <div class="tx-amount ${isIn ? 'in' : 'out'}">${isIn ? '+' : '-'}${amount} FCFA</div>
+                            <div class="tx-amount ${isIn ? 'in' : 'out'}">${isIn ? '+' : '-'}${amount} €</div>
                         </div>`;
                 }).join('');
 
