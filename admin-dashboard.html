@@ -433,15 +433,11 @@
 
             userResults.innerHTML = '<div class="empty-state">Recherche...</div>';
 
-            const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(q);
-
-            let query = _supabase.from('profiles').select('id, nom, solde, cashback, role');
-            query = isUuid ? query.eq('id', q) : query.ilike('nom', `%${q}%`);
-
-            const { data, error } = await query.limit(10);
+            const { data, error } = await _supabase.rpc('admin_search_users', { search_term: q });
 
             if (error) {
                 userResults.innerHTML = `<div class="empty-state">Erreur : ${error.message}</div>`;
+                console.error(error);
                 return;
             }
             if (!data || data.length === 0) {
@@ -579,11 +575,7 @@
         async function loadRetraits() {
             retraitsList.innerHTML = '<div class="empty-state">Chargement...</div>';
 
-            const { data: retraits, error } = await _supabase
-                .from('retraits')
-                .select('*')
-                .eq('statut', 'en_attente')
-                .order('created_at', { ascending: true });
+            const { data: retraits, error } = await _supabase.rpc('admin_list_pending_retraits');
 
             if (error) {
                 retraitsList.innerHTML = `<div class="empty-state">Erreur : ${error.message}</div>`;
@@ -594,17 +586,8 @@
                 return;
             }
 
-            const userIds = [...new Set(retraits.map(r => r.user_id))];
-            const { data: profiles } = await _supabase
-                .from('profiles')
-                .select('id, nom')
-                .in('id', userIds);
-
-            const nameMap = {};
-            (profiles || []).forEach(p => { nameMap[p.id] = p.nom; });
-
             retraitsList.innerHTML = '';
-            retraits.forEach(r => retraitsList.appendChild(buildRetraitRow(r, nameMap[r.user_id])));
+            retraits.forEach(r => retraitsList.appendChild(buildRetraitRow(r, r.nom)));
         }
 
         function buildRetraitRow(r, nom) {
