@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>NOVA BANK - Tableau de bord</title>
+    <title>PayOnline - Tableau de bord</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,263 +14,527 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        body {
-            background: #f5f7fc;
-            min-height: 100vh;
-            padding-bottom: 90px;
+        :root {
+            --ink: #14122B;
+            --ink-soft: #6E6A8C;
+            --surface: #FFFFFF;
+            --canvas: #F3F1FA;
+            --accent: #C6FF3D;
+            --accent-deep: #9FE000;
+            --violet: #6C4CFF;
+            --violet-deep: #4B2FDB;
+            --danger: #FF4468;
+            --success: #16C784;
+            --line: #E3E0F2;
         }
 
-        /* Header */
+        body {
+            background: var(--canvas);
+            min-height: 100vh;
+            padding-bottom: 100px;
+            color: var(--ink);
+        }
+
+        /* ---- Header ---- */
         .header {
-            background: #0b1a2f;
-            padding: 20px 24px;
+            background: var(--ink);
+            padding: 18px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             color: white;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 200;
         }
 
-        .logo {
-            font-size: 1.8rem;
+        .wordmark {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-family: 'Sora', sans-serif;
             font-weight: 800;
+            font-size: 1.25rem;
+        }
+
+        .wordmark .bolt {
+            width: 28px;
+            height: 28px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ink);
+            font-size: 0.95rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.08);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
             color: white;
+            position: relative;
         }
 
-        .logo span {
-            color: #ff5252;
+        .icon-btn:hover { background: rgba(255,255,255,0.16); }
+
+        .notif-dot {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            border: 2px solid var(--ink);
         }
 
-        .user-greeting {
-            background: rgba(255,255,255,0.1);
-            padding: 10px 20px;
-            border-radius: 40px;
+        /* Dropdown menu triggered by 3-dot button */
+        .menu-dropdown {
+            position: absolute;
+            top: 48px;
+            right: 0;
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.2);
+            min-width: 220px;
+            padding: 8px;
+            display: none;
+            z-index: 300;
+            animation: pop 0.15s ease;
+        }
+
+        .menu-dropdown.open { display: block; }
+
+        @keyframes pop {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .menu-dropdown .user-chip {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--line);
+            margin-bottom: 6px;
+        }
+
+        .menu-dropdown .user-chip .name {
+            font-weight: 700;
+            color: var(--ink);
+            font-size: 0.92rem;
+        }
+
+        .menu-dropdown .user-chip .mail {
+            color: var(--ink-soft);
+            font-size: 0.78rem;
+            margin-top: 2px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            color: var(--ink);
+            font-size: 0.9rem;
             font-weight: 500;
+            cursor: pointer;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
         }
 
-        /* Container principal */
+        .menu-item:hover { background: var(--canvas); }
+
+        .menu-item.danger { color: var(--danger); }
+        .menu-item svg { flex-shrink: 0; opacity: 0.8; }
+
+        /* ---- Container ---- */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 18px;
         }
 
-        /* Section bienvenue */
+        /* ---- Welcome / balance hero ---- */
         .welcome-card {
-            background: linear-gradient(135deg, #0b1a2f 0%, #1e3a5f 100%);
+            background: linear-gradient(135deg, var(--ink) 0%, var(--violet-deep) 100%);
             color: white;
-            padding: 30px;
-            border-radius: 40px;
-            margin-bottom: 25px;
-            box-shadow: 0 15px 30px rgba(11,26,47,0.2);
+            padding: 28px;
+            border-radius: 24px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .welcome-card h1 {
-            font-size: 2rem;
-            margin-bottom: 10px;
+        .welcome-card::after {
+            content: '';
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 1px solid rgba(198,255,61,0.25);
+            top: -110px;
+            right: -60px;
         }
 
-        .welcome-card p {
-            opacity: 0.9;
-            font-size: 1.1rem;
+        .welcome-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Cartes de solde */
+        .welcome-top p.eyebrow {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        #welcomeMessage {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .balance-hero {
+            margin-top: 22px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .balance-hero .label {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.65);
+        }
+
+        .balance-hero .amount {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 2.4rem;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .balance-hero .amount small {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.55);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            font-family: 'Sora', sans-serif;
+            font-size: 0.88rem;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .hero-btn.primary { background: var(--accent); color: var(--ink); }
+        .hero-btn.primary:hover { background: var(--accent-deep); }
+        .hero-btn.ghost { background: rgba(255,255,255,0.1); color: white; }
+        .hero-btn.ghost:hover { background: rgba(255,255,255,0.18); }
+
+        /* ---- Secondary balance cards ---- */
         .balance-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 26px;
         }
 
         .balance-card {
-            background: white;
-            padding: 25px;
-            border-radius: 40px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
-            border: 1px solid #eef2f6;
-            transition: all 0.3s ease;
-        }
-
-        .balance-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(11,26,47,0.08);
+            background: var(--surface);
+            padding: 20px;
+            border-radius: 18px;
+            border: 1px solid var(--line);
         }
 
         .balance-label {
-            color: #6f7d95;
-            font-size: 1rem;
-            margin-bottom: 10px;
+            color: var(--ink-soft);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .balance-amount {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #0b1a2f;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: var(--ink);
+            margin-top: 8px;
         }
 
         .balance-amount small {
-            font-size: 1rem;
-            color: #8e9daf;
-            font-weight: 400;
+            font-size: 0.8rem;
+            color: var(--ink-soft);
+            font-family: 'Inter', sans-serif;
         }
 
         .card-footer {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid #eef2f6;
-            color: #2d9c5c;
-            font-weight: 500;
-        }
-
-        /* Actions rapides */
-        .actions-title {
-            font-size: 1.5rem;
-            color: #0b1a2f;
-            margin-bottom: 20px;
+            margin-top: 10px;
+            font-size: 0.78rem;
             font-weight: 600;
         }
 
+        .card-footer.up { color: var(--success); }
+        .card-footer.neutral { color: var(--ink-soft); }
+
+        /* ---- Section titles ---- */
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .section-title h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .section-title a {
+            font-size: 0.82rem;
+            color: var(--violet);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* ---- Quick actions ---- */
         .actions-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 14px;
+            margin-bottom: 28px;
         }
 
         .action-card {
-            background: white;
-            padding: 25px 20px;
-            border-radius: 40px;
+            background: var(--surface);
+            padding: 18px 14px;
+            border-radius: 16px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid #eef2f6;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+            border: 1px solid var(--line);
             text-decoration: none;
             color: inherit;
             display: block;
+            transition: transform 0.15s ease, border-color 0.15s ease;
         }
 
         .action-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(11,26,47,0.1);
-            border-color: #ff5252;
+            transform: translateY(-4px);
+            border-color: var(--violet);
+        }
+
+        .action-card .icon-wrap {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: var(--canvas);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            color: var(--violet);
         }
 
         .action-card h3 {
-            color: #0b1a2f;
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-            font-weight: 600;
+            color: var(--ink);
+            font-size: 0.88rem;
+            font-weight: 700;
         }
 
-        .action-card p {
-            color: #6f7d95;
-            font-size: 0.9rem;
-            line-height: 1.5;
+        /* ---- Weekly activity bars ---- */
+        .activity-card {
+            background: var(--surface);
+            border-radius: 18px;
+            border: 1px solid var(--line);
+            padding: 20px;
+            margin-bottom: 28px;
         }
 
-        /* Navigation du bas */
+        .bars {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            height: 110px;
+            margin-top: 16px;
+        }
+
+        .bar-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            height: 100%;
+            gap: 8px;
+        }
+
+        .bar {
+            width: 100%;
+            border-radius: 6px 6px 3px 3px;
+            background: var(--line);
+        }
+
+        .bar.filled {
+            background: linear-gradient(180deg, var(--accent) 0%, var(--violet) 100%);
+        }
+
+        .bar-day {
+            font-size: 0.7rem;
+            color: var(--ink-soft);
+        }
+
+        /* ---- Transactions list ---- */
+        .tx-list {
+            background: var(--surface);
+            border-radius: 18px;
+            border: 1px solid var(--line);
+            overflow: hidden;
+            margin-bottom: 28px;
+        }
+
+        .tx-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .tx-item:last-child { border-bottom: none; }
+
+        .tx-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .tx-icon.in { background: rgba(22,199,132,0.12); color: var(--success); }
+        .tx-icon.out { background: rgba(255,68,104,0.1); color: var(--danger); }
+
+        .tx-info { flex: 1; min-width: 0; }
+        .tx-info .title { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+        .tx-info .date { font-size: 0.76rem; color: var(--ink-soft); margin-top: 2px; }
+
+        .tx-amount { font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 0.9rem; }
+        .tx-amount.in { color: var(--success); }
+        .tx-amount.out { color: var(--danger); }
+
+        .tx-empty {
+            padding: 30px 18px;
+            text-align: center;
+            color: var(--ink-soft);
+            font-size: 0.88rem;
+        }
+
+        /* ---- Alerts ---- */
+        .alert {
+            padding: 14px 20px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+            display: none;
+            font-weight: 500;
+            font-size: 0.88rem;
+            white-space: pre-line;
+        }
+
+        .alert-success { background: rgba(22,199,132,0.12); color: var(--success); border: 1px solid rgba(22,199,132,0.3); }
+        .alert-error { background: rgba(255,68,104,0.1); color: var(--danger); border: 1px solid rgba(255,68,104,0.3); }
+        .alert-warning { background: rgba(255,140,66,0.12); color: #C15A00; border: 1px solid rgba(255,140,66,0.3); }
+
+        /* ---- Bottom nav ---- */
         .bottom-nav {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
+            bottom: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 32px);
+            max-width: 460px;
+            background: var(--ink);
             display: flex;
             justify-content: space-around;
-            padding: 15px 10px 25px;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
-            border-top: 1px solid #eef2f6;
-            z-index: 99;
-            backdrop-filter: blur(10px);
-            background: rgba(255,255,255,0.98);
+            padding: 10px 6px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(20,18,43,0.35);
+            z-index: 150;
         }
 
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
-            color: #8e9daf;
-            font-size: 0.9rem;
+            gap: 3px;
+            color: rgba(255,255,255,0.55);
+            font-size: 0.68rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            padding: 8px 16px;
-            border-radius: 40px;
-            text-decoration: none;
+            padding: 7px 10px;
+            border-radius: 12px;
             background: none;
             border: none;
         }
 
-        .nav-item:hover {
-            color: #0b1a2f;
-            background: #f0f4ff;
-        }
+        .nav-item svg { width: 20px; height: 20px; }
 
         .nav-item.active {
-            color: #0b1a2f;
-            background: #f0f4ff;
+            color: var(--ink);
+            background: var(--accent);
         }
 
-        .nav-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        /* Alert */
-        .alert {
-            padding: 16px 24px;
-            border-radius: 40px;
-            margin-bottom: 20px;
-            display: none;
-            font-weight: 500;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(-15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .alert-success {
-            background: #e3f5eb;
-            color: #2d9c5c;
-            border: 1px solid #c0e6d3;
-        }
-
-        .alert-error {
-            background: #ffeae8;
-            color: #ff5252;
-            border: 1px solid #ffcdc8;
-        }
-
-        .alert-warning {
-            background: #fff2dd;
-            color: #ff8c42;
-            border: 1px solid #ffe0b2;
-        }
-
-        /* Loading */
+        /* ---- Loading ---- */
         .loading {
             text-align: center;
             padding: 40px;
-            color: #8e9daf;
+            color: var(--ink-soft);
         }
 
         .spinner {
-            border: 4px solid #f0f4ff;
-            border-top: 4px solid #0b1a2f;
+            border: 4px solid var(--line);
+            border-top: 4px solid var(--violet);
             border-radius: 50%;
-            width: 48px;
-            height: 48px;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
+            margin: 0 auto 14px;
         }
 
         @keyframes spin {
@@ -276,118 +542,157 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-            
-            .welcome-card h1 {
-                font-size: 1.6rem;
-            }
-            
-            .balance-amount {
-                font-size: 2rem;
-            }
-            
-            .actions-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .bottom-nav {
-                padding: 10px 5px 20px;
-            }
-            
-            .nav-item {
-                padding: 6px 12px;
-            }
-        }
-
         @media (max-width: 480px) {
-            .nav-label {
-                display: none;
-            }
-            
-            .nav-item {
-                padding: 10px 14px;
-            }
-            
-            .user-greeting {
-                font-size: 0.9rem;
-                padding: 8px 16px;
-            }
+            .balance-hero .amount { font-size: 1.9rem; }
+            .welcome-card { padding: 22px; }
         }
     </style>
 </head>
 <body>
     <header class="header">
-        <div class="logo">NOVA<span>BANK</span></div>
-        <div class="user-greeting" id="userGreeting">Bonjour, <span id="userName">...</span></div>
+        <div class="wordmark"><span class="bolt">P</span>PayOnline</div>
+        <div class="header-right">
+            <button class="icon-btn" title="Notifications" onclick="showAlert('Aucune nouvelle notification', 'success')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <span class="notif-dot"></span>
+            </button>
+            <button class="icon-btn" id="menuBtn" title="Menu">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="5" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.2" fill="currentColor" stroke="none"/></svg>
+            </button>
+            <div class="menu-dropdown" id="menuDropdown">
+                <div class="user-chip">
+                    <div class="name" id="menuUserName">Utilisateur</div>
+                    <div class="mail" id="menuUserMail">—</div>
+                </div>
+                <button class="menu-item" onclick="showAlert('Profil — bientôt disponible', 'success')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+                    Mon profil
+                </button>
+                <button class="menu-item" onclick="showAlert('Sécurité — bientôt disponible', 'success')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 11 4.5-2.5 8-6 8-11V5l-8-3z"/></svg>
+                    Sécurité
+                </button>
+                <button class="menu-item" onclick="showFAQ()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 .8-1 1.7"/><circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none"/></svg>
+                    Aide / FAQ
+                </button>
+                <button class="menu-item" onclick="showSupport()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v12H7l-3 3V4z"/></svg>
+                    Support
+                </button>
+                <button class="menu-item danger" onclick="logout()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+                    Déconnexion
+                </button>
+            </div>
+        </div>
     </header>
 
     <div class="container">
         <div class="alert" id="alertMessage"></div>
 
-        <!-- Section bienvenue -->
+        <!-- Hero solde -->
         <div class="welcome-card">
-            <h1 id="welcomeMessage">Bienvenue sur votre espace</h1>
-            <p id="welcomeSubtitle">Gérez vos comptes en toute sécurité</p>
+            <div class="welcome-top">
+                <div>
+                    <p class="eyebrow">Bienvenue</p>
+                    <div id="welcomeMessage">Bonjour...</div>
+                </div>
+            </div>
+            <div class="balance-hero">
+                <div class="label">Solde disponible</div>
+                <div class="amount" id="currentBalance">0.00 <small>FCFA</small></div>
+            </div>
+            <div class="hero-actions">
+                <a href="recharge.html" class="hero-btn primary">+ Recharger</a>
+                <a href="retrait.html" class="hero-btn ghost">Retirer</a>
+            </div>
         </div>
 
-        <!-- Cartes de solde -->
+        <!-- Cartes secondaires -->
         <div class="balance-cards">
             <div class="balance-card">
-                <div class="balance-label">Compte courant</div>
-                <div class="balance-amount" id="currentBalance">0.00 <small>EUR</small></div>
-                <div class="card-footer">Disponible immédiatement</div>
+                <div class="balance-label">Compte épargne</div>
+                <div class="balance-amount" id="savingsBalance">0.00 <small>FCFA</small></div>
+                <div class="card-footer up">Taux 2.5% annuel</div>
             </div>
             <div class="balance-card">
-                <div class="balance-label">Compte épargne</div>
-                <div class="balance-amount" id="savingsBalance">0.00 <small>EUR</small></div>
-                <div class="card-footer">Taux 2.5% annuel</div>
+                <div class="balance-label">Cashback cumulé</div>
+                <div class="balance-amount" id="cashbackBalance">0.00 <small>FCFA</small></div>
+                <div class="card-footer neutral">Crédité automatiquement</div>
+            </div>
+            <div class="balance-card">
+                <div class="balance-label">Statut du compte</div>
+                <div class="balance-amount" style="font-size:1.2rem;">Vérifié ✓</div>
+                <div class="card-footer up">Toutes fonctions actives</div>
             </div>
         </div>
 
         <!-- Actions rapides -->
-        <div class="actions-title">Actions rapides</div>
+        <div class="section-title"><h2>Actions rapides</h2></div>
         <div class="actions-grid">
-            <a href="retrait.html" class="action-card">
-                <h3>Retrait</h3>
-                <p>Effectuer un retrait d'argent</p>
+            <a href="recharge.html" class="action-card">
+                <div class="icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+                <h3>Recharge</h3>
             </a>
+            <a href="retrait.html" class="action-card">
+                <div class="icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7 7 7-7"/></svg></div>
+                <h3>Retrait</h3>
+            </a>
+            <div class="action-card" onclick="showHistory()">
+                <div class="icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+                <h3>Historique</h3>
+            </div>
+            <div class="action-card" onclick="showAlert('Parrainage — bientôt disponible', 'success')">
+                <div class="icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3"/><path d="M2 20c0-3.3 3-6 7-6s7 2.7 7 6"/><path d="M17 8a3 3 0 1 1 0 6"/><path d="M22 20c0-2.5-1.8-4.6-4-5.5"/></svg></div>
+                <h3>Parrainage</h3>
+            </div>
             <div class="action-card" onclick="showSupport()">
+                <div class="icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v12H7l-3 3V4z"/></svg></div>
                 <h3>Support</h3>
-                <p>Contacter le service client</p>
             </div>
             <div class="action-card" onclick="showFAQ()">
+                <div class="icon-wrap"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 .8-1 1.7"/><circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none"/></svg></div>
                 <h3>FAQ</h3>
-                <p>Questions fréquentes</p>
             </div>
-            <div class="action-card" onclick="showHistory()">
-                <h3>Historique</h3>
-                <p>Consulter vos transactions</p>
+        </div>
+
+        <!-- Activité de la semaine -->
+        <div class="activity-card">
+            <div class="section-title" style="margin-bottom:0;"><h2>Activité de la semaine</h2></div>
+            <div class="bars" id="weeklyBars">
+                <!-- generated by JS -->
             </div>
+        </div>
+
+        <!-- Transactions récentes -->
+        <div class="section-title"><h2>Transactions récentes</h2><a href="#" onclick="showHistory(); return false;">Tout voir</a></div>
+        <div class="tx-list" id="txList">
+            <div class="tx-empty">Chargement...</div>
         </div>
     </div>
 
     <!-- Navigation du bas -->
     <nav class="bottom-nav">
         <button class="nav-item active" onclick="window.location.href='dashboard.html'">
-            <span class="nav-label">Accueil</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+            Accueil
+        </button>
+        <button class="nav-item" onclick="window.location.href='recharge.html'">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            Recharge
         </button>
         <button class="nav-item" onclick="window.location.href='retrait.html'">
-            <span class="nav-label">Retrait</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7 7 7-7"/></svg>
+            Retrait
         </button>
-        <button class="nav-item" onclick="showSupport()">
-            <span class="nav-label">Support</span>
+        <button class="nav-item" onclick="showHistory()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            Historique
         </button>
-        <button class="nav-item" onclick="showFAQ()">
-            <span class="nav-label">FAQ</span>
-        </button>
-        <button class="nav-item" onclick="logout()">
-            <span class="nav-label">Déconnexion</span>
+        <button class="nav-item" onclick="document.getElementById('menuDropdown').classList.toggle('open')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+            Profil
         </button>
     </nav>
 
@@ -396,7 +701,7 @@
         // Configuration Supabase avec gestion d'erreurs
         const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
-        
+
         const { createClient } = supabase;
         const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY, {
             auth: {
@@ -408,15 +713,24 @@
 
         let currentUser = null;
         let userProfile = null;
-        let retryCount = 0;
 
-        // Fonction pour afficher les alertes
+        // Menu dropdown toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const menuDropdown = document.getElementById('menuDropdown');
+        menuBtn.addEventListener('click', () => menuDropdown.classList.toggle('open'));
+        document.addEventListener('click', (e) => {
+            if (!menuBtn.contains(e.target) && !menuDropdown.contains(e.target)) {
+                menuDropdown.classList.remove('open');
+            }
+        });
+
         function showAlert(message, type) {
             const alert = document.getElementById('alertMessage');
             alert.textContent = message;
             alert.className = `alert alert-${type}`;
             alert.style.display = 'block';
-            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
             setTimeout(() => {
                 alert.style.display = 'none';
             }, 5000);
@@ -426,19 +740,21 @@
         async function checkAuth() {
             try {
                 const { data: { user }, error } = await _supabase.auth.getUser();
-                
+
                 if (error || !user) {
-                    console.log('Non connecté, redirection vers connexion');
                     window.location.href = 'connexion.html';
                     return;
                 }
 
                 currentUser = user;
-                document.getElementById('userName').textContent = user.email?.split('@')[0] || 'Utilisateur';
-                document.getElementById('welcomeMessage').textContent = `Bonjour ${user.email?.split('@')[0] || ''}`;
-                
+                const shortName = user.email?.split('@')[0] || 'Utilisateur';
+                document.getElementById('welcomeMessage').textContent = `Bonjour ${shortName}`;
+                document.getElementById('menuUserName').textContent = shortName;
+                document.getElementById('menuUserMail').textContent = user.email || '';
+
                 await loadUserProfile(user.id);
-                
+                await loadTransactions(user.id);
+
             } catch (error) {
                 console.error('Erreur auth:', error);
                 showAlert('Erreur de connexion. Rafraîchissez la page.', 'error');
@@ -455,26 +771,26 @@
                     .single();
 
                 if (error) {
-                    console.error('Erreur chargement profil:', error);
-                    
-                    // Si le profil n'existe pas, le créer
                     if (error.code === 'PGRST116') {
                         await createUserProfile(userId);
                         return;
                     }
-                    
                     showAlert('Erreur chargement profil', 'error');
                     return;
                 }
 
                 if (data) {
                     userProfile = data;
-                    document.getElementById('currentBalance').textContent = (data.solde || 0).toFixed(2);
-                    document.getElementById('savingsBalance').textContent = ((data.solde || 0) * 0.3).toFixed(2);
-                    document.getElementById('userName').textContent = data.nom?.split(' ')[0] || 'Utilisateur';
-                    document.getElementById('welcomeMessage').textContent = `Bonjour ${data.nom?.split(' ')[0] || ''}`;
+                    const solde = data.solde || 0;
+                    document.getElementById('currentBalance').innerHTML = solde.toFixed(2) + ' <small>FCFA</small>';
+                    document.getElementById('savingsBalance').innerHTML = (solde * 0.3).toFixed(2) + ' <small>FCFA</small>';
+                    document.getElementById('cashbackBalance').innerHTML = (data.cashback || 0).toFixed(2) + ' <small>FCFA</small>';
+
+                    const shortName = data.nom?.split(' ')[0] || 'Utilisateur';
+                    document.getElementById('welcomeMessage').textContent = `Bonjour ${shortName}`;
+                    document.getElementById('menuUserName').textContent = data.nom || shortName;
                 }
-                
+
             } catch (error) {
                 console.error('Erreur:', error);
                 showAlert('Erreur lors du chargement', 'error');
@@ -497,32 +813,91 @@
                     ]);
 
                 if (error) throw error;
-                
-                // Recharger le profil
                 await loadUserProfile(userId);
-                
+
             } catch (error) {
                 console.error('Erreur création profil:', error);
                 showAlert('Erreur création profil', 'error');
             }
         }
 
+        // Charger les transactions récentes (si la table existe)
+        async function loadTransactions(userId) {
+            const txList = document.getElementById('txList');
+            try {
+                const { data, error } = await _supabase
+                    .from('transactions')
+                    .select('*')
+                    .eq('user_id', userId)
+                    .order('created_at', { ascending: false })
+                    .limit(6);
+
+                if (error || !data || data.length === 0) {
+                    txList.innerHTML = '<div class="tx-empty">Aucune transaction pour le moment</div>';
+                    renderWeeklyBars([]);
+                    return;
+                }
+
+                txList.innerHTML = data.map(tx => {
+                    const isIn = (tx.type || '').toLowerCase().includes('recharge') || (tx.montant || 0) > 0;
+                    const amount = Math.abs(tx.montant || 0).toFixed(2);
+                    const date = tx.created_at ? new Date(tx.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+                    return `
+                        <div class="tx-item">
+                            <div class="tx-icon ${isIn ? 'in' : 'out'}">
+                                ${isIn
+                                    ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>'
+                                    : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>'}
+                            </div>
+                            <div class="tx-info">
+                                <div class="title">${tx.type || (isIn ? 'Recharge' : 'Retrait')}</div>
+                                <div class="date">${date}</div>
+                            </div>
+                            <div class="tx-amount ${isIn ? 'in' : 'out'}">${isIn ? '+' : '-'}${amount} FCFA</div>
+                        </div>`;
+                }).join('');
+
+                renderWeeklyBars(data);
+
+            } catch (e) {
+                console.error('Erreur transactions:', e);
+                txList.innerHTML = '<div class="tx-empty">Aucune transaction pour le moment</div>';
+                renderWeeklyBars([]);
+            }
+        }
+
+        // Barres d'activité (7 derniers jours)
+        function renderWeeklyBars(transactions) {
+            const days = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+            const totals = new Array(7).fill(0);
+
+            transactions.forEach(tx => {
+                if (!tx.created_at) return;
+                const d = new Date(tx.created_at);
+                const idx = (d.getDay() + 6) % 7; // lundi = 0
+                totals[idx] += Math.abs(tx.montant || 0);
+            });
+
+            const max = Math.max(...totals, 1);
+            const container = document.getElementById('weeklyBars');
+            container.innerHTML = days.map((day, i) => {
+                const h = Math.max(6, Math.round((totals[i] / max) * 90));
+                const filled = totals[i] > 0 ? 'filled' : '';
+                return `<div class="bar-col"><div class="bar ${filled}" style="height:${h}px"></div><div class="bar-day">${day}</div></div>`;
+            }).join('');
+        }
+
         // Fonctions d'actions
         function showSupport() {
-            showAlert('📧 Support client: Serviceclient08987@gmail.com', 'success');
+            showAlert('Support client : Serviceclient08987@gmail.com', 'success');
         }
 
         function showFAQ() {
-            const faqMessage = 
-                '❓ FAQ:\n' +
-                '• Retrait: Document de confirmation requis\n' +
-                '• Support: Serviceclient08987@gmail.com\n' +
-                '• Délai: 24-48h après validation';
-            showAlert(faqMessage, 'success');
+            showAlert('FAQ\n• Retrait : document de confirmation requis\n• Support : Serviceclient08987@gmail.com\n• Délai : 24-48h après validation', 'success');
         }
 
         function showHistory() {
-            showAlert('Historique des transactions - Bientôt disponible', 'success');
+            showAlert('Historique complet — bientôt disponible', 'success');
         }
 
         // Déconnexion
@@ -538,7 +913,6 @@
 
         // Vérification périodique de la session
         let sessionCheckInterval;
-        
         function startSessionCheck() {
             sessionCheckInterval = setInterval(async () => {
                 const { data: { user } } = await _supabase.auth.getUser();
@@ -546,14 +920,11 @@
                     clearInterval(sessionCheckInterval);
                     window.location.href = 'connexion.html';
                 }
-            }, 60000); // Vérification toutes les minutes
+            }, 60000);
         }
 
-        // Nettoyage à la déconnexion
         window.addEventListener('beforeunload', () => {
-            if (sessionCheckInterval) {
-                clearInterval(sessionCheckInterval);
-            }
+            if (sessionCheckInterval) clearInterval(sessionCheckInterval);
         });
 
         // Initialisation
