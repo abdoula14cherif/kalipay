@@ -274,14 +274,30 @@
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
 
-        // Liste des emails admin autorisés (à adapter selon tes besoins).
-        // Pour une vraie sécurité, préfère vérifier un rôle "admin" dans
-        // une table "profiles" plutôt qu'une liste d'emails côté front,
-        // car ce fichier est visible par n'importe qui.
-        const ADMIN_EMAILS = ['serviceclient08987@gmail.com'];
+        // Liste de secours (au cas où la colonne "role" n'est pas encore
+        // en place). Une fois setup_admin_roles.sql exécuté, la vérification
+        // se fait via la base (colonne "role" dans profiles), pas ici.
+        const ADMIN_EMAILS_FALLBACK = ['serviceclient08987@gmail.com', 'abdoula13cherif@gmail.com'];
 
-        function isAdminEmail(email) {
-            return ADMIN_EMAILS.includes((email || '').toLowerCase());
+        async function isAdminUser(user) {
+            if (!user) return false;
+
+            try {
+                const { data, error } = await _supabase
+                    .from('profiles')
+                    .select('role')
+                    .eq('id', user.id)
+                    .single();
+
+                if (!error && data) {
+                    return data.role === 'admin';
+                }
+            } catch (e) {
+                console.log('Colonne role indisponible, utilisation de la liste de secours');
+            }
+
+            // Repli si la colonne role n'existe pas encore
+            return ADMIN_EMAILS_FALLBACK.includes((user.email || '').toLowerCase());
         }
 
         function showAlert(message, type) {
@@ -295,7 +311,7 @@
         async function checkExistingSession() {
             try {
                 const { data: { user }, error } = await _supabase.auth.getUser();
-                if (!error && user && isAdminEmail(user.email)) {
+                if (!error && user && await isAdminUser(user)) {
                     sessionStorage.setItem('adminAuth', 'true');
                     window.location.href = 'admin-dashboard.html';
                 }
@@ -325,7 +341,7 @@
 
                 if (error) throw error;
 
-                if (isAdminEmail(data.user.email)) {
+                if (await isAdminUser(data.user)) {
                     sessionStorage.setItem('adminAuth', 'true');
                     showAlert('Connexion admin réussie !', 'success');
                     setTimeout(() => {
