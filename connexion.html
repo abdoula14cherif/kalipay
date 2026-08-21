@@ -3,306 +3,375 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>NOVA BANK - Connexion</title>
+    <title>PayOnline - Connexion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        :root {
+            --ink: #14122B;
+            --ink-soft: #6E6A8C;
+            --surface: #FFFFFF;
+            --canvas: #F3F1FA;
+            --accent: #C6FF3D;
+            --accent-deep: #9FE000;
+            --violet: #6C4CFF;
+            --violet-deep: #4B2FDB;
+            --danger: #FF4468;
+            --success: #16C784;
+            --line: #E3E0F2;
         }
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #0b1a2f 0%, #1e3a5f 100%);
+            font-family: 'Inter', sans-serif;
+            background: var(--ink);
+            color: var(--ink);
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 24px;
             position: relative;
             overflow-x: hidden;
         }
 
         body::before {
             content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
-            animation: rotate 30s linear infinite;
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 15% 20%, rgba(198,255,61,0.10) 0, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(108,76,255,0.25) 0, transparent 45%),
+                radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: auto, auto, 26px 26px;
+            pointer-events: none;
         }
 
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .container {
-            max-width: 480px;
+        .shell {
+            max-width: 960px;
             width: 100%;
-            background: white;
-            border-radius: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: grid;
+            grid-template-columns: 1fr 1.15fr;
+            background: var(--surface);
+            border-radius: 28px;
             overflow: hidden;
+            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
             position: relative;
             z-index: 1;
-            animation: slideUp 0.6s ease;
+            animation: rise 0.5s ease;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .header {
-            background: #0b1a2f;
-            padding: 40px 30px;
-            text-align: center;
+        /* ---- Left brand panel ---- */
+        .brand-panel {
+            background: var(--ink);
+            color: var(--surface);
+            padding: 48px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             position: relative;
-            border-bottom: 4px solid #ff5252;
+            overflow: hidden;
         }
 
-        .header::after {
+        .brand-panel::after {
             content: '';
             position: absolute;
-            bottom: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 40px;
-            background: white;
-            border-radius: 12px;
-            transform: translateX(-50%) rotate(45deg);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            border: 1px solid rgba(198,255,61,0.25);
+            top: -120px;
+            right: -140px;
         }
 
-        .logo {
-            font-size: 2.5rem;
+        .brand-panel::before {
+            content: '';
+            position: absolute;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            border: 1px solid rgba(108,76,255,0.35);
+            bottom: -100px;
+            left: -90px;
+        }
+
+        .wordmark {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Sora', sans-serif;
             font-weight: 800;
-            color: white;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            position: relative;
-            z-index: 1;
-            line-height: 1.2;
-        }
-
-        .logo span {
-            color: #ff5252;
-            font-weight: 800;
-            background: rgba(255,255,255,0.1);
-            padding: 0 8px;
-            border-radius: 12px;
-        }
-
-        .tagline {
-            color: rgba(255,255,255,0.8);
-            margin-top: 12px;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
+            font-size: 1.5rem;
+            letter-spacing: -0.02em;
             position: relative;
             z-index: 1;
         }
 
-        .form-section {
-            padding: 40px 30px;
-            background: white;
+        .wordmark .bolt {
+            width: 34px;
+            height: 34px;
+            background: var(--accent);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ink);
+            font-size: 1.1rem;
+        }
+
+        .brand-copy {
+            position: relative;
+            z-index: 1;
+            margin-top: 60px;
+        }
+
+        .brand-copy h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.1rem;
+            font-weight: 700;
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+        }
+
+        .brand-copy p {
+            margin-top: 14px;
+            color: rgba(255,255,255,0.65);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            max-width: 320px;
+        }
+
+        .brand-stats {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            gap: 28px;
+            margin-top: 40px;
+        }
+
+        .brand-stats div span {
+            display: block;
+        }
+
+        .brand-stats .num {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--accent);
+        }
+
+        .brand-stats .lbl {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 2px;
+        }
+
+        .brand-foot {
+            position: relative;
+            z-index: 1;
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* ---- Right form panel ---- */
+        .form-panel {
+            padding: 48px 44px;
+            background: var(--surface);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .form-title {
-            font-size: 1.8rem;
-            color: #0b1a2f;
-            margin-bottom: 8px;
+            font-family: 'Sora', sans-serif;
+            font-size: 1.6rem;
             font-weight: 700;
+            color: var(--ink);
         }
 
         .form-subtitle {
-            color: #6f7d95;
+            color: var(--ink-soft);
+            margin-top: 6px;
             margin-bottom: 30px;
-            font-size: 0.95rem;
-            border-left: 4px solid #ff5252;
-            padding-left: 15px;
-            line-height: 1.5;
+            font-size: 0.92rem;
         }
 
         .form-group {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #0b1a2f;
+            margin-bottom: 7px;
+            color: var(--ink);
             font-weight: 600;
-            font-size: 0.9rem;
-            margin-left: 6px;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
         }
 
         .form-group input {
             width: 100%;
-            padding: 16px 20px;
-            border: 2px solid #e6ecf2;
-            border-radius: 40px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: #f9fcff;
-            color: #0b1a2f;
-            font-weight: 500;
+            padding: 14px 18px;
+            border: 1.5px solid var(--line);
+            border-radius: 12px;
+            font-size: 0.98rem;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s ease, background 0.2s ease;
+            background: var(--canvas);
+            color: var(--ink);
         }
 
-        .form-group input:hover {
-            background: white;
-            border-color: #b8c7e7;
+        .form-group input::placeholder {
+            color: #A6A2C4;
         }
 
         .form-group input:focus {
             outline: none;
-            border-color: #0b1a2f;
-            background: white;
-            box-shadow: 0 8px 20px rgba(11,26,47,0.08);
+            border-color: var(--violet);
+            background: var(--surface);
+            box-shadow: 0 0 0 4px rgba(108,76,255,0.12);
         }
 
         .form-group input.error {
-            border-color: #ff5252;
-            animation: shake 0.5s ease;
+            border-color: var(--danger);
+            animation: shake 0.4s ease;
         }
 
         @keyframes shake {
-            10%, 90% { transform: translateX(-2px); }
-            20%, 80% { transform: translateX(4px); }
-            30%, 50%, 70% { transform: translateX(-6px); }
-            40%, 60% { transform: translateX(6px); }
+            20%, 60% { transform: translateX(-4px); }
+            40%, 80% { transform: translateX(4px); }
         }
 
         .forgot-password {
             text-align: right;
-            margin-top: 8px;
-            margin-bottom: 16px;
+            margin-top: -8px;
+            margin-bottom: 20px;
         }
 
         .forgot-password a {
-            color: #6f7d95;
+            color: var(--ink-soft);
             text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: color 0.3s ease;
+            font-size: 0.85rem;
+            font-weight: 600;
             cursor: pointer;
         }
 
         .forgot-password a:hover {
-            color: #ff5252;
+            color: var(--violet);
         }
 
         .btn-submit {
             width: 100%;
-            padding: 18px;
-            background: #0b1a2f;
-            color: white;
+            padding: 16px;
+            background: var(--accent);
+            color: var(--ink);
             border: none;
-            border-radius: 40px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Sora', sans-serif;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-            box-shadow: 0 8px 20px rgba(11,26,47,0.2);
-            letter-spacing: 0.5px;
+            transition: transform 0.15s ease, background 0.2s ease;
+            letter-spacing: 0.01em;
         }
 
         .btn-submit:hover:not(:disabled) {
-            background: #1e3a5f;
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(11,26,47,0.3);
+            background: var(--accent-deep);
+            transform: translateY(-2px);
         }
 
         .btn-submit:disabled {
-            opacity: 0.7;
+            opacity: 0.6;
             cursor: not-allowed;
-            background: #6f7d95;
+            transform: none;
         }
 
         .register-link {
             text-align: center;
-            margin-top: 25px;
-            color: #6f7d95;
+            margin-top: 22px;
+            color: var(--ink-soft);
+            font-size: 0.9rem;
         }
 
         .register-link a {
-            color: #0b1a2f;
+            color: var(--violet);
             text-decoration: none;
             font-weight: 700;
-            margin-left: 5px;
-            transition: color 0.3s ease;
-            border-bottom: 2px solid transparent;
-            cursor: pointer;
-        }
-
-        .register-link a:hover {
-            color: #ff5252;
-            border-bottom-color: #ff5252;
+            margin-left: 4px;
         }
 
         .alert {
-            padding: 16px 20px;
-            border-radius: 40px;
-            margin-bottom: 25px;
+            padding: 13px 18px;
+            border-radius: 12px;
+            margin-bottom: 22px;
             display: none;
-            animation: slideIn 0.3s ease;
             font-weight: 500;
-            width: 100%;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            font-size: 0.88rem;
         }
 
         .alert-success {
-            background: #e3f5eb;
-            color: #2d9c5c;
-            border: 1px solid #c0e6d3;
+            background: rgba(22,199,132,0.12);
+            color: var(--success);
+            border: 1px solid rgba(22,199,132,0.3);
         }
 
         .alert-error {
-            background: #ffeae8;
-            color: #ff5252;
-            border: 1px solid #ffcdc8;
+            background: rgba(255,68,104,0.1);
+            color: var(--danger);
+            border: 1px solid rgba(255,68,104,0.3);
         }
 
         .footer-text {
             text-align: center;
             margin-top: 20px;
-            font-size: 0.8rem;
-            color: #8e9daf;
+            font-size: 0.78rem;
+            color: #A6A2C4;
+        }
+
+        @media (max-width: 760px) {
+            .shell {
+                grid-template-columns: 1fr;
+                border-radius: 22px;
+            }
+            .brand-panel {
+                padding: 34px 28px;
+            }
+            .brand-copy { margin-top: 30px; }
+            .brand-copy h1 { font-size: 1.5rem; }
+            .brand-stats { margin-top: 26px; }
+            .form-panel { padding: 34px 26px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">NOVA<span>BANK</span></div>
-            <div class="tagline">Sécurité - Innovation - Confiance</div>
+    <div class="shell">
+        <div class="brand-panel">
+            <div class="wordmark"><span class="bolt">P</span>PayOnline</div>
+            <div class="brand-copy">
+                <h1>Content de vous revoir.</h1>
+                <p>Connectez-vous pour retrouver votre solde, vos transactions et vos options Mobile Money.</p>
+            </div>
+            <div class="brand-stats">
+                <div><span class="num">+50k</span><span class="lbl">Utilisateurs actifs</span></div>
+                <div><span class="num">24/7</span><span class="lbl">Support disponible</span></div>
+            </div>
+            <div class="brand-foot">© 2026 PayOnline — Tous droits réservés</div>
         </div>
 
-        <div class="form-section">
+        <div class="form-panel">
             <h2 class="form-title">Connexion</h2>
-            <div class="form-subtitle">
-                Accédez à votre espace personnel
-            </div>
+            <div class="form-subtitle">Accédez à votre espace personnel</div>
 
             <div class="alert" id="alertMessage"></div>
 
@@ -327,21 +396,19 @@
             </form>
 
             <div class="register-link">
-                Pas encore de compte ? <a href="index.html">S'inscrire</a>  <!-- CHANGÉ ICI -->
+                Pas encore de compte ? <a href="index.html">S'inscrire</a>
             </div>
 
-            <div class="footer-text">
-                © 2026 NOVA BANK - Tous droits réservés
-            </div>
+            <div class="footer-text">© 2026 PayOnline - Tous droits réservés</div>
         </div>
     </div>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
         // Initialisation Supabase
-        const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
-        
+        const SUPABASE_URL = 'https://chlqzkovnfcyfesyefpl.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNobHF6a292bmZjeWZlc3llZnBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczMDM1NDcsImV4cCI6MjEwMjg3OTU0N30.MvFQEHAc5lXzloAb1HXALhy_6abymsXsOeiDoPNJB0w';
+
         const { createClient } = supabase;
         const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -361,7 +428,7 @@
             alertMessage.textContent = message;
             alertMessage.className = `alert alert-${type}`;
             alertMessage.style.display = 'block';
-            
+
             setTimeout(() => {
                 alertMessage.style.display = 'none';
             }, 5000);
@@ -369,7 +436,7 @@
 
         function showForgotPassword(event) {
             event.preventDefault();
-            showAlert('Contactez votre conseiller : 01 23 45 67 89', 'success');
+            showAlert('Contactez votre conseiller : Serviceclient08987@gmail.com', 'success');
         }
 
         // Connexion
@@ -404,21 +471,21 @@
 
             } catch (error) {
                 console.error(error);
-                
+
                 emailInput.classList.add('error');
                 passwordInput.classList.add('error');
-                
+
                 if (error.message.includes('Invalid')) {
                     showAlert('Email ou mot de passe incorrect', 'error');
                 } else {
                     showAlert(error.message, 'error');
                 }
-                
+
                 setTimeout(() => {
                     emailInput.classList.remove('error');
                     passwordInput.classList.remove('error');
                 }, 2000);
-                
+
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'SE CONNECTER';
             }
