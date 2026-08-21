@@ -3,548 +3,507 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>NOVA BANK - Retrait</title>
+    <title>PayOnline - Retrait</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        :root {
+            --ink: #14122B;
+            --ink-soft: #6E6A8C;
+            --surface: #FFFFFF;
+            --canvas: #F3F1FA;
+            --accent: #C6FF3D;
+            --accent-deep: #9FE000;
+            --violet: #6C4CFF;
+            --violet-deep: #4B2FDB;
+            --danger: #FF4468;
+            --success: #16C784;
+            --warn: #FF8C42;
+            --line: #E3E0F2;
         }
 
         body {
-            background: #f5f7fc;
+            background: var(--canvas);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 500px;
-            width: 100%;
-            background: white;
-            border-radius: 40px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            position: relative;
+            padding-bottom: 40px;
+            color: var(--ink);
         }
 
         .header {
-            background: #0b1a2f;
-            padding: 30px;
-            text-align: center;
-            border-bottom: 4px solid #ff5252;
-        }
-
-        .logo {
-            font-size: 2.2rem;
-            font-weight: 800;
+            background: var(--ink);
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .logo span {
-            color: #ff5252;
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.08);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            text-decoration: none;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.16); }
+
+        .wordmark {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Sora', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+        .wordmark .bolt {
+            width: 26px; height: 26px;
+            background: var(--accent);
+            border-radius: 7px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--ink); font-size: 0.85rem;
         }
 
-        .content {
-            padding: 30px;
-            transition: all 0.3s ease;
+        .container {
+            max-width: 560px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .content.blur {
-            filter: blur(4px);
-            pointer-events: none;
+        .alert {
+            padding: 14px 20px;
+            border-radius: 14px;
+            margin-bottom: 18px;
+            display: none;
+            font-weight: 500;
+            font-size: 0.88rem;
+            white-space: pre-line;
         }
-
-        .title {
-            font-size: 1.8rem;
-            color: #0b1a2f;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .subtitle {
-            color: #6f7d95;
-            margin-bottom: 25px;
-            border-left: 4px solid #ff5252;
-            padding-left: 15px;
-        }
+        .alert-success { background: rgba(22,199,132,0.12); color: var(--success); border: 1px solid rgba(22,199,132,0.3); }
+        .alert-error { background: rgba(255,68,104,0.1); color: var(--danger); border: 1px solid rgba(255,68,104,0.3); }
 
         .balance-card {
-            background: #f0f4ff;
-            border-radius: 30px;
-            padding: 20px;
-            margin-bottom: 25px;
+            background: linear-gradient(135deg, var(--ink) 0%, var(--violet-deep) 100%);
+            color: white;
+            padding: 22px;
+            border-radius: 20px;
+            margin-bottom: 22px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .balance-label {
-            color: #0b1a2f;
-            font-weight: 600;
-            font-size: 1rem;
+        .balance-card .label { font-size: 0.82rem; color: rgba(255,255,255,0.65); }
+        .balance-card .amount {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.7rem;
+            font-weight: 500;
+            margin-top: 4px;
         }
+        .balance-card .amount small { font-size: 0.85rem; color: rgba(255,255,255,0.55); font-family: 'Inter'; }
 
-        .balance-amount {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #0b1a2f;
-        }
-
-        .balance-amount span {
-            font-size: 1rem;
-            color: #8e9daf;
-            font-weight: 400;
-        }
-
-        .form-group {
+        .card {
+            background: var(--surface);
+            border-radius: 20px;
+            border: 1px solid var(--line);
+            padding: 24px;
             margin-bottom: 20px;
         }
+
+        .card h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .card .desc {
+            color: var(--ink-soft);
+            font-size: 0.88rem;
+            margin-bottom: 20px;
+        }
+
+        .form-group { margin-bottom: 18px; }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #0b1a2f;
+            margin-bottom: 7px;
             font-weight: 600;
-            font-size: 0.95rem;
-            margin-left: 6px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--ink);
         }
 
-        .form-group input, .form-group select {
+        .form-group input {
             width: 100%;
-            padding: 16px 20px;
-            border: 2px solid #e6ecf2;
-            border-radius: 40px;
-            font-size: 1rem;
-            transition: all 0.3s;
-            background: #f9fcff;
+            padding: 14px 18px;
+            border: 1.5px solid var(--line);
+            border-radius: 12px;
+            font-size: 0.98rem;
+            background: var(--canvas);
+            color: var(--ink);
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus {
             outline: none;
-            border-color: #0b1a2f;
-            box-shadow: 0 5px 15px rgba(11,26,47,0.1);
+            border-color: var(--violet);
+            background: var(--surface);
+            box-shadow: 0 0 0 4px rgba(108,76,255,0.12);
         }
 
-        .btn-withdraw {
+        .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+        .btn-submit {
             width: 100%;
-            padding: 18px;
-            background: #0b1a2f;
-            color: white;
+            padding: 16px;
+            background: var(--accent);
+            color: var(--ink);
             border: none;
-            border-radius: 40px;
-            font-size: 1.1rem;
-            font-weight: 600;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Sora', sans-serif;
             cursor: pointer;
-            transition: all 0.3s;
-            margin: 20px 0;
         }
+        .btn-submit:hover:not(:disabled) { background: var(--accent-deep); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        .btn-withdraw:hover {
-            background: #1e3a5f;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(11,26,47,0.2);
-        }
-
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #8e9daf;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .back-link:hover {
-            color: #ff5252;
-        }
-
-        /* Overlay pour le message */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(3px);
-        }
-
-        .overlay.show {
-            display: flex;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Carte de message réduite */
-        .message-card {
-            background: white;
-            border-radius: 30px;
-            padding: 25px;
-            max-width: 380px;
-            width: 90%;
-            text-align: center;
-            animation: slideUp 0.4s ease;
-            border: 3px solid #ff5252;
-            box-shadow: 0 20px 40px rgba(255,82,82,0.2);
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .exclamation {
-            width: 60px;
-            height: 60px;
-            background: #ff5252;
-            border-radius: 50%;
+        /* Status / pending requests */
+        .req-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin: 0 auto 15px;
-            animation: pulse 1.5s infinite;
+            gap: 12px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--line);
         }
+        .req-item:last-child { border-bottom: none; }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .req-icon {
+            width: 38px; height: 38px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
         }
+        .req-icon.pending { background: rgba(255,140,66,0.12); color: var(--warn); }
+        .req-icon.valide { background: rgba(22,199,132,0.12); color: var(--success); }
+        .req-icon.refuse { background: rgba(255,68,104,0.1); color: var(--danger); }
 
-        .exclamation span {
-            color: white;
-            font-size: 2.5rem;
-            font-weight: 800;
-        }
+        .req-info { flex: 1; min-width: 0; }
+        .req-info .amount { font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 0.92rem; }
+        .req-info .date { font-size: 0.76rem; color: var(--ink-soft); margin-top: 2px; }
 
-        .message-card h2 {
-            color: #ff5252;
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .message-card p {
-            color: #0b1a2f;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 15px;
-        }
-
-        .doc-list {
-            background: #f9fcff;
+        .req-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 4px 10px;
             border-radius: 20px;
-            padding: 15px;
-            margin: 15px 0;
-            text-align: left;
-            list-style: none;
-            font-size: 0.9rem;
+        }
+        .req-badge.pending { background: rgba(255,140,66,0.14); color: var(--warn); }
+        .req-badge.valide { background: rgba(22,199,132,0.14); color: var(--success); }
+        .req-badge.refuse { background: rgba(255,68,104,0.12); color: var(--danger); }
+
+        .req-empty { color: var(--ink-soft); font-size: 0.88rem; text-align: center; padding: 10px 0; }
+
+        /* Support callout */
+        .support-card {
+            background: var(--canvas);
+            border: 1px dashed var(--violet);
+            border-radius: 18px;
+            padding: 20px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
         }
 
-        .doc-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid #eef2f6;
-            color: #0b1a2f;
-            font-weight: 500;
-            display: flex;
+        .support-card .icon-wrap {
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            background: var(--violet);
+            color: white;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .support-card h3 { font-size: 0.98rem; font-weight: 700; margin-bottom: 4px; }
+        .support-card p { font-size: 0.85rem; color: var(--ink-soft); line-height: 1.5; margin-bottom: 12px; }
+
+        .btn-support {
+            display: inline-flex;
             align-items: center;
             gap: 8px;
-        }
-
-        .doc-list li:last-child {
-            border-bottom: none;
-        }
-
-        .doc-list li::before {
-            content: "•";
-            color: #ff5252;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .btn-contact {
-            width: 100%;
-            padding: 14px;
-            background: #ff5252;
+            padding: 10px 18px;
+            background: var(--violet);
             color: white;
             border: none;
-            border-radius: 40px;
-            font-size: 1rem;
-            font-weight: 600;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            font-family: 'Sora', sans-serif;
             cursor: pointer;
-            transition: all 0.3s;
-            margin: 10px 0;
+            text-decoration: none;
         }
-
-        .btn-contact:hover {
-            background: #ff3333;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px rgba(255,82,82,0.3);
-        }
-
-        .btn-close {
-            background: transparent;
-            border: 2px solid #e6ecf2;
-            color: #0b1a2f;
-            padding: 10px 25px;
-            border-radius: 40px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            width: 100%;
-        }
-
-        .btn-close:hover {
-            background: #f0f4ff;
-            border-color: #0b1a2f;
-        }
-
-        .delay-text {
-            color: #ff5252;
-            font-weight: 600;
-            margin: 10px 0;
-            font-size: 0.9rem;
-        }
-
-        .alert {
-            padding: 15px;
-            border-radius: 40px;
-            margin-bottom: 20px;
-            display: none;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        .alert-error {
-            background: #ffeae8;
-            color: #ff5252;
-            border: 1px solid #ffcdc8;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 20px;
-            color: #8e9daf;
-            font-size: 0.9rem;
-        }
+        .btn-support:hover { background: var(--violet-deep); }
     </style>
 </head>
 <body>
+    <header class="header">
+        <a href="dashboard.html" class="back-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </a>
+        <div class="wordmark"><span class="bolt">P</span>PayOnline</div>
+    </header>
+
     <div class="container">
-        <div class="header">
-            <div class="logo">NOVA<span>BANK</span></div>
-        </div>
+        <div class="alert" id="alertMessage"></div>
 
-        <div class="content" id="mainContent">
-            <div class="alert" id="alertMessage"></div>
-
-            <h1 class="title">Retrait d'argent</h1>
-            <div class="subtitle">
-                Effectuez votre retrait en toute sécurité
-            </div>
-
-            <!-- Solde -->
-            <div class="balance-card">
-                <span class="balance-label">Solde disponible</span>
-                <span class="balance-amount" id="userBalance">1.250,00 <span>EUR</span></span>
-            </div>
-
-            <div class="form-group">
-                <label>Montant du retrait (€)</label>
-                <input type="number" id="withdrawAmount" placeholder="Ex: 500" value="100">
-            </div>
-
-            <div class="form-group">
-                <label>Compte à débiter</label>
-                <select id="withdrawAccount">
-                    <option value="current">Compte courant • ****5678</option>
-                    <option value="savings">Compte épargne • ****9012</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Numéro de carte bancaire</label>
-                <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456">
-            </div>
-
-            <div class="form-group">
-                <label>Date d'expiration</label>
-                <input type="text" id="cardExpiry" placeholder="MM/AA">
-            </div>
-
-            <div class="form-group">
-                <label>CVV</label>
-                <input type="text" id="cardCVV" placeholder="123">
-            </div>
-
-            <button class="btn-withdraw" onclick="processWithdraw()">
-                EFFECTUER LE RETRAIT
-            </button>
-
-            <a href="dashboard.html" class="back-link">← Retour au tableau de bord</a>
-            
-            <div class="footer">
-                NOVA BANK - Sécurité garantie
+        <div class="balance-card">
+            <div>
+                <div class="label">Solde disponible</div>
+                <div class="amount" id="userBalance">0.00 <small>FCFA</small></div>
             </div>
         </div>
-    </div>
 
-    <!-- Overlay avec message réduit -->
-    <div class="overlay" id="securityOverlay">
-        <div class="message-card">
-            <div class="exclamation">
-                <span>!</span>
+        <!-- Formulaire de demande de retrait -->
+        <div class="card">
+            <h2>Demande de retrait</h2>
+            <div class="desc">Votre demande est envoyée à notre équipe et traitée manuellement. Vous recevrez votre virement une fois validée.</div>
+
+            <form id="withdrawForm">
+                <div class="form-group">
+                    <label for="withdrawAmount">Montant du retrait (FCFA)</label>
+                    <input type="number" id="withdrawAmount" placeholder="Ex: 50000" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cardHolder">Nom du titulaire de la carte</label>
+                    <input type="text" id="cardHolder" placeholder="Jean Dupont" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cardNumber">Numéro de carte bancaire</label>
+                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                </div>
+
+                <div class="row-2">
+                    <div class="form-group">
+                        <label for="cardExpiry">Date d'expiration</label>
+                        <input type="text" id="cardExpiry" placeholder="MM/AA" maxlength="5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cardCity">Ville / banque</label>
+                        <input type="text" id="cardCity" placeholder="Ex: Ecobank Douala">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    ENVOYER LA DEMANDE
+                </button>
+            </form>
+        </div>
+
+        <!-- Traitement rapide -->
+        <div class="support-card" style="margin-bottom: 20px;">
+            <div class="icon-wrap">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v12H7l-3 3V4z"/></svg>
             </div>
-            
-            <h2>Document requis</h2>
-            
-            <p>Un document de confirmation est nécessaire pour valider votre retrait</p>
-
-            <ul class="doc-list">
-                <li>Pièce d'identité</li>
-                <li>Justificatif de domicile</li>
-                <li>RIB du compte</li>
-                <li>Formulaire signé</li>
-            </ul>
-
-            <div class="delay-text">
-                ⏱️ Délai: 24-48h
+            <div>
+                <h3>Besoin d'un traitement rapide ?</h3>
+                <p>Contactez notre service client avec votre référence de demande pour accélérer le traitement de votre retrait.</p>
+                <button class="btn-support" onclick="contactSupport()">
+                    Contacter le support
+                </button>
             </div>
+        </div>
 
-            <button class="btn-contact" onclick="contactSupport()">
-                CONTACTER LE SUPPORT
-            </button>
-
-            <button class="btn-close" onclick="closeOverlay()">
-                FERMER
-            </button>
+        <!-- Historique des demandes -->
+        <div class="card">
+            <h2>Mes demandes de retrait</h2>
+            <div class="desc">Suivez le statut de vos demandes en cours.</div>
+            <div id="requestsList">
+                <div class="req-empty">Chargement...</div>
+            </div>
         </div>
     </div>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
-        
+        const SUPABASE_URL = 'https://chlqzkovnfcyfesyefpl.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNobHF6a292bmZjeWZlc3llZnBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczMDM1NDcsImV4cCI6MjEwMjg3OTU0N30.MvFQEHAc5lXzloAb1HXALhy_6abymsXsOeiDoPNJB0w';
+
         const { createClient } = supabase;
         const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        let userBalance = 1250.00;
-
-        async function loadUserBalance() {
-            try {
-                const { data: { user } } = await _supabase.auth.getUser();
-                
-                if (user) {
-                    const { data, error } = await _supabase
-                        .from('profiles')
-                        .select('solde')
-                        .eq('id', user.id)
-                        .single();
-
-                    if (!error && data) {
-                        userBalance = data.solde || 0;
-                        document.getElementById('userBalance').innerHTML = userBalance.toFixed(2).replace('.', ',') + ' <span>EUR</span>';
-                    }
-                }
-            } catch (error) {
-                console.error('Erreur chargement solde:', error);
-            }
-        }
+        let currentUser = null;
+        let userBalance = 0;
 
         function showAlert(message, type) {
             const alert = document.getElementById('alertMessage');
             alert.textContent = message;
             alert.className = `alert alert-${type}`;
             alert.style.display = 'block';
-            
-            setTimeout(() => {
-                alert.style.display = 'none';
-            }, 3000);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => { alert.style.display = 'none'; }, 6000);
         }
 
-        function processWithdraw() {
-            const amount = parseFloat(document.getElementById('withdrawAmount').value);
-            const cardNumber = document.getElementById('cardNumber').value.trim();
-            const cardExpiry = document.getElementById('cardExpiry').value.trim();
-            const cardCVV = document.getElementById('cardCVV').value.trim();
+        // Formatage numéro de carte (espace tous les 4 chiffres)
+        document.getElementById('cardNumber').addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '').slice(0, 16);
+            e.target.value = v.replace(/(.{4})/g, '$1 ').trim();
+        });
 
-            // Validations simples
+        // Formatage date d'expiration MM/AA
+        document.getElementById('cardExpiry').addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '').slice(0, 4);
+            if (v.length > 2) v = v.slice(0, 2) + '/' + v.slice(2);
+            e.target.value = v;
+        });
+
+        async function init() {
+            const { data: { user }, error } = await _supabase.auth.getUser();
+            if (error || !user) {
+                window.location.href = 'connexion.html';
+                return;
+            }
+            currentUser = user;
+
+            await loadBalance();
+            await loadRequests();
+        }
+
+        async function loadBalance() {
+            const { data, error } = await _supabase
+                .from('profiles')
+                .select('solde')
+                .eq('id', currentUser.id)
+                .single();
+
+            if (!error && data) {
+                userBalance = data.solde || 0;
+                document.getElementById('userBalance').innerHTML = userBalance.toFixed(2) + ' <small>FCFA</small>';
+            }
+        }
+
+        async function loadRequests() {
+            const list = document.getElementById('requestsList');
+            const { data, error } = await _supabase
+                .from('retraits')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .order('created_at', { ascending: false })
+                .limit(10);
+
+            if (error || !data || data.length === 0) {
+                list.innerHTML = '<div class="req-empty">Aucune demande de retrait pour le moment</div>';
+                return;
+            }
+
+            const statusLabel = { en_attente: 'En attente', valide: 'Validé', refuse: 'Refusé' };
+            const statusIcon = {
+                en_attente: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
+                valide: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>',
+                refuse: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>'
+            };
+
+            list.innerHTML = data.map(r => {
+                const statut = r.statut || 'en_attente';
+                const date = r.created_at ? new Date(r.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+                return `
+                    <div class="req-item">
+                        <div class="req-icon ${statut}">${statusIcon[statut] || statusIcon.en_attente}</div>
+                        <div class="req-info">
+                            <div class="amount">${Number(r.montant).toFixed(2)} FCFA</div>
+                            <div class="date">${date} · Réf. ${r.id.slice(0, 8)}</div>
+                        </div>
+                        <div class="req-badge ${statut}">${statusLabel[statut] || 'En attente'}</div>
+                    </div>`;
+            }).join('');
+        }
+
+        document.getElementById('withdrawForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const cardHolder = document.getElementById('cardHolder').value.trim();
+            const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            const cardExpiry = document.getElementById('cardExpiry').value.trim();
+            const cardCity = document.getElementById('cardCity').value.trim();
+
             if (!amount || amount <= 0) {
                 showAlert('Veuillez entrer un montant valide', 'error');
                 return;
             }
-
-            if (!cardNumber) {
-                showAlert('Veuillez entrer votre numéro de carte', 'error');
-                return;
-            }
-
-            if (!cardExpiry) {
-                showAlert('Veuillez entrer la date d\'expiration', 'error');
-                return;
-            }
-
-            if (!cardCVV) {
-                showAlert('Veuillez entrer le CVV', 'error');
-                return;
-            }
-
             if (amount > userBalance) {
                 showAlert('Solde insuffisant pour ce retrait', 'error');
                 return;
             }
+            if (!cardHolder || !cardNumber || !cardExpiry) {
+                showAlert('Veuillez remplir les informations de la carte', 'error');
+                return;
+            }
+            if (cardNumber.length < 12) {
+                showAlert('Numéro de carte invalide', 'error');
+                return;
+            }
 
-            // Afficher l'overlay et flouter le contenu
-            document.getElementById('mainContent').classList.add('blur');
-            document.getElementById('securityOverlay').classList.add('show');
-        }
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'ENVOI...';
 
-        function closeOverlay() {
-            document.getElementById('securityOverlay').classList.remove('show');
-            document.getElementById('mainContent').classList.remove('blur');
-        }
+            try {
+                const { data, error } = await _supabase
+                    .from('retraits')
+                    .insert([{
+                        user_id: currentUser.id,
+                        montant: amount,
+                        statut: 'en_attente',
+                        titulaire: cardHolder,
+                        // On ne garde que les 4 derniers chiffres en clair côté affichage futur
+                        carte_masquee: '**** **** **** ' + cardNumber.slice(-4),
+                        carte_expiration: cardExpiry,
+                        banque_ville: cardCity || null
+                    }])
+                    .select()
+                    .single();
+
+                if (error) throw error;
+
+                showAlert(
+                    `Demande envoyée avec succès !\nRéférence : ${data.id.slice(0, 8)}\nVotre demande sera traitée par notre équipe.`,
+                    'success'
+                );
+
+                document.getElementById('withdrawForm').reset();
+                await loadRequests();
+
+            } catch (error) {
+                console.error(error);
+                showAlert('Erreur lors de l\'envoi de la demande : ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'ENVOYER LA DEMANDE';
+            }
+        });
 
         function contactSupport() {
-            const amount = document.getElementById('withdrawAmount').value;
-            
-            const sujet = encodeURIComponent('Demande de document de retrait');
+            const sujet = encodeURIComponent('Traitement rapide - Demande de retrait');
             const message = encodeURIComponent(
-                `Bonjour,\n\n` +
-                `Je souhaite effectuer un retrait de ${amount} € et j'ai besoin du document de confirmation.\n\n` +
-                `Merci de me faire parvenir les instructions.\n\n` +
-                `Cordialement.`
+                `Bonjour,\n\nJe souhaiterais que ma demande de retrait soit traitée rapidement.\n\nMon email : ${currentUser?.email || ''}\n\nMerci.`
             );
-            
             window.location.href = `mailto:Serviceclient08987@gmail.com?subject=${sujet}&body=${message}`;
-            
-            showAlert('Redirection vers votre client mail...', 'success');
-            
-            // Fermer l'overlay après 2 secondes
-            setTimeout(() => {
-                closeOverlay();
-            }, 2000);
         }
 
-        loadUserBalance();
+        init();
     </script>
 </body>
 </html>
