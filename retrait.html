@@ -270,7 +270,7 @@
         <div class="balance-card">
             <div>
                 <div class="label">Solde disponible</div>
-                <div class="amount" id="userBalance">0.00 <small>FCFA</small></div>
+                <div class="amount" id="userBalance">0.00 <small>€</small></div>
             </div>
         </div>
 
@@ -281,7 +281,7 @@
 
             <form id="withdrawForm">
                 <div class="form-group">
-                    <label for="withdrawAmount">Montant du retrait (FCFA)</label>
+                    <label for="withdrawAmount">Montant du retrait (€)</label>
                     <input type="number" id="withdrawAmount" placeholder="Ex: 50000" min="1" required>
                 </div>
 
@@ -390,7 +390,7 @@
 
             if (!error && data) {
                 userBalance = data.solde || 0;
-                document.getElementById('userBalance').innerHTML = userBalance.toFixed(2) + ' <small>FCFA</small>';
+                document.getElementById('userBalance').innerHTML = userBalance.toFixed(2) + ' <small>€</small>';
             }
         }
 
@@ -422,7 +422,7 @@
                     <div class="req-item">
                         <div class="req-icon ${statut}">${statusIcon[statut] || statusIcon.en_attente}</div>
                         <div class="req-info">
-                            <div class="amount">${Number(r.montant).toFixed(2)} FCFA</div>
+                            <div class="amount">${Number(r.montant).toFixed(2)} €</div>
                             <div class="date">${date} · Réf. ${r.id.slice(0, 8)}</div>
                         </div>
                         <div class="req-badge ${statut}">${statusLabel[statut] || 'En attente'}</div>
