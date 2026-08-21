@@ -518,7 +518,8 @@
             currentAdmin = user;
             document.getElementById('adminChip').textContent = user.email;
 
-            await Promise.all([loadUsers(), loadRetraits()]);
+            await loadUsers();
+            await loadRetraits();
             renderStats();
             renderUsers();
             renderRetraits();
@@ -541,7 +542,7 @@
         async function loadRetraits() {
             const { data, error } = await _supabase
                 .from('retraits')
-                .select('*, profiles:user_id(nom, email)')
+                .select('*')
                 .order('created_at', { ascending: false });
 
             if (error) {
@@ -549,7 +550,14 @@
                 allRetraits = [];
                 return;
             }
-            allRetraits = data || [];
+
+            // On associe manuellement le profil correspondant (pas de FK
+            // déclarée entre retraits.user_id et profiles, donc pas de
+            // jointure automatique possible côté PostgREST).
+            allRetraits = (data || []).map(r => ({
+                ...r,
+                profiles: allUsers.find(u => u.id === r.user_id) || null
+            }));
         }
 
         function renderStats() {
@@ -801,7 +809,8 @@
 
                 showAlert(decision === 'valide' ? 'Retrait validé et solde débité' : 'Retrait refusé', 'success');
                 closeRetraitModal();
-                await Promise.all([loadUsers(), loadRetraits()]);
+                await loadUsers();
+                await loadRetraits();
                 renderStats();
                 renderUsers();
                 renderRetraits();
