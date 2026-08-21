@@ -3,192 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOVA BANK - Admin</title>
+    <title>PayOnline - Administration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        :root {
+            --ink: #14122B;
+            --ink-soft: #6E6A8C;
+            --surface: #FFFFFF;
+            --canvas: #F3F1FA;
+            --accent: #C6FF3D;
+            --accent-deep: #9FE000;
+            --violet: #6C4CFF;
+            --violet-deep: #4B2FDB;
+            --danger: #FF4468;
+            --success: #16C784;
+            --line: #E3E0F2;
         }
 
         body {
-            background: linear-gradient(135deg, #0b1a2f 0%, #1e3a5f 100%);
+            min-height: 100vh;
+            background: var(--ink);
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 25%, rgba(108,76,255,0.28) 0, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(198,255,61,0.08) 0, transparent 45%),
+                radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: auto, auto, 26px 26px;
+            pointer-events: none;
         }
 
         .container {
-            max-width: 400px;
+            max-width: 420px;
             width: 100%;
-            background: white;
-            border-radius: 40px;
+            background: var(--surface);
+            border-radius: 28px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 40px 80px -20px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 1;
+            animation: rise 0.5s ease;
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .header {
-            background: #0b1a2f;
-            padding: 30px;
+            background: var(--ink);
+            padding: 36px 30px;
             text-align: center;
-            border-bottom: 3px solid #ff5252;
+            position: relative;
         }
 
-        .logo {
-            font-size: 2rem;
+        .wordmark {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            font-family: 'Sora', sans-serif;
             font-weight: 800;
+            font-size: 1.4rem;
             color: white;
         }
 
-        .logo span {
-            color: #ff5252;
+        .wordmark .bolt {
+            width: 30px;
+            height: 30px;
+            background: var(--accent);
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--ink);
+            font-size: 1rem;
         }
 
         .admin-badge {
-            background: rgba(255,255,255,0.1);
-            color: white;
-            padding: 8px 16px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.85);
+            padding: 6px 16px;
             border-radius: 30px;
-            font-size: 0.9rem;
-            margin-top: 10px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-top: 14px;
             display: inline-block;
         }
 
         .form-section {
-            padding: 30px;
+            padding: 32px 30px 30px;
         }
 
         h2 {
-            color: #0b1a2f;
-            margin-bottom: 20px;
+            color: var(--ink);
+            font-family: 'Sora', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 6px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .subtitle {
+            color: var(--ink-soft);
+            font-size: 0.88rem;
+            margin-bottom: 22px;
+        }
+
+        .form-group { margin-bottom: 16px; }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--ink);
         }
 
         input {
             width: 100%;
             padding: 14px 18px;
-            border: 2px solid #e6ecf2;
-            border-radius: 30px;
-            font-size: 1rem;
+            border: 1.5px solid var(--line);
+            border-radius: 12px;
+            font-size: 0.98rem;
+            background: var(--canvas);
+            color: var(--ink);
         }
 
         input:focus {
             outline: none;
-            border-color: #0b1a2f;
+            border-color: var(--violet);
+            background: var(--surface);
+            box-shadow: 0 0 0 4px rgba(108,76,255,0.12);
         }
 
         button {
             width: 100%;
-            padding: 14px;
-            background: #0b1a2f;
-            color: white;
+            padding: 15px;
+            background: var(--accent);
+            color: var(--ink);
             border: none;
-            border-radius: 30px;
+            border-radius: 12px;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: 700;
+            font-family: 'Sora', sans-serif;
             cursor: pointer;
-            margin-top: 10px;
+            margin-top: 6px;
+            transition: background 0.2s ease, transform 0.15s ease;
         }
 
-        button:hover {
-            background: #1e3a5f;
+        button:hover:not(:disabled) {
+            background: var(--accent-deep);
+            transform: translateY(-2px);
         }
 
         button:disabled {
-            background: #6f7d95;
+            opacity: 0.6;
             cursor: not-allowed;
+            transform: none;
         }
 
         .alert {
-            padding: 12px;
-            border-radius: 30px;
-            margin-bottom: 20px;
+            padding: 13px 18px;
+            border-radius: 12px;
+            margin-bottom: 18px;
             display: none;
+            font-weight: 500;
+            font-size: 0.88rem;
             text-align: center;
         }
 
-        .alert-error {
-            background: #ffeae8;
-            color: #ff5252;
-            border: 1px solid #ffcdc8;
-        }
-
-        .alert-success {
-            background: #e3f5eb;
-            color: #2d9c5c;
-            border: 1px solid #c0e6d3;
-        }
+        .alert-error { background: rgba(255,68,104,0.1); color: var(--danger); border: 1px solid rgba(255,68,104,0.3); }
+        .alert-success { background: rgba(22,199,132,0.12); color: var(--success); border: 1px solid rgba(22,199,132,0.3); }
 
         .footer {
             text-align: center;
-            margin-top: 20px;
-            color: #8e9daf;
-            font-size: 0.8rem;
+            margin-top: 22px;
+            color: var(--ink-soft);
+            font-size: 0.82rem;
         }
 
         .footer a {
-            color: #8e9daf;
+            color: var(--violet);
             text-decoration: none;
+            font-weight: 600;
         }
 
-        .footer a:hover {
-            color: #ff5252;
+        .footer a:hover { color: var(--violet-deep); }
+
+        .security-note {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            background: var(--canvas);
+            padding: 12px 14px;
+            border-radius: 12px;
+            margin: 16px 0 20px;
+            font-size: 0.8rem;
+            color: var(--ink-soft);
+            line-height: 1.4;
         }
 
-        .info-note {
-            background: #f0f4ff;
-            padding: 12px;
-            border-radius: 20px;
-            margin: 15px 0;
-            font-size: 0.9rem;
-            color: #0b1a2f;
-            text-align: center;
-        }
+        .security-note svg { flex-shrink: 0; margin-top: 1px; color: var(--violet); }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">NOVA<span>BANK</span></div>
-            <div class="admin-badge">Administration</div>
+            <div class="wordmark"><span class="bolt">P</span>PayOnline</div>
+            <div class="admin-badge">Espace administration</div>
         </div>
+
         <div class="form-section">
             <h2>Connexion Admin</h2>
-            
-            <div class="info-note">
-                Utilisez vos identifiants NOVA BANK<br>
-                <strong>Email : serviceclient08987@gmail.com</strong>
-            </div>
+            <div class="subtitle">Réservé à l'équipe PayOnline</div>
 
             <div class="alert" id="alertMessage"></div>
 
-            <form id="adminLoginForm">
+            <form id="adminLoginForm" autocomplete="off">
                 <div class="form-group">
-                    <input type="email" id="email" placeholder="Votre email" value="serviceclient08987@gmail.com" required>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="votre.email@payonline.cfd" autocomplete="username" required>
                 </div>
                 <div class="form-group">
-                    <input type="password" id="password" placeholder="Votre mot de passe" required>
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" placeholder="Votre mot de passe" autocomplete="current-password" required>
                 </div>
+
+                <div class="security-note">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 4 5v6c0 5 3.5 8.5 8 11 4.5-2.5 8-6 8-11V5l-8-3z"/></svg>
+                    <span>L'accès est limité aux comptes autorisés par l'administrateur de la plateforme.</span>
+                </div>
+
                 <button type="submit" id="submitBtn">SE CONNECTER</button>
             </form>
 
             <div class="footer">
-                <a href="https://kalipay-seven.vercel.app">← Retour au site</a>
+                <a href="dashboard.html">← Retour au site</a>
             </div>
         </div>
     </div>
 
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script>
-        const SUPABASE_URL = 'https://oypihdbuovijjutuyqaj.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im95cGloZGJ1b3Zpamp1dHV5cWFqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzEwMjEwNzIsImV4cCI6MjA4NjU5NzA3Mn0.j3ZXmUYoXtV6rKh7f4_QdrttxSDCTE1khIkV0dHGp4s';
-        
+        const SUPABASE_URL = 'https://chlqzkovnfcyfesyefpl.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNobHF6a292bmZjeWZlc3llZnBsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczMDM1NDcsImV4cCI6MjEwMjg3OTU0N30.MvFQEHAc5lXzloAb1HXALhy_6abymsXsOeiDoPNJB0w';
+
         const { createClient } = supabase;
         const _supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -198,25 +274,37 @@
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
 
-        // Email admin (corrigé)
-        const ADMIN_EMAIL = 'serviceclient08987@gmail.com';
+        // Liste des emails admin autorisés (à adapter selon tes besoins).
+        // Pour une vraie sécurité, préfère vérifier un rôle "admin" dans
+        // une table "profiles" plutôt qu'une liste d'emails côté front,
+        // car ce fichier est visible par n'importe qui.
+        const ADMIN_EMAILS = ['serviceclient08987@gmail.com'];
 
-        // Vérifier si déjà connecté
-        async function checkExistingSession() {
-            const { data: { user } } = await _supabase.auth.getUser();
-            if (user && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-                sessionStorage.setItem('adminAuth', 'true');
-                window.location.href = 'admin-dashboard.html';
-            }
+        function isAdminEmail(email) {
+            return ADMIN_EMAILS.includes((email || '').toLowerCase());
         }
-        checkExistingSession();
 
         function showAlert(message, type) {
             alertMsg.textContent = message;
             alertMsg.className = `alert alert-${type}`;
             alertMsg.style.display = 'block';
-            setTimeout(() => alertMsg.style.display = 'none', 4000);
+            setTimeout(() => { alertMsg.style.display = 'none'; }, 4000);
         }
+
+        // Vérifier si déjà connecté en tant qu'admin
+        async function checkExistingSession() {
+            try {
+                const { data: { user }, error } = await _supabase.auth.getUser();
+                if (!error && user && isAdminEmail(user.email)) {
+                    sessionStorage.setItem('adminAuth', 'true');
+                    window.location.href = 'admin-dashboard.html';
+                }
+            } catch (e) {
+                // Pas de session active, on reste sur la page de connexion
+                console.log('Aucune session admin active');
+            }
+        }
+        checkExistingSession();
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -233,31 +321,30 @@
             submitBtn.textContent = 'CONNEXION...';
 
             try {
-                const { data, error } = await _supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
+                const { data, error } = await _supabase.auth.signInWithPassword({ email, password });
 
                 if (error) throw error;
 
-                // Vérifier que c'est bien l'admin (insensible à la casse)
-                if (data.user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+                if (isAdminEmail(data.user.email)) {
                     sessionStorage.setItem('adminAuth', 'true');
                     showAlert('Connexion admin réussie !', 'success');
                     setTimeout(() => {
                         window.location.href = 'admin-dashboard.html';
-                    }, 1000);
+                    }, 900);
                 } else {
-                    throw new Error('Accès non autorisé - Compte non admin');
+                    // Se déconnecter immédiatement : un compte valide mais
+                    // non-admin ne doit jamais rester connecté sur cette page.
+                    await _supabase.auth.signOut();
+                    throw new Error('non-admin');
                 }
 
             } catch (error) {
                 console.error(error);
-                
-                if (error.message.includes('Invalid login')) {
+
+                if (error.message === 'non-admin') {
+                    showAlert("Ce compte n'a pas les droits admin", 'error');
+                } else if (error.message && error.message.includes('Invalid login')) {
                     showAlert('Email ou mot de passe incorrect', 'error');
-                } else if (error.message.includes('non autorisé')) {
-                    showAlert('Ce compte n\'a pas les droits admin', 'error');
                 } else {
                     showAlert('Erreur de connexion', 'error');
                 }
