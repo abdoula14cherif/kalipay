@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PayOnline - Tableau de bord Admin</title>
+    <title>PayOnline - Admin Dashboard</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
     <style>
@@ -19,328 +19,455 @@
             --violet: #6C4CFF;
             --violet-deep: #4B2FDB;
             --danger: #FF4468;
-            --danger-deep: #E12F52;
             --success: #16C784;
+            --warn: #FF8C42;
             --line: #E3E0F2;
         }
 
-        body {
-            min-height: 100vh;
-            background: var(--canvas);
-            position: relative;
-        }
+        body { background: var(--canvas); min-height: 100vh; color: var(--ink); }
 
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background-image:
-                radial-gradient(circle at 20% 0%, rgba(108,76,255,0.10) 0, transparent 45%),
-                radial-gradient(circle at 90% 10%, rgba(198,255,61,0.08) 0, transparent 45%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* ---------- top bar ---------- */
-        .topbar {
+        /* ---- Header ---- */
+        .header {
             background: var(--ink);
-            padding: 18px 24px;
+            padding: 16px 24px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
+            color: white;
             position: sticky;
             top: 0;
-            z-index: 10;
+            z-index: 200;
         }
 
-        .wordmark {
-            display: inline-flex;
-            align-items: center;
-            gap: 9px;
-            font-family: 'Sora', sans-serif;
-            font-weight: 800;
-            font-size: 1.2rem;
-            color: white;
-        }
-
+        .wordmark { display: flex; align-items: center; gap: 9px; font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.2rem; }
         .wordmark .bolt {
-            width: 28px;
-            height: 28px;
-            background: var(--accent);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--ink);
-            font-size: 0.95rem;
+            width: 28px; height: 28px; background: var(--accent); border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; color: var(--ink); font-size: 0.9rem;
         }
-
-        .admin-badge {
+        .header-right { display: flex; align-items: center; gap: 14px; }
+        .admin-chip {
             background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: rgba(255,255,255,0.85);
-            padding: 5px 14px;
+            padding: 8px 14px;
             border-radius: 30px;
-            font-size: 0.72rem;
-            font-weight: 600;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-        }
-
-        .logout-btn {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 10px;
             font-size: 0.82rem;
-            font-weight: 600;
+            color: rgba(255,255,255,0.85);
+        }
+        .logout-btn {
+            background: rgba(255,68,104,0.15);
+            color: #FF8FA3;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
             cursor: pointer;
         }
-        .logout-btn:hover { background: rgba(255,68,104,0.25); border-color: var(--danger); }
+        .logout-btn:hover { background: rgba(255,68,104,0.25); }
 
-        /* ---------- layout ---------- */
-        .wrap {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 24px 18px 60px;
-            position: relative;
-            z-index: 1;
+        .container { max-width: 1300px; margin: 0 auto; padding: 24px; }
+
+        .alert {
+            padding: 14px 20px; border-radius: 14px; margin-bottom: 18px;
+            display: none; font-weight: 500; font-size: 0.88rem; white-space: pre-line;
         }
+        .alert-success { background: rgba(22,199,132,0.12); color: var(--success); border: 1px solid rgba(22,199,132,0.3); }
+        .alert-error { background: rgba(255,68,104,0.1); color: var(--danger); border: 1px solid rgba(255,68,104,0.3); }
 
-        .tabs {
-            display: flex;
-            gap: 8px;
+        /* ---- Stats ---- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+        .stat-card {
             background: var(--surface);
-            padding: 6px;
-            border-radius: 14px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 20px -8px rgba(20,18,43,0.08);
+            border-radius: 18px;
+            border: 1px solid var(--line);
+            padding: 20px;
         }
+        .stat-card .label { color: var(--ink-soft); font-size: 0.82rem; }
+        .stat-card .value {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 1.6rem;
+            font-weight: 500;
+            margin-top: 8px;
+            color: var(--ink);
+        }
+        .stat-card.accent .value { color: var(--violet); }
+        .stat-card.warn .value { color: var(--warn); }
 
+        /* ---- Tabs ---- */
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
         .tab-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            background: transparent;
-            border-radius: 10px;
-            font-family: 'Sora', sans-serif;
+            background: var(--surface);
+            border: 1px solid var(--line);
+            color: var(--ink-soft);
+            padding: 10px 18px;
+            border-radius: 12px;
             font-weight: 700;
             font-size: 0.88rem;
-            color: var(--ink-soft);
             cursor: pointer;
-            transition: all 0.15s ease;
+            font-family: 'Sora', sans-serif;
         }
-        .tab-btn.active { background: var(--ink); color: white; }
+        .tab-btn.active { background: var(--ink); color: white; border-color: var(--ink); }
+        .tab-btn .badge {
+            background: var(--danger);
+            color: white;
+            font-size: 0.7rem;
+            padding: 1px 7px;
+            border-radius: 20px;
+            margin-left: 6px;
+        }
 
-        .panel { display: none; }
-        .panel.active { display: block; }
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
 
+        /* ---- Card / table wrapper ---- */
         .card {
             background: var(--surface);
             border-radius: 18px;
-            padding: 24px;
-            box-shadow: 0 4px 20px -8px rgba(20,18,43,0.08);
-            margin-bottom: 18px;
+            border: 1px solid var(--line);
+            overflow: hidden;
         }
-
-        h2 {
-            color: var(--ink);
-            font-family: 'Sora', sans-serif;
-            font-size: 1.15rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-        }
-        .subtitle { color: var(--ink-soft); font-size: 0.85rem; margin-bottom: 18px; }
-
-        .search-row { display: flex; gap: 10px; margin-bottom: 8px; }
-
-        input, select {
-            width: 100%;
-            padding: 13px 16px;
-            border: 1.5px solid var(--line);
-            border-radius: 12px;
-            font-size: 0.94rem;
-            background: var(--canvas);
-            color: var(--ink);
-        }
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--violet);
-            background: var(--surface);
-            box-shadow: 0 0 0 4px rgba(108,76,255,0.12);
-        }
-
-        .form-group { margin-bottom: 14px; }
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            color: var(--ink-soft);
-        }
-
-        .btn {
-            padding: 13px 18px;
-            border: none;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            font-family: 'Sora', sans-serif;
-            cursor: pointer;
-            transition: transform 0.15s ease, background 0.2s ease;
-            white-space: nowrap;
-        }
-        .btn:hover:not(:disabled) { transform: translateY(-2px); }
-        .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
-
-        .btn-primary { background: var(--accent); color: var(--ink); }
-        .btn-primary:hover:not(:disabled) { background: var(--accent-deep); }
-
-        .btn-violet { background: var(--violet); color: white; }
-        .btn-violet:hover:not(:disabled) { background: var(--violet-deep); }
-
-        .btn-danger { background: rgba(255,68,104,0.1); color: var(--danger); border: 1px solid rgba(255,68,104,0.3); }
-        .btn-danger:hover:not(:disabled) { background: var(--danger); color: white; }
-
-        .btn-success { background: rgba(22,199,132,0.12); color: var(--success); border: 1px solid rgba(22,199,132,0.3); }
-        .btn-success:hover:not(:disabled) { background: var(--success); color: white; }
-
-        .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
-        .btn-row .btn { flex: 1; min-width: 130px; }
-
-        /* ---------- user result card ---------- */
-        .user-card {
-            border: 1.5px solid var(--line);
-            border-radius: 14px;
-            padding: 18px;
-            margin-top: 14px;
-        }
-        .user-head {
+        .card-head {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--line);
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
         }
-        .user-name { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.02rem; color: var(--ink); }
-        .user-id { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--ink-soft); word-break: break-all; }
+        .card-head h2 { font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 700; }
 
-        .role-pill {
-            padding: 4px 12px;
-            border-radius: 30px;
+        .search-box {
+            padding: 10px 16px;
+            border: 1.5px solid var(--line);
+            border-radius: 10px;
+            font-size: 0.88rem;
+            background: var(--canvas);
+            min-width: 220px;
+        }
+        .search-box:focus { outline: none; border-color: var(--violet); background: var(--surface); }
+
+        table { width: 100%; border-collapse: collapse; }
+        thead th {
+            text-align: left;
             font-size: 0.72rem;
-            font-weight: 700;
             text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--ink-soft);
+            padding: 12px 20px;
+            background: var(--canvas);
+            white-space: nowrap;
         }
-        .role-admin { background: rgba(108,76,255,0.14); color: var(--violet); }
-        .role-user { background: rgba(110,106,140,0.12); color: var(--ink-soft); }
+        tbody td {
+            padding: 14px 20px;
+            border-top: 1px solid var(--line);
+            font-size: 0.9rem;
+            vertical-align: middle;
+        }
+        tbody tr:hover { background: rgba(108,76,255,0.03); }
 
-        .stat-row { display: flex; gap: 10px; margin-bottom: 16px; }
-        .stat-box {
-            flex: 1;
+        .cell-user .name { font-weight: 700; color: var(--ink); }
+        .cell-user .mail { font-size: 0.78rem; color: var(--ink-soft); margin-top: 2px; }
+
+        .mono { font-family: 'IBM Plex Mono', monospace; }
+
+        .role-badge {
+            font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 20px;
+        }
+        .role-badge.admin { background: rgba(108,76,255,0.14); color: var(--violet); }
+        .role-badge.user { background: var(--canvas); color: var(--ink-soft); }
+
+        .status-badge { font-size: 0.72rem; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+        .status-badge.en_attente { background: rgba(255,140,66,0.14); color: var(--warn); }
+        .status-badge.valide { background: rgba(22,199,132,0.14); color: var(--success); }
+        .status-badge.refuse { background: rgba(255,68,104,0.12); color: var(--danger); }
+
+        .btn-sm {
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            font-family: 'Sora', sans-serif;
+        }
+        .btn-sm.edit { background: var(--canvas); color: var(--ink); }
+        .btn-sm.edit:hover { background: var(--line); }
+        .btn-sm.approve { background: rgba(22,199,132,0.14); color: var(--success); }
+        .btn-sm.approve:hover { background: rgba(22,199,132,0.25); }
+        .btn-sm.reject { background: rgba(255,68,104,0.1); color: var(--danger); }
+        .btn-sm.reject:hover { background: rgba(255,68,104,0.2); }
+
+        .actions-cell { display: flex; gap: 8px; }
+
+        .empty-row td { text-align: center; padding: 40px 20px; color: var(--ink-soft); }
+
+        .loading-row td { text-align: center; padding: 30px; color: var(--ink-soft); }
+
+        /* ---- Modal ---- */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(20,18,43,0.55);
+            display: none; align-items: center; justify-content: center;
+            z-index: 500; padding: 20px; backdrop-filter: blur(3px);
+        }
+        .modal-overlay.open { display: flex; }
+
+        .modal {
+            background: var(--surface);
+            border-radius: 22px;
+            max-width: 460px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 26px;
+            animation: pop 0.15s ease;
+        }
+        @keyframes pop { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .modal h3 { font-family: 'Sora', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+        .modal .modal-sub { color: var(--ink-soft); font-size: 0.85rem; margin-bottom: 20px; }
+
+        .modal .form-group { margin-bottom: 16px; }
+        .modal label {
+            display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.78rem;
+            text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink);
+        }
+        .modal input, .modal select, .modal textarea {
+            width: 100%; padding: 12px 16px; border: 1.5px solid var(--line);
+            border-radius: 10px; font-size: 0.94rem; background: var(--canvas); color: var(--ink);
+            font-family: 'Inter', sans-serif;
+        }
+        .modal input:focus, .modal select:focus, .modal textarea:focus {
+            outline: none; border-color: var(--violet); background: var(--surface);
+        }
+
+        .balance-row { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+        .balance-row input { flex: 1; }
+        .quick-btn {
+            width: 38px; height: 38px; border-radius: 10px; border: 1.5px solid var(--line);
+            background: var(--canvas); font-weight: 700; cursor: pointer; font-size: 1.1rem; color: var(--ink);
+        }
+        .quick-btn:hover { border-color: var(--violet); color: var(--violet); }
+
+        .quick-amounts { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+        .quick-amount {
+            padding: 6px 12px; border-radius: 20px; border: 1px solid var(--line);
+            background: var(--canvas); font-size: 0.78rem; font-weight: 600; cursor: pointer; color: var(--ink-soft);
+        }
+        .quick-amount:hover { border-color: var(--violet); color: var(--violet); }
+
+        .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-modal {
+            flex: 1; padding: 13px; border-radius: 12px; border: none;
+            font-weight: 700; font-family: 'Sora', sans-serif; font-size: 0.9rem; cursor: pointer;
+        }
+        .btn-modal.primary { background: var(--accent); color: var(--ink); }
+        .btn-modal.primary:hover:not(:disabled) { background: var(--accent-deep); }
+        .btn-modal.ghost { background: var(--canvas); color: var(--ink); }
+        .btn-modal.ghost:hover { background: var(--line); }
+        .btn-modal:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .card-details {
             background: var(--canvas);
             border-radius: 12px;
-            padding: 12px 14px;
-        }
-        .stat-box .label { font-size: 0.7rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 3px; }
-        .stat-box .value { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.05rem; color: var(--ink); }
-
-        hr.sep { border: none; border-top: 1px solid var(--line); margin: 16px 0; }
-
-        .mini-label { font-weight: 700; font-size: 0.78rem; color: var(--ink); margin-bottom: 8px; }
-
-        /* ---------- retraits ---------- */
-        .retrait-row {
-            border: 1.5px solid var(--line);
-            border-radius: 14px;
-            padding: 16px 18px;
-            margin-bottom: 12px;
-        }
-        .retrait-top { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
-        .retrait-montant { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--ink); }
-        .retrait-meta { font-size: 0.78rem; color: var(--ink-soft); }
-        .retrait-user { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--ink-soft); word-break: break-all; margin-bottom: 10px; }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--ink-soft);
-            font-size: 0.9rem;
-        }
-
-        .alert {
-            padding: 13px 18px;
-            border-radius: 12px;
+            padding: 14px;
             margin-bottom: 16px;
-            display: none;
-            font-weight: 500;
-            font-size: 0.86rem;
-            text-align: center;
+            font-size: 0.85rem;
         }
-        .alert-error { background: rgba(255,68,104,0.1); color: var(--danger); border: 1px solid rgba(255,68,104,0.3); }
-        .alert-success { background: rgba(22,199,132,0.12); color: var(--success); border: 1px solid rgba(22,199,132,0.3); }
+        .card-details div { display: flex; justify-content: space-between; padding: 4px 0; }
+        .card-details span:first-child { color: var(--ink-soft); }
+        .card-details span:last-child { font-weight: 600; }
 
-        .loading-gate {
-            position: fixed;
-            inset: 0;
-            background: var(--ink);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 999;
-            color: rgba(255,255,255,0.7);
-            font-family: 'Sora', sans-serif;
-            font-weight: 600;
+        @media (max-width: 700px) {
+            table thead { display: none; }
+            table, tbody, tr, td { display: block; width: 100%; }
+            tbody tr { border-top: 1px solid var(--line); padding: 12px 0; }
+            tbody td { border-top: none; padding: 6px 20px; }
+            tbody td::before {
+                content: attr(data-label);
+                font-size: 0.7rem;
+                text-transform: uppercase;
+                color: var(--ink-soft);
+                display: block;
+                margin-bottom: 3px;
+            }
         }
-        .hidden { display: none !important; }
     </style>
 </head>
 <body>
+    <header class="header">
+        <div class="wordmark"><span class="bolt">P</span>PayOnline <span style="font-weight:400; opacity:0.6; font-size:0.9rem;">Admin</span></div>
+        <div class="header-right">
+            <div class="admin-chip" id="adminChip">...</div>
+            <button class="logout-btn" onclick="logout()">Déconnexion</button>
+        </div>
+    </header>
 
-    <div class="loading-gate" id="loadingGate">Vérification des accès admin...</div>
+    <div class="container">
+        <div class="alert" id="alertMessage"></div>
 
-    <div class="topbar">
-        <div class="wordmark"><span class="bolt">P</span>PayOnline</div>
-        <div style="display:flex; align-items:center; gap:10px;">
-            <span class="admin-badge">Admin</span>
-            <button class="logout-btn" id="logoutBtn">Déconnexion</button>
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="label">Utilisateurs</div>
+                <div class="value" id="statUsers">—</div>
+            </div>
+            <div class="stat-card accent">
+                <div class="label">Solde total plateforme</div>
+                <div class="value" id="statTotalBalance">—</div>
+            </div>
+            <div class="stat-card warn">
+                <div class="label">Retraits en attente</div>
+                <div class="value" id="statPending">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="label">Montant en attente</div>
+                <div class="value" id="statPendingAmount">—</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="users" onclick="switchTab('users')">Utilisateurs</button>
+            <button class="tab-btn" data-tab="retraits" onclick="switchTab('retraits')">Retraits <span class="badge" id="pendingBadge" style="display:none;">0</span></button>
+        </div>
+
+        <!-- Users tab -->
+        <div class="tab-panel active" id="tab-users">
+            <div class="card">
+                <div class="card-head">
+                    <h2>Tous les utilisateurs</h2>
+                    <input type="text" class="search-box" id="userSearch" placeholder="Rechercher nom ou email...">
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Utilisateur</th>
+                            <th>Solde</th>
+                            <th>Cashback</th>
+                            <th>Rôle</th>
+                            <th>Inscrit le</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <tr class="loading-row"><td colspan="6">Chargement...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Retraits tab -->
+        <div class="tab-panel" id="tab-retraits">
+            <div class="card">
+                <div class="card-head">
+                    <h2>Demandes de retrait</h2>
+                    <select class="search-box" id="retraitFilter" onchange="renderRetraits()">
+                        <option value="en_attente">En attente</option>
+                        <option value="all">Toutes</option>
+                        <option value="valide">Validées</option>
+                        <option value="refuse">Refusées</option>
+                    </select>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Utilisateur</th>
+                            <th>Montant</th>
+                            <th>Carte</th>
+                            <th>Statut</th>
+                            <th>Date</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="retraitsTableBody">
+                        <tr class="loading-row"><td colspan="6">Chargement...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
-    <div class="wrap">
-        <div class="alert" id="alertMessage"></div>
+    <!-- Modal: éditer utilisateur -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal">
+            <h3 id="modalUserName">Modifier l'utilisateur</h3>
+            <div class="modal-sub" id="modalUserEmail">—</div>
 
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="users">Utilisateurs</button>
-            <button class="tab-btn" data-tab="retraits">Retraits</button>
-        </div>
+            <div class="form-group">
+                <label>Nom complet</label>
+                <input type="text" id="editNom">
+            </div>
 
-        <!-- ===================== ONGLET UTILISATEURS ===================== -->
-        <div class="panel active" id="panel-users">
-            <div class="card">
-                <h2>Rechercher un utilisateur</h2>
-                <div class="subtitle">Par nom ou identifiant (UUID)</div>
-                <div class="search-row">
-                    <input type="text" id="userSearchInput" placeholder="Nom ou UUID de l'utilisateur">
-                    <button class="btn btn-violet" id="userSearchBtn">Chercher</button>
+            <div class="form-group">
+                <label>Solde actuel (€)</label>
+                <div class="balance-row">
+                    <button class="quick-btn" onclick="adjustModalAmount(-1)">−</button>
+                    <input type="number" id="editSoldeDelta" placeholder="Montant à ajouter/retirer" step="0.01">
+                    <button class="quick-btn" onclick="adjustModalAmount(1)">+</button>
+                </div>
+                <div class="quick-amounts">
+                    <span class="quick-amount" onclick="setModalAmount(10)">+10€</span>
+                    <span class="quick-amount" onclick="setModalAmount(50)">+50€</span>
+                    <span class="quick-amount" onclick="setModalAmount(100)">+100€</span>
+                    <span class="quick-amount" onclick="setModalAmount(500)">+500€</span>
+                </div>
+                <div style="font-size:0.82rem; color:var(--ink-soft);">
+                    Solde actuel : <strong id="currentSoldeDisplay">0.00 €</strong> — nouveau solde après ajustement : <strong id="newSoldeDisplay">0.00 €</strong>
                 </div>
             </div>
 
-            <div id="userResults"></div>
-        </div>
-
-        <!-- ===================== ONGLET RETRAITS ===================== -->
-        <div class="panel" id="panel-retraits">
-            <div class="card">
-                <h2>Demandes de retrait en attente</h2>
-                <div class="subtitle">Validez ou refusez chaque demande</div>
-                <button class="btn btn-violet" id="refreshRetraitsBtn" style="width:100%; margin-bottom:4px;">Actualiser</button>
+            <div class="form-group">
+                <label>Ou fixer un solde exact (€)</label>
+                <input type="number" id="editSoldeExact" placeholder="Laisser vide pour utiliser l'ajustement ci-dessus" step="0.01">
             </div>
-            <div id="retraitsList"></div>
+
+            <div class="form-group">
+                <label>Cashback (€)</label>
+                <input type="number" id="editCashback" step="0.01">
+            </div>
+
+            <div class="form-group">
+                <label>Rôle</label>
+                <select id="editRole">
+                    <option value="user">Utilisateur</option>
+                    <option value="admin">Administrateur</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Note (facultatif, journalisée)</label>
+                <input type="text" id="editReason" placeholder="Ex: bonus fidélité, correction erreur...">
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-modal ghost" onclick="closeUserModal()">Annuler</button>
+                <button class="btn-modal primary" id="saveUserBtn" onclick="saveUser()">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: traiter un retrait -->
+    <div class="modal-overlay" id="retraitModal">
+        <div class="modal">
+            <h3 id="retraitModalTitle">Traiter la demande</h3>
+            <div class="modal-sub">Référence <span id="retraitModalRef"></span></div>
+
+            <div class="card-details" id="retraitDetails"></div>
+
+            <div class="form-group">
+                <label>Note (facultatif)</label>
+                <textarea id="retraitNote" rows="2" placeholder="Ex: viré le 21/08 par transfert bancaire"></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-modal ghost" style="background: rgba(255,68,104,0.1); color: var(--danger);" onclick="processRetrait('refuse')">Refuser</button>
+                <button class="btn-modal primary" onclick="processRetrait('valide')">Valider</button>
+            </div>
         </div>
     </div>
 
@@ -354,307 +481,358 @@
 
         const ADMIN_EMAILS_FALLBACK = ['serviceclient08987@gmail.com', 'abdoula13cherif@gmail.com'];
 
-        const loadingGate = document.getElementById('loadingGate');
-        const alertMsg = document.getElementById('alertMessage');
+        let currentAdmin = null;
+        let allUsers = [];
+        let allRetraits = [];
+        let activeUserId = null;
+        let activeRetraitId = null;
 
         function showAlert(message, type) {
-            alertMsg.textContent = message;
-            alertMsg.className = `alert alert-${type}`;
-            alertMsg.style.display = 'block';
+            const alert = document.getElementById('alertMessage');
+            alert.textContent = message;
+            alert.className = `alert alert-${type}`;
+            alert.style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => { alertMsg.style.display = 'none'; }, 4500);
+            setTimeout(() => { alert.style.display = 'none'; }, 6000);
         }
 
-        function fmt(n) {
-            const v = Number(n || 0);
-            return v.toLocaleString('fr-FR', { maximumFractionDigits: 0 }) + ' FCFA';
-        }
-
-        // ------------------------------------------------------------
-        // Garde d'accès admin
-        // ------------------------------------------------------------
         async function isAdminUser(user) {
             if (!user) return false;
             try {
-                const { data, error } = await _supabase
-                    .from('profiles')
-                    .select('role')
-                    .eq('id', user.id)
-                    .single();
+                const { data, error } = await _supabase.from('profiles').select('role').eq('id', user.id).single();
                 if (!error && data) return data.role === 'admin';
             } catch (e) {}
             return ADMIN_EMAILS_FALLBACK.includes((user.email || '').toLowerCase());
         }
 
-        async function guardAdminAccess() {
+        async function init() {
             const { data: { user }, error } = await _supabase.auth.getUser();
-            if (error || !user || !(await isAdminUser(user))) {
-                sessionStorage.removeItem('adminAuth');
-                window.location.href = 'admin-login.html';
+            if (error || !user) { window.location.href = 'admin.html'; return; }
+
+            if (!(await isAdminUser(user))) {
+                showAlert("Accès refusé : ce compte n'a pas les droits admin", 'error');
+                setTimeout(() => window.location.href = 'admin.html', 1500);
                 return;
             }
-            sessionStorage.setItem('adminAuth', 'true');
-            loadingGate.classList.add('hidden');
+
+            currentAdmin = user;
+            document.getElementById('adminChip').textContent = user.email;
+
+            await Promise.all([loadUsers(), loadRetraits()]);
+            renderStats();
+            renderUsers();
+            renderRetraits();
         }
-        guardAdminAccess();
 
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
-            await _supabase.auth.signOut();
-            sessionStorage.removeItem('adminAuth');
-            window.location.href = 'admin-login.html';
-        });
-
-        // ------------------------------------------------------------
-        // Onglets
-        // ------------------------------------------------------------
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
-                if (btn.dataset.tab === 'retraits') loadRetraits();
-            });
-        });
-
-        // ------------------------------------------------------------
-        // Onglet Utilisateurs — recherche
-        // ------------------------------------------------------------
-        const userResults = document.getElementById('userResults');
-
-        document.getElementById('userSearchBtn').addEventListener('click', searchUsers);
-        document.getElementById('userSearchInput').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') searchUsers();
-        });
-
-        async function searchUsers() {
-            const q = document.getElementById('userSearchInput').value.trim();
-            if (!q) { showAlert('Entrez un nom ou un identifiant', 'error'); return; }
-
-            userResults.innerHTML = '<div class="empty-state">Recherche...</div>';
-
-            const { data, error } = await _supabase.rpc('admin_search_users', { search_term: q });
+        async function loadUsers() {
+            const { data, error } = await _supabase
+                .from('profiles')
+                .select('*')
+                .order('date_inscription', { ascending: false });
 
             if (error) {
-                userResults.innerHTML = `<div class="empty-state">Erreur : ${error.message}</div>`;
-                console.error(error);
+                showAlert('Erreur chargement utilisateurs : ' + error.message, 'error');
+                allUsers = [];
                 return;
             }
-            if (!data || data.length === 0) {
-                userResults.innerHTML = '<div class="empty-state">Aucun utilisateur trouvé</div>';
-                return;
-            }
-
-            userResults.innerHTML = '';
-            data.forEach(u => userResults.appendChild(buildUserCard(u)));
+            allUsers = data || [];
         }
-
-        function buildUserCard(u) {
-            const card = document.createElement('div');
-            card.className = 'card user-card';
-
-            card.innerHTML = `
-                <div class="user-head">
-                    <div>
-                        <div class="user-name">${u.nom || 'Sans nom'}</div>
-                        <div class="user-id">${u.id}</div>
-                    </div>
-                    <span class="role-pill ${u.role === 'admin' ? 'role-admin' : 'role-user'}">${u.role || 'user'}</span>
-                </div>
-
-                <div class="stat-row">
-                    <div class="stat-box">
-                        <div class="label">Solde</div>
-                        <div class="value solde-display">${fmt(u.solde)}</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="label">Cashback</div>
-                        <div class="value cashback-display">${fmt(u.cashback)}</div>
-                    </div>
-                </div>
-
-                <hr class="sep">
-
-                <div class="mini-label">Ajuster le solde (+ / -)</div>
-                <div class="search-row">
-                    <input type="number" class="delta-input" placeholder="Ex: 5000 ou -2000">
-                    <button class="btn btn-primary btn-adjust" style="flex:0 0 auto;">Appliquer</button>
-                </div>
-
-                <div class="mini-label" style="margin-top:14px;">Fixer un solde exact</div>
-                <div class="search-row">
-                    <input type="number" class="setbalance-input" placeholder="Nouveau solde">
-                    <button class="btn btn-violet btn-setbalance" style="flex:0 0 auto;">Fixer</button>
-                </div>
-
-                <hr class="sep">
-
-                <div class="mini-label">Modifier le profil</div>
-                <div class="form-group">
-                    <label>Nom</label>
-                    <input type="text" class="nom-input" value="${u.nom || ''}">
-                </div>
-                <div class="form-group">
-                    <label>Cashback</label>
-                    <input type="number" class="cashback-input" value="${u.cashback || 0}">
-                </div>
-                <div class="form-group">
-                    <label>Rôle</label>
-                    <select class="role-input">
-                        <option value="user" ${u.role !== 'admin' ? 'selected' : ''}>user</option>
-                        <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>admin</option>
-                    </select>
-                </div>
-                <button class="btn btn-primary btn-updateprofile" style="width:100%;">Enregistrer le profil</button>
-            `;
-
-            const deltaInput = card.querySelector('.delta-input');
-            const setBalanceInput = card.querySelector('.setbalance-input');
-            const soldeDisplay = card.querySelector('.solde-display');
-
-            card.querySelector('.btn-adjust').addEventListener('click', async (e) => {
-                const delta = parseFloat(deltaInput.value);
-                if (isNaN(delta) || delta === 0) { showAlert('Entrez un montant valide', 'error'); return; }
-                await runAction(e.target, async () => {
-                    const { data, error } = await _supabase.rpc('admin_adjust_balance', {
-                        target_user_id: u.id,
-                        delta: delta,
-                        reason: null
-                    });
-                    if (error) throw error;
-                    soldeDisplay.textContent = fmt(data);
-                    deltaInput.value = '';
-                    showAlert('Solde ajusté avec succès', 'success');
-                });
-            });
-
-            card.querySelector('.btn-setbalance').addEventListener('click', async (e) => {
-                const val = parseFloat(setBalanceInput.value);
-                if (isNaN(val)) { showAlert('Entrez un montant valide', 'error'); return; }
-                await runAction(e.target, async () => {
-                    const { data, error } = await _supabase.rpc('admin_set_balance', {
-                        target_user_id: u.id,
-                        new_value: val,
-                        reason: null
-                    });
-                    if (error) throw error;
-                    soldeDisplay.textContent = fmt(data);
-                    setBalanceInput.value = '';
-                    showAlert('Solde fixé avec succès', 'success');
-                });
-            });
-
-            card.querySelector('.btn-updateprofile').addEventListener('click', async (e) => {
-                const newNom = card.querySelector('.nom-input').value.trim();
-                const newCashback = parseFloat(card.querySelector('.cashback-input').value);
-                const newRole = card.querySelector('.role-input').value;
-                await runAction(e.target, async () => {
-                    const { error } = await _supabase.rpc('admin_update_profile', {
-                        target_user_id: u.id,
-                        new_nom: newNom || null,
-                        new_cashback: isNaN(newCashback) ? null : newCashback,
-                        new_role: newRole
-                    });
-                    if (error) throw error;
-                    card.querySelector('.cashback-display').textContent = fmt(newCashback);
-                    card.querySelector('.role-pill').textContent = newRole;
-                    card.querySelector('.role-pill').className = `role-pill ${newRole === 'admin' ? 'role-admin' : 'role-user'}`;
-                    showAlert('Profil mis à jour', 'success');
-                });
-            });
-
-            return card;
-        }
-
-        // ------------------------------------------------------------
-        // Onglet Retraits
-        // ------------------------------------------------------------
-        const retraitsList = document.getElementById('retraitsList');
-        document.getElementById('refreshRetraitsBtn').addEventListener('click', loadRetraits);
 
         async function loadRetraits() {
-            retraitsList.innerHTML = '<div class="empty-state">Chargement...</div>';
-
-            const { data: retraits, error } = await _supabase.rpc('admin_list_pending_retraits');
+            const { data, error } = await _supabase
+                .from('retraits')
+                .select('*, profiles:user_id(nom, email)')
+                .order('created_at', { ascending: false });
 
             if (error) {
-                retraitsList.innerHTML = `<div class="empty-state">Erreur : ${error.message}</div>`;
+                showAlert('Erreur chargement retraits : ' + error.message, 'error');
+                allRetraits = [];
                 return;
             }
-            if (!retraits || retraits.length === 0) {
-                retraitsList.innerHTML = '<div class="empty-state">Aucune demande en attente</div>';
-                return;
-            }
-
-            retraitsList.innerHTML = '';
-            retraits.forEach(r => retraitsList.appendChild(buildRetraitRow(r, r.nom)));
+            allRetraits = data || [];
         }
 
-        function buildRetraitRow(r, nom) {
-            const row = document.createElement('div');
-            row.className = 'card retrait-row';
+        function renderStats() {
+            document.getElementById('statUsers').textContent = allUsers.length;
+            const totalBalance = allUsers.reduce((sum, u) => sum + (Number(u.solde) || 0), 0);
+            document.getElementById('statTotalBalance').textContent = totalBalance.toFixed(2) + ' €';
 
-            row.innerHTML = `
-                <div class="retrait-top">
-                    <div class="retrait-montant">${fmt(r.montant)}</div>
-                    <div class="retrait-meta">${new Date(r.created_at).toLocaleString('fr-FR')}</div>
-                </div>
-                <div class="retrait-user">${nom ? nom + ' — ' : ''}${r.user_id}</div>
-                <div class="form-group">
-                    <label>Note (optionnel)</label>
-                    <input type="text" class="note-input" placeholder="Motif ou commentaire">
-                </div>
-                <div class="btn-row">
-                    <button class="btn btn-success btn-valider">Valider</button>
-                    <button class="btn btn-danger btn-refuser">Refuser</button>
-                </div>
+            const pending = allRetraits.filter(r => r.statut === 'en_attente');
+            document.getElementById('statPending').textContent = pending.length;
+            const pendingAmount = pending.reduce((sum, r) => sum + (Number(r.montant) || 0), 0);
+            document.getElementById('statPendingAmount').textContent = pendingAmount.toFixed(2) + ' €';
+
+            const badge = document.getElementById('pendingBadge');
+            if (pending.length > 0) {
+                badge.style.display = 'inline-block';
+                badge.textContent = pending.length;
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+        }
+
+        // ---------- USERS ----------
+        function renderUsers() {
+            const query = (document.getElementById('userSearch').value || '').toLowerCase();
+            const body = document.getElementById('usersTableBody');
+
+            const filtered = allUsers.filter(u =>
+                (u.nom || '').toLowerCase().includes(query) ||
+                (u.email || '').toLowerCase().includes(query)
+            );
+
+            if (filtered.length === 0) {
+                body.innerHTML = '<tr class="empty-row"><td colspan="6">Aucun utilisateur trouvé</td></tr>';
+                return;
+            }
+
+            body.innerHTML = filtered.map(u => {
+                const date = u.date_inscription ? new Date(u.date_inscription).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }) : '—';
+                return `
+                    <tr>
+                        <td data-label="Utilisateur" class="cell-user">
+                            <div class="name">${escapeHtml(u.nom || 'Sans nom')}</div>
+                            <div class="mail">${escapeHtml(u.email || '')}</div>
+                        </td>
+                        <td data-label="Solde" class="mono">${Number(u.solde || 0).toFixed(2)} €</td>
+                        <td data-label="Cashback" class="mono">${Number(u.cashback || 0).toFixed(2)} €</td>
+                        <td data-label="Rôle"><span class="role-badge ${u.role === 'admin' ? 'admin' : 'user'}">${u.role === 'admin' ? 'Admin' : 'Utilisateur'}</span></td>
+                        <td data-label="Inscrit le">${date}</td>
+                        <td data-label="">
+                            <div class="actions-cell">
+                                <button class="btn-sm edit" onclick="openUserModal('${u.id}')">Modifier</button>
+                            </div>
+                        </td>
+                    </tr>`;
+            }).join('');
+        }
+
+        document.getElementById('userSearch').addEventListener('input', renderUsers);
+
+        function openUserModal(userId) {
+            const u = allUsers.find(x => x.id === userId);
+            if (!u) return;
+
+            activeUserId = userId;
+            document.getElementById('modalUserName').textContent = u.nom || 'Utilisateur';
+            document.getElementById('modalUserEmail').textContent = u.email || '';
+            document.getElementById('editNom').value = u.nom || '';
+            document.getElementById('editSoldeDelta').value = '';
+            document.getElementById('editSoldeExact').value = '';
+            document.getElementById('editCashback').value = Number(u.cashback || 0).toFixed(2);
+            document.getElementById('editRole').value = u.role || 'user';
+            document.getElementById('editReason').value = '';
+            document.getElementById('currentSoldeDisplay').textContent = Number(u.solde || 0).toFixed(2) + ' €';
+            document.getElementById('newSoldeDisplay').textContent = Number(u.solde || 0).toFixed(2) + ' €';
+
+            document.getElementById('editSoldeDelta').oninput = updateNewSoldePreview;
+            document.getElementById('editSoldeExact').oninput = () => {
+                const exact = document.getElementById('editSoldeExact').value;
+                document.getElementById('newSoldeDisplay').textContent = exact !== '' ? Number(exact).toFixed(2) + ' €' : Number(u.solde || 0).toFixed(2) + ' €';
+            };
+
+            document.getElementById('userModal').classList.add('open');
+        }
+
+        function updateNewSoldePreview() {
+            const u = allUsers.find(x => x.id === activeUserId);
+            if (!u) return;
+            const delta = parseFloat(document.getElementById('editSoldeDelta').value) || 0;
+            document.getElementById('newSoldeDisplay').textContent = (Number(u.solde || 0) + delta).toFixed(2) + ' €';
+        }
+
+        function adjustModalAmount(sign) {
+            const input = document.getElementById('editSoldeDelta');
+            const current = parseFloat(input.value) || 0;
+            input.value = (current + sign).toFixed(2);
+            updateNewSoldePreview();
+        }
+
+        function setModalAmount(amount) {
+            document.getElementById('editSoldeDelta').value = amount;
+            updateNewSoldePreview();
+        }
+
+        function closeUserModal() {
+            document.getElementById('userModal').classList.remove('open');
+            activeUserId = null;
+        }
+
+        async function saveUser() {
+            if (!activeUserId) return;
+            const saveBtn = document.getElementById('saveUserBtn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Enregistrement...';
+
+            try {
+                const nom = document.getElementById('editNom').value.trim();
+                const cashback = parseFloat(document.getElementById('editCashback').value) || 0;
+                const role = document.getElementById('editRole').value;
+                const reason = document.getElementById('editReason').value.trim() || null;
+                const soldeExact = document.getElementById('editSoldeExact').value;
+                const soldeDelta = parseFloat(document.getElementById('editSoldeDelta').value) || 0;
+
+                // 1. Infos de profil (nom, cashback, rôle)
+                const { error: profileError } = await _supabase.rpc('admin_update_profile', {
+                    target_user_id: activeUserId,
+                    new_nom: nom || null,
+                    new_cashback: cashback,
+                    new_role: role
+                });
+                if (profileError) throw profileError;
+
+                // 2. Solde : exact prioritaire sur delta
+                if (soldeExact !== '') {
+                    const { error: balError } = await _supabase.rpc('admin_set_balance', {
+                        target_user_id: activeUserId,
+                        new_value: parseFloat(soldeExact),
+                        reason
+                    });
+                    if (balError) throw balError;
+                } else if (soldeDelta !== 0) {
+                    const { error: balError } = await _supabase.rpc('admin_adjust_balance', {
+                        target_user_id: activeUserId,
+                        delta: soldeDelta,
+                        reason
+                    });
+                    if (balError) throw balError;
+                }
+
+                showAlert('Utilisateur mis à jour avec succès', 'success');
+                closeUserModal();
+                await loadUsers();
+                renderStats();
+                renderUsers();
+
+            } catch (error) {
+                console.error(error);
+                showAlert('Erreur : ' + error.message, 'error');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Enregistrer';
+            }
+        }
+
+        // ---------- RETRAITS ----------
+        function renderRetraits() {
+            const filter = document.getElementById('retraitFilter').value;
+            const body = document.getElementById('retraitsTableBody');
+
+            const filtered = filter === 'all' ? allRetraits : allRetraits.filter(r => r.statut === filter);
+
+            if (filtered.length === 0) {
+                body.innerHTML = '<tr class="empty-row"><td colspan="6">Aucune demande</td></tr>';
+                return;
+            }
+
+            body.innerHTML = filtered.map(r => {
+                const date = r.created_at ? new Date(r.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—';
+                const nom = r.profiles?.nom || r.titulaire || 'Utilisateur';
+                const email = r.profiles?.email || '';
+                const canProcess = r.statut === 'en_attente';
+                return `
+                    <tr>
+                        <td data-label="Utilisateur" class="cell-user">
+                            <div class="name">${escapeHtml(nom)}</div>
+                            <div class="mail">${escapeHtml(email)}</div>
+                        </td>
+                        <td data-label="Montant" class="mono">${Number(r.montant).toFixed(2)} €</td>
+                        <td data-label="Carte">${escapeHtml(r.carte_masquee || '—')}</td>
+                        <td data-label="Statut"><span class="status-badge ${r.statut}">${statutLabel(r.statut)}</span></td>
+                        <td data-label="Date">${date}</td>
+                        <td data-label="">
+                            ${canProcess ? `<div class="actions-cell">
+                                <button class="btn-sm edit" onclick="openRetraitModal('${r.id}')">Traiter</button>
+                            </div>` : ''}
+                        </td>
+                    </tr>`;
+            }).join('');
+        }
+
+        function statutLabel(s) {
+            return { en_attente: 'En attente', valide: 'Validé', refuse: 'Refusé' }[s] || s;
+        }
+
+        function openRetraitModal(retraitId) {
+            const r = allRetraits.find(x => x.id === retraitId);
+            if (!r) return;
+            activeRetraitId = retraitId;
+
+            document.getElementById('retraitModalRef').textContent = r.id.slice(0, 8);
+            document.getElementById('retraitNote').value = '';
+
+            const nom = r.profiles?.nom || r.titulaire || 'Utilisateur';
+            const email = r.profiles?.email || '';
+            document.getElementById('retraitDetails').innerHTML = `
+                <div><span>Client</span><span>${escapeHtml(nom)}</span></div>
+                <div><span>Email</span><span>${escapeHtml(email)}</span></div>
+                <div><span>Montant</span><span>${Number(r.montant).toFixed(2)} €</span></div>
+                <div><span>Titulaire carte</span><span>${escapeHtml(r.titulaire || '—')}</span></div>
+                <div><span>Carte</span><span>${escapeHtml(r.carte_masquee || '—')}</span></div>
+                <div><span>Expiration</span><span>${escapeHtml(r.carte_expiration || '—')}</span></div>
+                <div><span>Banque / ville</span><span>${escapeHtml(r.banque_ville || '—')}</span></div>
             `;
 
-            const noteInput = row.querySelector('.note-input');
-
-            row.querySelector('.btn-valider').addEventListener('click', async (e) => {
-                await processRetrait(r.id, 'valide', noteInput.value.trim(), e.target, row);
-            });
-            row.querySelector('.btn-refuser').addEventListener('click', async (e) => {
-                await processRetrait(r.id, 'refuse', noteInput.value.trim(), e.target, row);
-            });
-
-            return row;
+            document.getElementById('retraitModal').classList.add('open');
         }
 
-        async function processRetrait(id, statut, note, btn, row) {
-            await runAction(btn, async () => {
+        function closeRetraitModal() {
+            document.getElementById('retraitModal').classList.remove('open');
+            activeRetraitId = null;
+        }
+
+        async function processRetrait(decision) {
+            if (!activeRetraitId) return;
+            const note = document.getElementById('retraitNote').value.trim() || null;
+
+            try {
                 const { error } = await _supabase.rpc('admin_process_retrait', {
-                    p_retrait_id: id,
-                    new_statut: statut,
-                    note: note || null
+                    p_retrait_id: activeRetraitId,
+                    new_statut: decision,
+                    note
                 });
                 if (error) throw error;
-                row.remove();
-                showAlert(statut === 'valide' ? 'Retrait validé' : 'Retrait refusé', 'success');
-                if (!retraitsList.children.length) {
-                    retraitsList.innerHTML = '<div class="empty-state">Aucune demande en attente</div>';
-                }
-            });
-        }
 
-        // ------------------------------------------------------------
-        // Utilitaire : exécute une action RPC avec état de chargement
-        // ------------------------------------------------------------
-        async function runAction(btn, fn) {
-            const originalText = btn.textContent;
-            btn.disabled = true;
-            btn.textContent = '...';
-            try {
-                await fn();
-            } catch (err) {
-                console.error(err);
-                showAlert(err.message || 'Une erreur est survenue', 'error');
-            } finally {
-                btn.disabled = false;
-                btn.textContent = originalText;
+                showAlert(decision === 'valide' ? 'Retrait validé et solde débité' : 'Retrait refusé', 'success');
+                closeRetraitModal();
+                await Promise.all([loadUsers(), loadRetraits()]);
+                renderStats();
+                renderUsers();
+                renderRetraits();
+
+            } catch (error) {
+                console.error(error);
+                showAlert('Erreur : ' + error.message, 'error');
             }
         }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str || '';
+            return div.innerHTML;
+        }
+
+        async function logout() {
+            await _supabase.auth.signOut();
+            sessionStorage.removeItem('adminAuth');
+            window.location.href = 'admin.html';
+        }
+
+        // Fermer les modals en cliquant en dehors
+        document.getElementById('userModal').addEventListener('click', (e) => {
+            if (e.target.id === 'userModal') closeUserModal();
+        });
+        document.getElementById('retraitModal').addEventListener('click', (e) => {
+            if (e.target.id === 'retraitModal') closeRetraitModal();
+        });
+
+        init();
     </script>
 </body>
 </html>
